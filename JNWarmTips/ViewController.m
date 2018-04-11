@@ -7,11 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "JNDayModel.h"
+#import "JNWarmTipsHeader.h"
+#import "JNDayCollectionViewCell.h"
 
-#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
-#define RGB(R,G,B) [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1]
-
-static CGFloat kCollectionViewHeight = 400;
 static CGFloat kWeekViewHeight = 25;
 static CGFloat kNavViewHeight = 64;
 
@@ -22,21 +21,207 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *weekView;
 @property(nonatomic, assign) CGFloat collectionViewHeight;
+
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property(nonatomic, assign) NSInteger currentYear;
+@property(nonatomic, assign) NSInteger currentMonth;
+@property(nonatomic, assign) NSInteger currentDay;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = RGB(255, 250, 240);
+
+    // 初始化设置
+    [self initDataSource];
+    self.navigationItem.title = [NSString stringWithFormat:@"%lu", self.currentMonth];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+
+    self.view.backgroundColor = RGB(245, 245, 245);
     [self.view addSubview:self.collectionView];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
+    [self.collectionView registerClass:[JNDayCollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
 
     [self.view addSubview:self.weekView];
+    [self.navigationController.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"今天" style:UIBarButtonItemStylePlain target:self action:@selector(backToToday)]];
+
 
 }
 
 #pragma mark - Private Method
+
+- (void) initDataSource {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *currentDate = [NSDate date];
+    NSDateComponents *components = [calendar components:NSCalendarUnitMonth|NSCalendarUnitYear|NSCalendarUnitDay fromDate:currentDate];
+    self.currentMonth = components.month;
+    self.currentYear = components.year;
+    self.currentDay = components.day;
+
+    NSArray *lastMonthArray = [self getAllDaysOfMonth:self.currentMonth - 1 InYear:self.currentYear];
+    [self.dataArray addObject:lastMonthArray];
+
+    NSArray *currentMonthArray = [self getAllDaysOfMonth:self.currentMonth InYear:self.currentYear];
+    [self.dataArray addObject:currentMonthArray];
+
+    NSArray *nextMonthArray = [self getAllDaysOfMonth:self.currentMonth + 1 InYear:self.currentYear];
+    [self.dataArray addObject:nextMonthArray ];
+
+}
+
+- (NSMutableArray *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
+
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+
+    // 获取本月1号是周几
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *firstDayStr = [NSString stringWithFormat:@"%ld-%ld-01",year,month];
+    NSLog(@"%@",firstDayStr);
+    NSDate *firstDay = [dateFormatter dateFromString:firstDayStr];
+    NSDateComponents *weekComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstDay];
+    NSInteger firstDayInWeek = weekComponents.weekday;
+    NSLog(@"weekComponents = %ld", weekComponents.weekday);
+
+    // 获取当前月有多少天
+    NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:firstDay];
+    NSLog(@"range = %ld", range.length);
+
+    // 获取上一个月有多少天
+    NSInteger lastMonthInt = month - 1;
+    NSInteger lastMonthInYear = year;
+    if (month == 1) {
+        lastMonthInYear = year - 1;
+        lastMonthInt = 12;
+    }
+    NSString *lastMonthStr = [NSString stringWithFormat:@"%ld-%ld-01", lastMonthInYear, lastMonthInt];
+    NSDate *lastMonth = [dateFormatter dateFromString:lastMonthStr];
+    NSRange lastMonthRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:lastMonth];
+    NSInteger daysOflastMonth = lastMonthRange.length;
+    NSLog(@"lastMonthRange = %ld", lastMonthRange.length);
+
+    // 排列本月所有日期
+    NSMutableArray *days = [NSMutableArray array];
+    // 需要显示的上个月的天数
+    for (int index = 1; index < firstDayInWeek; index++) {
+        JNDayModel *dayModel = [JNDayModel new];
+        dayModel.day = [NSString stringWithFormat:@"%ld", (daysOflastMonth - firstDayInWeek + index + 1)];
+        dayModel.month = [NSString stringWithFormat:@"%ld",lastMonthInt];
+        dayModel.year = [NSString stringWithFormat:@"%ld", lastMonthInYear];
+        dayModel.isCurrentDay = NO;
+        dayModel.needShowFlag = NO;
+        dayModel.isCurrentMonth = NO;
+        dayModel.isCurrentMonth = NO;
+        dayModel.isToday = NO;
+        [days addObject:dayModel];
+    }
+    // 本月的天数
+    for (int i = 1; i <= range.length; i++) {
+        JNDayModel *dayModel = [JNDayModel new];
+        dayModel.day = [NSString stringWithFormat:@"%ld", i];
+        dayModel.month = [NSString stringWithFormat:@"%ld", month];
+        dayModel.year = [NSString stringWithFormat:@"%ld", year];
+        dayModel.isCurrentDay = NO;
+        dayModel.needShowFlag = NO;
+        dayModel.isCurrentMonth = YES;
+        dayModel.isToday = (i == self.currentDay && month == self.currentMonth && year == self.currentYear);
+        [days addObject:dayModel];
+    }
+    // 下个月的天数
+    NSInteger nextMonthInt = month + 1;
+    NSInteger nextMonthInYear = year;
+    if (month == 12) {
+        nextMonthInt = 1;
+        nextMonthInYear = year + 1;
+    }
+    if (days.count < 35) {
+        NSInteger nextDays = 35 - days.count;
+        for (int i = 1; i <= nextDays; i++) {
+            JNDayModel *dayModel = [JNDayModel new];
+            dayModel.day = [NSString stringWithFormat:@"%ld", i];
+            dayModel.month = [NSString stringWithFormat:@"%ld", nextMonthInt];
+            dayModel.year = [NSString stringWithFormat:@"%ld", nextMonthInYear];
+            dayModel.isCurrentDay = NO;
+            dayModel.needShowFlag = NO;
+            dayModel.isCurrentMonth = NO;
+            [days addObject:dayModel];
+        }
+
+    }
+    return days;
+}
+
+- (void) currentMonthDays {
+
+    // 获取当前是几月
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *currentDate = [NSDate date];
+    NSDateComponents *components = [calendar components:NSCalendarUnitMonth|NSCalendarUnitYear|NSCalendarUnitDay fromDate:currentDate];
+    NSInteger currentMonth = components.month;
+    NSInteger currentYear = components.year;
+    NSInteger currentDay = components.day;
+    NSLog(@"%ld",components.month);
+    NSLog(@"%ld",components.year);
+
+    // 获取本月1号是周几
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *firstDayStr = [NSString stringWithFormat:@"%ld-%ld-01", components.year, components.month];
+    NSLog(@"%@",firstDayStr);
+    NSDate *firstDay = [dateFormatter dateFromString:firstDayStr];
+    NSDateComponents *weekComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstDay];
+    NSInteger firstDayInWeek = weekComponents.weekday;
+    NSLog(@"weekComponents = %ld", weekComponents.weekday);
+
+    // 获取当前月有多少天
+    NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:currentDate];
+    NSLog(@"range = %ld", range.length);
+
+    // 获取上一个月有多少天
+    NSString *lastMonthStr = [NSString stringWithFormat:@"%ld-%ld-01", currentYear, currentMonth-1];
+    NSDate *lastMonth = [dateFormatter dateFromString:lastMonthStr];
+    NSRange lastMonthRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:lastMonth];
+    NSInteger daysOflastMonth = lastMonthRange.length;
+    NSLog(@"lastMonthRange = %ld", lastMonthRange.length);
+
+    // 排列本月所有日期
+    NSMutableArray *days = [NSMutableArray array];
+    // 需要显示的上个月的天数
+    for (int index = 1; index < firstDayInWeek; index++) {
+        JNDayModel *dayModel = [JNDayModel new];
+        dayModel.day = [NSString stringWithFormat:@"ld", daysOflastMonth - firstDayInWeek - 1];
+        dayModel.isCurrentDay = NO;
+        dayModel.needShowFlag = NO;
+        dayModel.isCurrentMonth = NO;
+        dayModel.isCurrentMonth = NO;
+        dayModel.isToday = NO;
+        [days addObject:dayModel];
+    }
+    // 本月的天数
+    for (int i = 1; i <= range.length; i++) {
+        JNDayModel *dayModel = [JNDayModel new];
+        dayModel.day = [NSString stringWithFormat:@"%ld", i];
+        dayModel.isCurrentDay = NO;
+        dayModel.needShowFlag = NO;
+        dayModel.isCurrentMonth = YES;
+        dayModel.isToday = i == components.day;
+        [days addObject:dayModel];
+    }
+    // 下个月的天数
+    if (days.count < 35) {
+        NSInteger nextDays = 35 - days.count;
+        for (int i = 1; i <= nextDays; i++) {
+            JNDayModel *dayModel = [JNDayModel new];
+            dayModel.day = [NSString stringWithFormat:@"%ld", i];
+            dayModel.isCurrentDay = NO;
+            dayModel.needShowFlag = NO;
+            dayModel.isCurrentMonth = NO;
+            [days addObject:dayModel];
+        }
+
+    }
+    self.dataArray = days;
+}
 
 - (CGSize) caculatorItemSize {
     CGFloat width = SCREEN_WIDTH / kItemCount;
@@ -46,18 +231,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 #pragma mark - Delegate & DataSources
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor whiteColor];
-    UILabel *textLabel = [UILabel new];
-    textLabel.font = [UIFont systemFontOfSize:14.0];
-    textLabel.textColor = RGB(79, 79, 79);
-    textLabel.center = cell.contentView.center;
-    textLabel.textAlignment = NSTextAlignmentCenter;
-    CGFloat width = [self caculatorItemSize].width;
-    textLabel.bounds = CGRectMake(0, 0, width, width);
-    textLabel.text = [NSString stringWithFormat:@"%ld", indexPath.item];
-    [cell.contentView addSubview:textLabel];
+    JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
 
+    NSArray *monthArray = self.dataArray[indexPath.section];
+    JNDayModel *dayModel = monthArray[indexPath.row];
+
+    [cell setupContent:dayModel.day andHighLight:dayModel.isCurrentMonth andIsToday:dayModel.isToday];
     return cell;
 }
 
@@ -66,7 +245,21 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return self.dataArray.count;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"did select");
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    NSArray *visibleCells = [self.collectionView visibleCells];
+//    NSInteger mid = visibleCells.count / 2;
+//    JNDayCollectionViewCell *cell = visibleCells[mid];
+//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
+//    NSArray *array = self.dataArray[indexPath.section];
+//    JNDayModel *model = array[indexPath.row];
+//    NSLog(@"model.month = %@", model.month);
 }
 
 #pragma mark - Getter & Setter
@@ -77,11 +270,14 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         layout.minimumInteritemSpacing = 0;
         layout.minimumLineSpacing = 0;
         layout.itemSize = [self caculatorItemSize];
+//        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
 
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kWeekViewHeight+kNavViewHeight+1, SCREEN_WIDTH, self.collectionViewHeight) collectionViewLayout:layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.pagingEnabled = YES;
     }
     return _collectionView;
 }
@@ -107,6 +303,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         }
     }
     return _weekView;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
 }
 
 - (CGFloat)collectionViewHeight {

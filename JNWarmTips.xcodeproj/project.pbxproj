@@ -13,6 +13,8 @@
 		6108F14A207B119700590F4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6108F149207B119700590F4D /* Assets.xcassets */; };
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
+		8B8D85F08B1FAD5C7357F330 /* JNDayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D82749061C7809E71BC1C /* JNDayCollectionViewCell.m */; };
+		8B8D8F5BC0B6C1B19C15F540 /* JNDayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D82D9FA1CDCF6DDCB2D5E /* JNDayModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,11 @@
 		6108F14C207B119700590F4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6108F14E207B119700590F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6108F14F207B119700590F4D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8B8D82749061C7809E71BC1C /* JNDayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayCollectionViewCell.m; sourceTree = "<group>"; };
+		8B8D82D9FA1CDCF6DDCB2D5E /* JNDayModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayModel.m; sourceTree = "<group>"; };
+		8B8D8B6556A8EA8A135718CC /* JNDayModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayModel.h; sourceTree = "<group>"; };
+		8B8D8BEC870939BE4CC56F9A /* JNWarmTipsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWarmTipsHeader.h; sourceTree = "<group>"; };
+		8B8D8E2F7EA51A7842667CD1 /* JNDayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayCollectionViewCell.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +74,11 @@
 				6108F14B207B119700590F4D /* LaunchScreen.storyboard */,
 				6108F14E207B119700590F4D /* Info.plist */,
 				6108F14F207B119700590F4D /* main.m */,
+				8B8D82D9FA1CDCF6DDCB2D5E /* JNDayModel.m */,
+				8B8D8B6556A8EA8A135718CC /* JNDayModel.h */,
+				8B8D82749061C7809E71BC1C /* JNDayCollectionViewCell.m */,
+				8B8D8E2F7EA51A7842667CD1 /* JNDayCollectionViewCell.h */,
+				8B8D8BEC870939BE4CC56F9A /* JNWarmTipsHeader.h */,
 			);
 			path = JNWarmTips;
 			sourceTree = "<group>";
@@ -145,6 +157,8 @@
 				6108F145207B119700590F4D /* ViewController.m in Sources */,
 				6108F150207B119700590F4D /* main.m in Sources */,
 				6108F142207B119700590F4D /* AppDelegate.m in Sources */,
+				8B8D8F5BC0B6C1B19C15F540 /* JNDayModel.m in Sources */,
+				8B8D85F08B1FAD5C7357F330 /* JNDayCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
