@@ -10,7 +10,6 @@
 @property (nonatomic, strong) NSString *day;
 @property (nonatomic, strong) NSString *month;
 @property (nonatomic, strong) NSString *year;
-@property(nonatomic, assign) BOOL isCurrentDay;
 @property(nonatomic, assign) BOOL needShowFlag;
 @property(nonatomic, assign) BOOL isCurrentMonth;
 @property(nonatomic, assign) BOOL isToday;

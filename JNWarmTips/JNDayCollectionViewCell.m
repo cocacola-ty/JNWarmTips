@@ -17,7 +17,9 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.textLabel.frame = self.bounds;
+//        self.textLabel.frame = self.bounds;
+        self.textLabel.bounds = CGRectMake(0, 0, self.bounds.size.width - 5, self.bounds.size.height - 5);
+        self.textLabel.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         [self.contentView addSubview:self.textLabel];
         self.selectedBackgroundView = self.selectedView;
     }
