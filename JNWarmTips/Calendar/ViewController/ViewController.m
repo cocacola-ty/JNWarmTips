@@ -12,9 +12,9 @@
  * 最多缓存一年的日期 缓存当前查看日期的前后各六个月日期  获取过不再重复获取
  * 点击回到今天 清空缓存
  *
- * dataArray : 数据源
+ * dataArray : 数据源 [@"2018-4", @"2018-5"] 通过key去cacheList中去取对应月份的数组
  * dataArrayInit : 最初始化的数据源 点击回到今天后重置的
- * cacheDate : 加载过后缓存下来的日期 @"2018-04" : @[...]
+ * cacheList : 加载过后缓存下来的日期 @"2018-04" : @[...]
  */
 
 #import "ViewController.h"
@@ -36,7 +36,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
-@property (nonatomic, strong) NSCache *cacheDate;
 @property(nonatomic, assign) NSInteger currentShowMonth;
 @end
 
@@ -46,6 +45,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [super viewDidLoad];
 
     // 初始化设置
+    self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
     self.navigationItem.title = [NSString stringWithFormat:@"%lu", self.currentMonth];
     self.currentShowMonth = self.currentMonth;
@@ -72,15 +72,23 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     _currentDay = components.day;
 
     NSArray *lastMonthArray = [self getAllDaysOfMonth:self.currentMonth - 1 InYear:self.currentYear];
-    NSString *lastMonthkey = [NSString stringWithFormat:@"%ld-%ld", self.currentYear, self.currentMonth];
-    NSDictionary *lastMonthDict = @{lastMonthkey : lastMonthArray};
-    [self.dataArray addObject:lastMonthDict];
+//    NSString *lastMonthkey = [NSString stringWithFormat:@"%ld-%ld", self.currentYear, self.currentMonth-1];
+    NSString *lastMonthKey = [self getLastMonth:self.currentMonth currentYear:self.currentYear];
+
+    NSDictionary *lastMonthDict = @{lastMonthKey : lastMonthArray};
+    [self.cacheList setObject:lastMonthArray forKey:lastMonthKey];
+    [self.dataArray addObject:lastMonthKey];
 
     NSArray *currentMonthArray = [self getAllDaysOfMonth:self.currentMonth InYear:self.currentYear];
-    [self.dataArray addObject:currentMonthArray];
+    NSString *currentMonthKey = [NSString stringWithFormat:@"%ld-%ld", self.currentYear, self.currentMonth];
+    [self.cacheList setObject:currentMonthArray forKey:currentMonthKey];
+    [self.dataArray addObject:currentMonthKey];
+//    [self.dataArray addObject:currentMonthArray];
 
     NSArray *nextMonthArray = [self getAllDaysOfMonth:self.currentMonth + 1 InYear:self.currentYear];
-    [self.dataArray addObject:nextMonthArray ];
+    NSString *nextMonthKey = [self getNextMonth:self.currentMonth currentYear:self.currentYear];
+    [self.cacheList setObject:nextMonthArray forKey:nextMonthKey];
+    [self.dataArray addObject:nextMonthKey];
 
 }
 
@@ -95,7 +103,11 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
 
-    NSArray *monthArray = self.dataArray[indexPath.section];
+//    NSArray *monthArray = self.dataArray[indexPath.section];
+//    JNDayModel *dayModel = monthArray[indexPath.row];
+
+    NSString *key = self.dataArray[indexPath.section];
+    NSArray *monthArray = [self.cacheList objectForKey:key];
     JNDayModel *dayModel = monthArray[indexPath.row];
 
     [cell setupContent:dayModel.day andHighLight:dayModel.isCurrentMonth andIsToday:dayModel.isToday];
@@ -136,50 +148,44 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         return (NSComparisonResult) (result == NSOrderedAscending);
     }];
     NSInteger section = [sortKeys.firstObject integerValue];
-    NSArray *daysArray = self.dataArray[section];
-    JNDayModel *model = daysArray[10];
-    NSInteger willShowMonth = [model.month integerValue];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", model.month];
+    NSString *key = self.dataArray[section];
+    NSRange range = [key rangeOfString:@"-"];
+    NSString *month = [key substringFromIndex:range.location];
+    NSString *year = [key substringWithRange:NSMakeRange(0, 4)];
+    NSInteger willShowMonth = [month integerValue];
+    NSInteger willShowYear = [year integerValue];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@",month];
 
+    // 加载下一个要显示月份到数据源 检查要加载的是否在数据源中已经存在，如果存在则不加载, 否则添加到数据源中
+    NSInteger currentIndex = [self.dataArray indexOfObject:key];
     if (willShowMonth < self.currentShowMonth || (willShowMonth == 12 && self.currentShowMonth == 1)) {
+        NSString *loadMonthKey = [self getLastMonth:willShowMonth currentYear:willShowYear];
         //向上翻
-        /*
-        NSInteger loadMonth;
-        NSInteger loadYear;
-        if(willShowMonth == 1) {
-            loadMonth = 12;
-            loadYear = [model.year integerValue] - 1;
-        } else {
-            loadMonth = willShowMonth - 1;
-            loadYear = [model.year integerValue];
+        if (![self.dataArray containsObject:loadMonthKey]) {
+            NSRange range = [loadMonthKey rangeOfString:@"-"];
+            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location] integerValue];
+            NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
+
+            NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
+            [self.cacheList setObject:loadData forKey:loadMonthKey];
+            [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
         }
-
-        NSArray *data = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-        NSLog(@"data = %@", data);
-        [self.dataArray insertObject:data atIndex:0];
-        [self.collectionView reloadData];
-        */
-
     } else if (willShowMonth > self.currentShowMonth || (willShowMonth == 1 && self.currentShowMonth == 12)) {
        // 向下翻
-        NSInteger loadMonth;
-        NSInteger loadYear;
-        if(willShowMonth == 12) {
-            loadMonth = 1;
-            loadYear = [model.year integerValue] + 1;
-        } else {
-            loadMonth = willShowMonth + 1;
-            loadYear = [model.year integerValue];
-        }
+        NSString *loadMonthKey = [self getNextMonth:willShowMonth currentYear:willShowYear];
+        if (![self.dataArray containsObject:loadMonthKey]) {
+            NSRange range = [loadMonthKey rangeOfString:@"-"];
+            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location] integerValue];
+            NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
-        NSArray *data = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-        [self.dataArray addObject:data];
-        NSLog(@"self.dataArray.count = %lu", self.dataArray.count);
-        [self.collectionView reloadData];
+            NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
+            [self.cacheList setObject:loadData forKey:loadMonthKey];
+            [self.dataArray addObject:loadMonthKey];
+            [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
+        }
     }
 
     self.currentShowMonth = willShowMonth;
-
 }
 
 #pragma mark - Getter & Setter

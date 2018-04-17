@@ -9,7 +9,14 @@
 
 @implementation ViewController (CalculateCalendar)
 
-- (NSMutableArray *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
+- (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
+
+    /*
+     * 检查缓存中是否有，如果没有日算对应月份所有日期
+     */
+    NSString *key = [NSString stringWithFormat:@"%ld-%ld", year, month];
+//    self.cacheList
+
 
     NSCalendar *calendar = [NSCalendar currentCalendar];
 
@@ -88,11 +95,28 @@
     return days;
 }
 
-- (void) getLastMonth {
+- (NSString *) getLastMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
 
+    NSInteger lastMonth = currentMonth - 1;
+    NSInteger lastYear = currentYear;
+    if (currentMonth == 1) {
+        lastMonth = 12;
+        lastYear = currentYear - 1;
+    }
+
+    return [NSString stringWithFormat:@"%ld-%ld", lastYear, lastMonth];
 }
 
-- (void) getNextMonth {
+- (NSString *) getNextMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
+
+    NSInteger nextMonth = currentMonth + 1;
+    NSInteger nextYear = currentYear;
+
+    if (currentMonth == 12) {
+        nextMonth = 1;
+        nextYear = currentYear + 1;
+    }
+    return [NSString stringWithFormat:@"%ld-%ld", nextYear, nextMonth];
 
 }
 @end

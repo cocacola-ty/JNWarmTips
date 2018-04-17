@@ -13,6 +13,7 @@
 @property(nonatomic, assign, readonly) NSInteger currentYear;
 @property(nonatomic, assign, readonly) NSInteger currentMonth;
 @property(nonatomic, assign, readonly) NSInteger currentDay;
+@property (nonatomic, strong) NSCache *cacheList;
 
 @end
 
