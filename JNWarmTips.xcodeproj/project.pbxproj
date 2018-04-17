@@ -12,6 +12,7 @@
 		6108F14A207B119700590F4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6108F149207B119700590F4D /* Assets.xcassets */; };
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
+		8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */; };
 		8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8323A3D6BA21634997CA /* JNDayModel.m */; };
 		8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */; };
 		8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8A132EEA90F3E88CE985 /* ViewController.m */; };
@@ -27,10 +28,12 @@
 		6108F14E207B119700590F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6108F14F207B119700590F4D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8B8D8138BCBDECACA0DA7C3D /* JNDayModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayModel.h; sourceTree = "<group>"; };
+		8B8D820CD58EE968EE8B7C5A /* ViewController+CalculateCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+CalculateCalendar.h"; sourceTree = "<group>"; };
 		8B8D82753B6EE75A38772E6D /* JNDayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayCollectionViewCell.h; sourceTree = "<group>"; };
 		8B8D8323A3D6BA21634997CA /* JNDayModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayModel.m; sourceTree = "<group>"; };
 		8B8D858DE8D731C6FA5BCE6C /* JNWarmTipsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWarmTipsHeader.h; sourceTree = "<group>"; };
 		8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayCollectionViewCell.m; sourceTree = "<group>"; };
+		8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+CalculateCalendar.m"; sourceTree = "<group>"; };
 		8B8D8A132EEA90F3E88CE985 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		8B8D8F01672CA9AF33AA94A3 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +113,8 @@
 			children = (
 				8B8D8A132EEA90F3E88CE985 /* ViewController.m */,
 				8B8D8F01672CA9AF33AA94A3 /* ViewController.h */,
+				8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */,
+				8B8D820CD58EE968EE8B7C5A /* ViewController+CalculateCalendar.h */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 				8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */,
 				8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */,
 				8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */,
+				8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

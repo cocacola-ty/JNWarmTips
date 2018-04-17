@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52b4467b-9b18-41bc-b5a0-22cc39560b62" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.h" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.m" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/JNWarmTips.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/JNWarmTips.xcodeproj/project.pbxproj" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/JNDayCollectionViewCell.h" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/View/JNDayCollectionViewCell.h" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/JNDayCollectionViewCell.m" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/View/JNDayCollectionViewCell.m" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/JNDayModel.h" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/Model/JNDayModel.h" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/JNDayModel.m" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/Model/JNDayModel.m" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/JNWarmTipsHeader.h" afterPath="$PROJECT_DIR$/JNWarmTips/PublicFile/JNWarmTipsHeader.h" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/ViewController.h" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h" />
-      <change beforePath="$PROJECT_DIR$/JNWarmTips/ViewController.m" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m" />
+      <change beforePath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h" />
+      <change beforePath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m" afterPath="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m" />
     </list>
     <ignored path="$USER_HOME$/Library/Developer/Xcode/DerivedData/JNWarmTips-azbsshmqlewszsbbfywpluuajlmi/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,8 +23,8 @@
       <file leaf-file-name="ViewController.m" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="74">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="490">
+              <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
               <folding>
                 <element signature="e#356#382#0" expanded="true" />
               </folding>
@@ -35,11 +32,45 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JNWarmTipsHeader.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ViewController.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="13" column="27" lean-forward="false" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewController+CalculateCalendar.m" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.m">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1188">
+              <caret line="3" column="1" lean-forward="false" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+              <folding>
+                <element signature="e#99#143#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewController+CalculateCalendar.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="9" column="78" lean-forward="false" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
+              <folding>
+                <element signature="e#99#132#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNWarmTipsHeader.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/JNWarmTips/PublicFile/JNWarmTipsHeader.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -78,6 +109,10 @@
         <option value="$PROJECT_DIR$/JNWarmTips/JNDayCollectionViewCell.m" />
         <option value="$PROJECT_DIR$/JNWarmTips/JNDayModel.h" />
         <option value="$PROJECT_DIR$/JNWarmTips/ViewController.m" />
+        <option value="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.h" />
+        <option value="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.m" />
+        <option value="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h" />
+        <option value="$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m" />
       </list>
     </option>
   </component>
@@ -119,6 +154,19 @@
               <item name="" type="efc3779f:XcodeRootNode" />
               <item name="JNWarmTips" type="1d218c8b:XcodeProjectNode" />
               <item name="JNWarmTips" type="fcab9f18:XcodeViewNode" />
+            </path>
+            <path>
+              <item name="" type="efc3779f:XcodeRootNode" />
+              <item name="JNWarmTips" type="1d218c8b:XcodeProjectNode" />
+              <item name="JNWarmTips" type="fcab9f18:XcodeViewNode" />
+              <item name="Calendar" type="fcab9f18:XcodeViewNode" />
+            </path>
+            <path>
+              <item name="" type="efc3779f:XcodeRootNode" />
+              <item name="JNWarmTips" type="1d218c8b:XcodeProjectNode" />
+              <item name="JNWarmTips" type="fcab9f18:XcodeViewNode" />
+              <item name="Calendar" type="fcab9f18:XcodeViewNode" />
+              <item name="ViewController" type="fcab9f18:XcodeViewNode" />
             </path>
           </expand>
           <select />
@@ -169,12 +217,12 @@
       <workItem from="1523328185185" duration="16322000" />
       <workItem from="1523417670537" duration="23136000" />
       <workItem from="1523589215694" duration="67000" />
-      <workItem from="1523946531461" duration="500000" />
+      <workItem from="1523946531461" duration="2196000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49981000" />
+    <option name="totallyTimeSpent" value="51677000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,16 +503,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding>
-            <element signature="e#356#382#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSObjCRuntime.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9432">
@@ -476,8 +514,46 @@
     <entry file="file://$PROJECT_DIR$/JNWarmTips/PublicFile/JNWarmTipsHeader.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="78" lean-forward="false" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
+          <folding>
+            <element signature="e#99#132#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="27" lean-forward="false" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+          <folding>
+            <element signature="e#356#382#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JNWarmTips/Calendar/ViewController/ViewController+CalculateCalendar.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1188">
+          <caret line="3" column="1" lean-forward="false" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+          <folding>
+            <element signature="e#99#143#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
