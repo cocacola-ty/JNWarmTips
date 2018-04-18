@@ -22,6 +22,7 @@
 #import "JNDayModel.h"
 #import "JNWarmTipsHeader.h"
 #import "JNDayCollectionViewCell.h"
+#import "Masonry.h"
 
 static CGFloat kWeekViewHeight = 25;
 static CGFloat kNavViewHeight = 64;
@@ -236,6 +237,14 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
+
+        UILabel *label = [UILabel new];
+        label.text = @"对象不会像 NSMutableDictionary 中那样被复制。（键不需要实现 NSCo";
+        [_tableView addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_tableView.mas_centerY);
+            make.centerX.equalTo(_tableView.mas_centerX);
+        }];
     }
     return _tableView;
 }
