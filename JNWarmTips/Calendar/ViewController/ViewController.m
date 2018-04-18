@@ -29,14 +29,18 @@ static CGFloat kNavViewHeight = 64;
 static CGFloat kItemCount = 7;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
-@interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *weekView;
 @property(nonatomic, assign) CGFloat collectionViewHeight;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
+
+@property (nonatomic, strong) NSMutableDictionary *allEvents;
+@property (nonatomic, strong) NSArray *tableViewDataArray;
 @end
 
 @implementation ViewController
@@ -47,7 +51,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     // 初始化设置
     self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
-    self.navigationItem.title = [NSString stringWithFormat:@"%lu", self.currentMonth];
+    self.navigationItem.title = [NSString stringWithFormat:@"%li月", self.currentMonth];
     self.currentShowMonth = self.currentMonth;
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
@@ -58,6 +62,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self.view addSubview:self.weekView];
     [self.navigationController.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"今天" style:UIBarButtonItemStylePlain target:self action:@selector(backToToday)]];
 
+    [self.view addSubview:self.tableView];
 
 }
 
@@ -72,10 +77,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     _currentDay = components.day;
 
     NSArray *lastMonthArray = [self getAllDaysOfMonth:self.currentMonth - 1 InYear:self.currentYear];
-//    NSString *lastMonthkey = [NSString stringWithFormat:@"%ld-%ld", self.currentYear, self.currentMonth-1];
     NSString *lastMonthKey = [self getLastMonth:self.currentMonth currentYear:self.currentYear];
 
-    NSDictionary *lastMonthDict = @{lastMonthKey : lastMonthArray};
     [self.cacheList setObject:lastMonthArray forKey:lastMonthKey];
     [self.dataArray addObject:lastMonthKey];
 
@@ -83,7 +86,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSString *currentMonthKey = [NSString stringWithFormat:@"%ld-%ld", self.currentYear, self.currentMonth];
     [self.cacheList setObject:currentMonthArray forKey:currentMonthKey];
     [self.dataArray addObject:currentMonthKey];
-//    [self.dataArray addObject:currentMonthArray];
 
     NSArray *nextMonthArray = [self getAllDaysOfMonth:self.currentMonth + 1 InYear:self.currentYear];
     NSString *nextMonthKey = [self getNextMonth:self.currentMonth currentYear:self.currentYear];
@@ -91,7 +93,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self.dataArray addObject:nextMonthKey];
 
 }
-
 
 - (CGSize) caculatorItemSize {
     CGFloat width = SCREEN_WIDTH / kItemCount;
@@ -102,9 +103,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
-
-//    NSArray *monthArray = self.dataArray[indexPath.section];
-//    JNDayModel *dayModel = monthArray[indexPath.row];
 
     NSString *key = self.dataArray[indexPath.section];
     NSArray *monthArray = [self.cacheList objectForKey:key];
@@ -131,7 +129,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 找到最多的section
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    NSMutableArray *array = [NSMutableArray array];
     for (NSIndexPath *indexpath in indexPathArray) {
         NSNumber *number = [NSNumber numberWithUnsignedInteger:indexpath.section];
         if ([[dictionary allKeys] containsObject:number]) {
@@ -143,18 +140,20 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         }
     }
 
+    // 对字典排序
     NSArray *sortKeys = [dictionary keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2){
         NSComparisonResult result = [obj1 compare:obj2];
         return (NSComparisonResult) (result == NSOrderedAscending);
     }];
     NSInteger section = [sortKeys.firstObject integerValue];
+
     NSString *key = self.dataArray[section];
     NSRange range = [key rangeOfString:@"-"];
-    NSString *month = [key substringFromIndex:range.location];
+    NSString *month = [key substringFromIndex:range.location+1];
     NSString *year = [key substringWithRange:NSMakeRange(0, 4)];
     NSInteger willShowMonth = [month integerValue];
     NSInteger willShowYear = [year integerValue];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@",month];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@月",month];
 
     // 加载下一个要显示月份到数据源 检查要加载的是否在数据源中已经存在，如果存在则不加载, 否则添加到数据源中
     NSInteger currentIndex = [self.dataArray indexOfObject:key];
@@ -163,29 +162,49 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         //向上翻
         if (![self.dataArray containsObject:loadMonthKey]) {
             NSRange range = [loadMonthKey rangeOfString:@"-"];
-            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location] integerValue];
+            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location+1] integerValue];
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            [self.cacheList setObject:loadData forKey:loadMonthKey];
-            [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
+            if (loadData) {
+                [self.cacheList setObject:loadData forKey:loadMonthKey];
+                [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
+                [self.collectionView reloadData];
+            }
         }
     } else if (willShowMonth > self.currentShowMonth || (willShowMonth == 1 && self.currentShowMonth == 12)) {
        // 向下翻
         NSString *loadMonthKey = [self getNextMonth:willShowMonth currentYear:willShowYear];
         if (![self.dataArray containsObject:loadMonthKey]) {
             NSRange range = [loadMonthKey rangeOfString:@"-"];
-            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location] integerValue];
+            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location+1] integerValue];
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            [self.cacheList setObject:loadData forKey:loadMonthKey];
-            [self.dataArray addObject:loadMonthKey];
-            [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
+            if (loadData) {
+                [self.cacheList setObject:loadData forKey:loadMonthKey];
+                [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
+                [self.collectionView reloadData];
+            }
         }
     }
 
     self.currentShowMonth = willShowMonth;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
+    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    cell.backgroundColor = [UIColor whiteColor];
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 2;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
 }
 
 #pragma mark - Getter & Setter
@@ -206,6 +225,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _collectionView.pagingEnabled = YES;
     }
     return _collectionView;
+}
+
+- (UITableView *)tableView {
+    if (!_tableView) {
+        CGFloat tableViewY =  kNavViewHeight + kWeekViewHeight + self.collectionViewHeight + 10;
+        CGFloat tableViewHeight = SCREEN_HEIGHT - tableViewY - 44;
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, SCREEN_WIDTH, tableViewHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = RGB(245, 245, 245);
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.tableFooterView = [UIView new];
+    }
+    return _tableView;
 }
 
 - (UIView *)weekView {

@@ -10,13 +10,16 @@
 @implementation ViewController (CalculateCalendar)
 
 - (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
-
+    NSLog(@"month = %li", month);
+    NSLog(@"year = %li", year);
     /*
      * 检查缓存中是否有，如果没有日算对应月份所有日期
      */
     NSString *key = [NSString stringWithFormat:@"%ld-%ld", year, month];
-//    self.cacheList
-
+    id value = [self.cacheList objectForKey:key];
+    if (value) {
+        return nil;
+    }
 
     NSCalendar *calendar = [NSCalendar currentCalendar];
 
@@ -24,15 +27,12 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *firstDayStr = [NSString stringWithFormat:@"%ld-%ld-01",year,month];
-    NSLog(@"%@",firstDayStr);
     NSDate *firstDay = [dateFormatter dateFromString:firstDayStr];
     NSDateComponents *weekComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstDay];
     NSInteger firstDayInWeek = weekComponents.weekday;
-    NSLog(@"weekComponents = %ld", weekComponents.weekday);
 
     // 获取当前月有多少天
     NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:firstDay];
-    NSLog(@"range = %ld", range.length);
 
     // 获取上一个月有多少天
     NSInteger lastMonthInt = month - 1;
@@ -45,7 +45,6 @@
     NSDate *lastMonth = [dateFormatter dateFromString:lastMonthStr];
     NSRange lastMonthRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:lastMonth];
     NSInteger daysOflastMonth = lastMonthRange.length;
-    NSLog(@"lastMonthRange = %ld", lastMonthRange.length);
 
     // 排列本月所有日期
     NSMutableArray *days = [NSMutableArray array];
