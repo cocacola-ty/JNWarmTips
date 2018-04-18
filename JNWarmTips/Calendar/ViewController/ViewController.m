@@ -23,6 +23,7 @@
 #import "JNWarmTipsHeader.h"
 #import "JNDayCollectionViewCell.h"
 #import "Masonry.h"
+#import <CoreText/CTFont.h>
 
 static CGFloat kWeekViewHeight = 25;
 static CGFloat kNavViewHeight = 64;
@@ -42,6 +43,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 @property (nonatomic, strong) NSMutableDictionary *allEvents;
 @property (nonatomic, strong) NSArray *tableViewDataArray;
+@property (nonatomic, strong) UILabel *placeHolderLabel;
 @end
 
 @implementation ViewController
@@ -64,6 +66,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self.navigationController.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"今天" style:UIBarButtonItemStylePlain target:self action:@selector(backToToday)]];
 
     [self.view addSubview:self.tableView];
+
+    [self downFont];
 
 }
 
@@ -98,6 +102,42 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (CGSize) caculatorItemSize {
     CGFloat width = SCREEN_WIDTH / kItemCount;
     return CGSizeMake(width, width);
+}
+
+- (void) downFont {
+
+    NSString *fontName = @"DFWaWaSC-W5";
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:fontName, kCTFontNameAttribute, nil];
+    CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attrs);
+    NSMutableArray *descs = [NSMutableArray arrayWithCapacity:0];
+    [descs addObject:(__bridge id)desc];
+    CFRelease(desc);
+
+    CTFontDescriptorMatchFontDescriptorsWithProgressHandler((__bridge CFArrayRef)descs, NULL, ^bool(CTFontDescriptorMatchingState state, CFDictionaryRef progressParameter) {
+        double progressValue = [[(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingPercentage] doubleValue];
+        // 字体已经匹配
+        if (state == kCTFontDescriptorMatchingDidBegin) {
+            NSLog(@"开始匹配");
+        } else if (state == kCTFontDescriptorMatchingDidFinish) { // 下载完成
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.placeHolderLabel.font = [UIFont fontWithName:fontName size:14.0];
+            });
+            NSLog(@"匹配完成");
+        } else if (state == kCTFontDescriptorMatchingWillBeginDownloading) { // 开始下载
+
+        } else if (state == kCTFontDescriptorMatchingDownloading) { // 下载中
+            NSLog(@"download....");
+            NSLog(@"progressValue = %lf", progressValue);
+        } else if (state == kCTFontDescriptorMatchingDidFinishDownloading) {
+            NSLog(@"download done ");
+        } else if (state == kCTFontDescriptorMatchingDidFailWithError) {
+            NSError *error = [(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingError];
+            NSLog(@"error.userInfo = %@", error.userInfo);
+            NSLog(@"error");
+        }
+
+        return (bool)YES;
+    });
 }
 
 #pragma mark - Delegate & DataSources
@@ -238,12 +278,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
 
-        UILabel *label = [UILabel new];
-        label.text = @"对象不会像 NSMutableDictionary 中那样被复制。（键不需要实现 NSCo";
-        [_tableView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_tableView addSubview:self.placeHolderLabel];
+        [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_tableView.mas_centerY);
             make.centerX.equalTo(_tableView.mas_centerX);
+            make.left.equalTo(_tableView.mas_left).offset(25);
+            make.right.equalTo(_tableView.mas_right).offset(-25);
         }];
     }
     return _tableView;
@@ -270,6 +310,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         }
     }
     return _weekView;
+}
+
+- (UILabel *)placeHolderLabel {
+    if (!_placeHolderLabel) {
+        _placeHolderLabel = [UILabel new];
+        _placeHolderLabel.text = @"";
+        _placeHolderLabel.numberOfLines = 0;
+    }
+    return _placeHolderLabel;
 }
 
 - (NSMutableArray *)dataArray {
