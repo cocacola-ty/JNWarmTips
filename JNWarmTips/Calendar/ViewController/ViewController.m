@@ -41,7 +41,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
 
-@property (nonatomic, strong) NSMutableDictionary *allEvents;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *allEvents;
+@property (nonatomic, strong) NSString *eventsListPath;
 @property (nonatomic, strong) NSArray *tableViewDataArray;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
 @end
@@ -54,10 +55,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     // 初始化设置
     self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
+
+    // 设置标题
     self.navigationItem.title = [NSString stringWithFormat:@"%li月", self.currentMonth];
     self.currentShowMonth = self.currentMonth;
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
+    // 添加日历
     self.view.backgroundColor = RGB(245, 245, 245);
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[JNDayCollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
@@ -65,6 +69,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self.view addSubview:self.weekView];
     [self.navigationController.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"今天" style:UIBarButtonItemStylePlain target:self action:@selector(backToToday)]];
 
+    // 添加事件列表
+    self.allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
+    NSString *eventInDayKey = [NSString stringWithFormat:@"%li-%li-%li", self.currentYear, self.currentMonth, self.currentDay];
+    NSArray *events = [self.allEvents objectForKey:eventInDayKey];
+    if (events) {
+        self.tableViewDataArray = events;
+    }else {
+        self.tableViewDataArray = [NSArray array];
+    }
     [self.view addSubview:self.tableView];
 
     [self downFont];
@@ -124,7 +137,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             });
             NSLog(@"匹配完成");
         } else if (state == kCTFontDescriptorMatchingWillBeginDownloading) { // 开始下载
-
         } else if (state == kCTFontDescriptorMatchingDownloading) { // 下载中
             NSLog(@"download....");
             NSLog(@"progressValue = %lf", progressValue);
@@ -241,6 +253,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.tableViewDataArray.count;
     return 2;
 }
 
@@ -315,7 +328,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         _placeHolderLabel = [UILabel new];
-        _placeHolderLabel.text = @"";
+        _placeHolderLabel.text = @"记录每天的小事件\n   记录每天的精彩";
+        _placeHolderLabel.textAlignment = NSTextAlignmentCenter;
         _placeHolderLabel.numberOfLines = 0;
     }
     return _placeHolderLabel;
@@ -326,6 +340,26 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
+}
+
+- (NSMutableDictionary<NSString *, NSArray *> *)allEvents {
+    if (!_allEvents) {
+        _allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.eventsListPath]) {
+            _allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
+        } else {
+            _allEvents = [NSMutableDictionary dictionary];
+            [_allEvents writeToFile:self.eventsListPath atomically:YES];
+        }
+    }
+    return _allEvents;
+}
+
+- (NSString *)eventsListPath {
+    if (!_eventsListPath) {
+        _eventsListPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Document/events.plist"];
+    }
+    return _eventsListPath;
 }
 
 - (CGFloat)collectionViewHeight {
