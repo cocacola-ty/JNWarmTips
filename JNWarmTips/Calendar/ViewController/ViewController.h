@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static const int kCollectionViewHeight = 220;
+
 @interface ViewController : UIViewController
 
 @property(nonatomic, assign, readonly) NSInteger currentYear;

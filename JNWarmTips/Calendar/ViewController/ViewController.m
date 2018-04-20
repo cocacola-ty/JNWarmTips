@@ -19,23 +19,24 @@
 
 #import "ViewController.h"
 #import "ViewController+CalculateCalendar.h"
+#import "JNTopContainerView.h"
 #import "JNDayModel.h"
 #import "JNWarmTipsHeader.h"
 #import "JNDayCollectionViewCell.h"
 #import "Masonry.h"
 #import <CoreText/CTFont.h>
 
-static CGFloat kWeekViewHeight = 25;
-static CGFloat kNavViewHeight = 64;
+static CGFloat kTopContainerViewHeight = 84;
+static CGFloat kWeekViewHeight = 35;
 
 static CGFloat kItemCount = 7;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) JNTopContainerView *topContainerView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *weekView;
-@property(nonatomic, assign) CGFloat collectionViewHeight;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
@@ -52,22 +53,55 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+
     // 初始化设置
     self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
 
     // 设置标题
-    self.navigationItem.title = [NSString stringWithFormat:@"%li月", self.currentMonth];
+//    self.navigationItem.title = [NSString stringWithFormat:@"%li月", self.currentMonth];
     self.currentShowMonth = self.currentMonth;
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
-    // 添加日历
-    self.view.backgroundColor = RGB(245, 245, 245);
-    [self.view addSubview:self.collectionView];
-    [self.collectionView registerClass:[JNDayCollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
+    // 布局
+    self.navigationController.navigationBar.hidden = YES;
+
+    [self.view addSubview:self.topContainerView];
+    [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.mas_equalTo(kTopContainerViewHeight);
+    }];
 
     [self.view addSubview:self.weekView];
-    [self.navigationController.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"今天" style:UIBarButtonItemStylePlain target:self action:@selector(backToToday)]];
+    [self.weekView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.topContainerView.mas_bottom);
+        make.left.equalTo(self.view.mas_left).offset(10);
+        make.right.equalTo(self.view.mas_right).offset(-10);
+        make.height.mas_equalTo(kWeekViewHeight);
+    }];
+
+    // 添加日历
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.collectionView];
+    [self.collectionView registerClass:[JNDayCollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.weekView.mas_bottom);
+        make.left.equalTo(self.view.mas_left).offset(10);
+        make.right.equalTo(self.view.mas_right).offset(-10);
+        make.height.mas_equalTo(kCollectionViewHeight);
+    }];
+
+    UIView *blankView = [UIView new];
+    blankView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:blankView];
+    [blankView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.top.equalTo(self.collectionView.mas_bottom);
+        make.height.mas_equalTo(20);
+    }];
 
     // 添加事件列表
     self.allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
@@ -79,6 +113,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         self.tableViewDataArray = [NSArray array];
     }
     [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(blankView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
 
     [self downFont];
 
@@ -113,8 +153,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (CGSize) caculatorItemSize {
-    CGFloat width = SCREEN_WIDTH / kItemCount;
-    return CGSizeMake(width, width);
+    CGFloat width = (SCREEN_WIDTH-22) / kItemCount;
+    CGFloat height = kCollectionViewHeight / 5;
+    return CGSizeMake(width, height);
 }
 
 - (void) downFont {
@@ -263,6 +304,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 #pragma mark - Getter & Setter
 
+- (JNTopContainerView *)topContainerView {
+    if (!_topContainerView) {
+        _topContainerView = [JNTopContainerView new];
+    }
+    return _topContainerView;
+}
+
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -272,7 +320,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 //        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
 
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kWeekViewHeight+kNavViewHeight+1, SCREEN_WIDTH, self.collectionViewHeight) collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
@@ -283,9 +331,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGFloat tableViewY =  kNavViewHeight + kWeekViewHeight + self.collectionViewHeight + 10;
-        CGFloat tableViewHeight = SCREEN_HEIGHT - tableViewY - 44;
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, SCREEN_WIDTH, tableViewHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.backgroundColor = RGB(245, 245, 245);
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -305,11 +351,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (UIView *)weekView {
     if (!_weekView) {
         _weekView = [UIView new];
-        _weekView.frame = CGRectMake(0, kNavViewHeight, SCREEN_WIDTH, kWeekViewHeight);
-        _weekView.backgroundColor = RGB(245, 245, 245);
+        _weekView.backgroundColor = [UIColor whiteColor];
 
         NSArray *weekdays = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
-        CGFloat width = SCREEN_WIDTH / 7;
+        CGFloat width = (SCREEN_WIDTH-20) / 7;
         CGFloat height = kWeekViewHeight;
         for (int i = 0; i < 7; ++i) {
             UILabel *lbl = [UILabel new];
@@ -362,7 +407,4 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return _eventsListPath;
 }
 
-- (CGFloat)collectionViewHeight {
-    return SCREEN_WIDTH / kItemCount * 5;
-}
 @end

@@ -17,7 +17,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-//        self.textLabel.frame = self.bounds;
         self.textLabel.bounds = CGRectMake(0, 0, self.bounds.size.width - 5, self.bounds.size.height - 5);
         self.textLabel.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         [self.contentView addSubview:self.textLabel];
@@ -34,10 +33,13 @@
 //        self.textLabel.layer.masksToBounds = YES;
         self.textLabel.backgroundColor = RGB(0, 191, 255);
         self.textLabel.textColor = [UIColor whiteColor];
-    }else {
-        self.textLabel.textColor = highLight ? RGB(79, 79, 79) : RGB(211, 211, 211);
+    }else if(highLight) {
+        self.textLabel.textColor = RGB(79, 79, 79);
         self.textLabel.backgroundColor = [UIColor whiteColor];
-//        self.textLabel.layer.cornerRadius = self.frame.size.height;
+        self.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:16.0];
+    } else {
+        self.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:16.0];
+        self.textLabel.textColor = RGB(211, 211, 211);
     }
 }
 
@@ -45,7 +47,6 @@
     if (!_textLabel) {
         _textLabel = [UILabel new];
         _textLabel.font = [UIFont systemFontOfSize:14.0];
-        _textLabel.textColor = RGB(79, 79, 79);
         _textLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _textLabel;

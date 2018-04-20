@@ -6,15 +6,26 @@
 #import "JNDayEventTableViewCell.h"
 
 
+@interface JNDayEventTableViewCell ()
+@property (nonatomic, strong) UIView *containerView;
+@end
+
 @implementation JNDayEventTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:self.containerView];
     }
     return self;
 }
 
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [UIView new];
+    }
+    return _containerView;
+}
 
 @end
