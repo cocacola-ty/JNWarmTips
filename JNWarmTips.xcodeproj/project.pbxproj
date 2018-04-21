@@ -19,6 +19,7 @@
 		8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */; };
 		8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8A132EEA90F3E88CE985 /* ViewController.m */; };
 		8B8D8DECA4453B6757CCDC21 /* ReadMe.md in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D846A78DB3E839387D207 /* ReadMe.md */; };
+		8B8D8E5176150954F3B6948A /* JNWarmTipsPublicFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E2393819A8A628D2505 /* JNWarmTipsPublicFile.m */; };
 		8B8D8F9E8CBB8DE1D626BA5B /* JNDayEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D845045EF929195B9E64A /* JNDayEventTableViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -38,11 +39,12 @@
 		8B8D845045EF929195B9E64A /* JNDayEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayEventTableViewCell.m; sourceTree = "<group>"; };
 		8B8D846A78DB3E839387D207 /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
 		8B8D854C7EB7027EF019EE08 /* JNTopContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNTopContainerView.h; sourceTree = "<group>"; };
-		8B8D858DE8D731C6FA5BCE6C /* JNWarmTipsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWarmTipsHeader.h; sourceTree = "<group>"; };
 		8B8D863217D9B0BFC1D6834C /* JNDayEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayEventTableViewCell.h; sourceTree = "<group>"; };
 		8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayCollectionViewCell.m; sourceTree = "<group>"; };
 		8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+CalculateCalendar.m"; sourceTree = "<group>"; };
 		8B8D8A132EEA90F3E88CE985 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8B8D8D6D3A68F0B563FDB92B /* JNWarmTipsPublicFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWarmTipsPublicFile.h; sourceTree = "<group>"; };
+		8B8D8E2393819A8A628D2505 /* JNWarmTipsPublicFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNWarmTipsPublicFile.m; sourceTree = "<group>"; };
 		8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNTopContainerView.m; sourceTree = "<group>"; };
 		8B8D8F01672CA9AF33AA94A3 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		987F68616B95B3F1A1C53504 /* Pods-JNWarmTips.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JNWarmTips.release.xcconfig"; path = "Pods/Target Support Files/Pods-JNWarmTips/Pods-JNWarmTips.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,8 +111,9 @@
 		8B8D87604E1A96A0CC8FFF17 /* PublicFile */ = {
 			isa = PBXGroup;
 			children = (
-				8B8D858DE8D731C6FA5BCE6C /* JNWarmTipsHeader.h */,
 				8B8D846A78DB3E839387D207 /* ReadMe.md */,
+				8B8D8E2393819A8A628D2505 /* JNWarmTipsPublicFile.m */,
+				8B8D8D6D3A68F0B563FDB92B /* JNWarmTipsPublicFile.h */,
 			);
 			path = PublicFile;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				8B8D8DECA4453B6757CCDC21 /* ReadMe.md in Sources */,
 				8B8D8F9E8CBB8DE1D626BA5B /* JNDayEventTableViewCell.m in Sources */,
 				8B8D82D0095163A877576A10 /* JNTopContainerView.m in Sources */,
+				8B8D8E5176150954F3B6948A /* JNWarmTipsPublicFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +443,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ty.JNWarmTips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
 			name = Debug;
 		};
@@ -453,6 +458,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ty.JNWarmTips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
 			name = Release;
 		};

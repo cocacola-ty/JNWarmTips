@@ -4,7 +4,7 @@
 //
 
 #import "JNDayCollectionViewCell.h"
-#import "JNWarmTipsHeader.h"
+#import "JNWarmTipsPublicFile.h"
 
 
 @interface JNDayCollectionViewCell()

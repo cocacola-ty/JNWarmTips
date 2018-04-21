@@ -21,11 +21,13 @@
 #import "ViewController+CalculateCalendar.h"
 #import "JNTopContainerView.h"
 #import "JNDayModel.h"
-#import "JNWarmTipsHeader.h"
+#import "JNWarmTipsPublicFile.h"
 #import "JNDayCollectionViewCell.h"
+#import "JNDayEventTableViewCell.h"
 #import "Masonry.h"
 #import <CoreText/CTFont.h>
 
+static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 static CGFloat kTopContainerViewHeight = 84;
 static CGFloat kWeekViewHeight = 35;
 
@@ -66,6 +68,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     // 布局
     self.navigationController.navigationBar.hidden = YES;
 
+    [self.topContainerView setContent:self.currentYear AndDay:self.currentDay AndMonth:self.currentMonth];
     [self.view addSubview:self.topContainerView];
     [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top);
@@ -102,6 +105,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.top.equalTo(self.collectionView.mas_bottom);
         make.height.mas_equalTo(20);
     }];
+    UILabel *dateLabel = [UILabel new];
+    dateLabel.font = [UIFont systemFontOfSize:12.0];
+    dateLabel.textColor = RGB(259, 69, 0);
+    dateLabel.text = @"2018-4月";
+    [blankView addSubview:dateLabel];
+    [dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(blankView.mas_centerY);
+        make.centerX.equalTo(blankView.mas_centerX);
+    }];
 
     // 添加事件列表
     self.allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
@@ -113,6 +125,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         self.tableViewDataArray = [NSArray array];
     }
     [self.view addSubview:self.tableView];
+    [self.tableView registerClass:[JNDayEventTableViewCell class] forCellReuseIdentifier:DayEventTableViewCellReuseId];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(blankView.mas_bottom);
         make.left.equalTo(self.view.mas_left);
@@ -287,19 +300,29 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
-    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    JNDayEventTableViewCell*cell = [[JNDayEventTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DayEventTableViewCellReuseId];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.tableViewDataArray.count;
+//    return self.tableViewDataArray.count;
     return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50;
+    return 110;
+}
+
+#pragma mark - Event Response
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
+    [[NSNotificationCenter defaultCenter] postNotificationName:MOTIONEVENTNOTIFICATION object:nil];
 }
 
 #pragma mark - Getter & Setter
@@ -307,6 +330,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (JNTopContainerView *)topContainerView {
     if (!_topContainerView) {
         _topContainerView = [JNTopContainerView new];
+        _topContainerView.backgroundColor = [UIColor whiteColor];
     }
     return _topContainerView;
 }
@@ -333,6 +357,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.backgroundColor = RGB(245, 245, 245);
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -353,14 +378,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _weekView = [UIView new];
         _weekView.backgroundColor = [UIColor whiteColor];
 
-        NSArray *weekdays = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
+//        NSArray *weekdays = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
+        NSArray *weekdays = @[@"Sun", @"Mon", @"Tue", @"Wed", @"Thu", @"Fri", @"Sat"];
         CGFloat width = (SCREEN_WIDTH-20) / 7;
         CGFloat height = kWeekViewHeight;
         for (int i = 0; i < 7; ++i) {
             UILabel *lbl = [UILabel new];
             lbl.textAlignment = NSTextAlignmentCenter;
             lbl.font = [UIFont systemFontOfSize:14.0];
-            lbl.textColor = (i == 0 || i == 6) ? RGB(255, 106, 106) : RGB(79, 79, 79);
+            lbl.textColor = (i == 0 || i == 6) ? RGB(255, 106, 106) : RGB(156, 156, 156);
             CGFloat x = i * width;
             lbl.frame = CGRectMake(x, 0, width, height);
             lbl.text = weekdays[i];

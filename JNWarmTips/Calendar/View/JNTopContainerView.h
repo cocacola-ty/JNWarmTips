@@ -6,4 +6,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JNTopContainerView : UIView
+- (void)setContent:(NSInteger)year AndDay:(NSInteger)day AndMonth:(NSInteger)month;
 @end
