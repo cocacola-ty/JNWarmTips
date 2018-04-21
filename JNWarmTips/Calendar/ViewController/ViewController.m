@@ -28,8 +28,8 @@
 #import <CoreText/CTFont.h>
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
-static CGFloat kTopContainerViewHeight = 84;
-static CGFloat kWeekViewHeight = 35;
+static CGFloat kTopContainerViewHeight = 64;
+static CGFloat kWeekViewHeight = 30;
 
 static CGFloat kItemCount = 7;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
@@ -70,8 +70,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     [self.topContainerView setContent:self.currentYear AndDay:self.currentDay AndMonth:self.currentMonth];
     [self.view addSubview:self.topContainerView];
+//    self.topContainerView.backgroundColor = [UIColor redColor];
     [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top);
+        make.top.equalTo(self.view.mas_top).offset(20);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.height.mas_equalTo(kTopContainerViewHeight);

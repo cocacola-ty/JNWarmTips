@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static const int kCollectionViewHeight = 220;
+static const int kCollectionViewHeight = 215;
 
 @interface ViewController : UIViewController
 

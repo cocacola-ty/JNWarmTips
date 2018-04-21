@@ -25,23 +25,20 @@
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.dateLabel];
         [self.dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.mas_top).offset(25);
             make.left.equalTo(self.mas_left).offset(15);
-            make.bottom.equalTo(self.mas_bottom);
+            make.centerY.equalTo(self.mas_centerY);
         }];
 
         [self addSubview:self.dayLabel];
         [self.dayLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.dateLabel.mas_right).offset(5);
             make.centerY.equalTo(self.dateLabel.mas_centerY);
-            make.height.mas_equalTo(self.dateLabel);
         }];
 
         [self addSubview:self.yearLabel];
         [self.yearLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(self.dateLabel.mas_top);
             make.left.equalTo(self.dayLabel.mas_right).offset(5);
-            make.bottom.equalTo(self.dateLabel.mas_centerY);
+            make.centerY.equalTo(self.dateLabel.mas_centerY);
         }];
     }
     return self;
@@ -57,7 +54,7 @@
         self.dateLabel.text = monthText;
     }
     self.dayLabel.text = [NSString stringWithFormat:@"%li",day];
-    self.yearLabel.text = [NSString stringWithFormat:@"%li", year];
+    self.yearLabel.text = [NSString stringWithFormat:@"%li \ntoday", year];
 }
 
 
@@ -91,8 +88,9 @@
 - (UILabel *)yearLabel {
     if (!_yearLabel) {
         _yearLabel = [UILabel new];
-        _yearLabel.font = [UIFont fontWithName:@"Menlo" size:13.0];
+        _yearLabel.font = [UIFont fontWithName:@"Menlo" size:12.0];
         _yearLabel.textColor = RGB(255, 54, 79);
+        _yearLabel.numberOfLines = 0;
         _yearLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _yearLabel;
