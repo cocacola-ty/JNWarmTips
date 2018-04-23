@@ -64,6 +64,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="I5z-Gx-63E" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vqU-DP-9Ab">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
@@ -77,11 +78,11 @@
             </objects>
             <point key="canvasLocation" x="-766" y="-54"/>
         </scene>
-        <!--Item-->
+        <!--日历-->
         <scene sceneID="TU4-bQ-a5f">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cgj-rE-GkI" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="agh-Yw-bnG"/>
+                    <tabBarItem key="tabBarItem" title="日历" id="agh-Yw-bnG"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="fvl-Kj-PXz">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
