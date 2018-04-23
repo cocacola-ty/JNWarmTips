@@ -67,7 +67,6 @@
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [UILabel new];
-//        _dateLabel.backgroundColor = [UIColor redColor];
         _dateLabel.font = [UIFont fontWithName:@"Menlo-Bold" size:28.0];
         _dateLabel.textColor = RGB(255, 54, 79);
         _dateLabel.textAlignment = NSTextAlignmentLeft;

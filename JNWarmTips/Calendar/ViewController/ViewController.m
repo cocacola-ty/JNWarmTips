@@ -60,17 +60,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
 
-    // 设置标题
-//    self.navigationItem.title = [NSString stringWithFormat:@"%li月", self.currentMonth];
     self.currentShowMonth = self.currentMonth;
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
     // 布局
     self.navigationController.navigationBar.hidden = YES;
 
     [self.topContainerView setContent:self.currentYear AndDay:self.currentDay AndMonth:self.currentMonth];
     [self.view addSubview:self.topContainerView];
-//    self.topContainerView.backgroundColor = [UIColor redColor];
     [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(20);
         make.left.equalTo(self.view.mas_left);
@@ -96,6 +92,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right).offset(-10);
         make.height.mas_equalTo(kCollectionViewHeight);
     }];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
     UIView *blankView = [UIView new];
     blankView.backgroundColor = [UIColor whiteColor];
@@ -105,15 +102,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.collectionView.mas_bottom);
         make.height.mas_equalTo(20);
-    }];
-    UILabel *dateLabel = [UILabel new];
-    dateLabel.font = [UIFont systemFontOfSize:12.0];
-    dateLabel.textColor = RGB(259, 69, 0);
-    dateLabel.text = @"2018-4月";
-    [blankView addSubview:dateLabel];
-    [dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(blankView.mas_centerY);
-        make.centerX.equalTo(blankView.mas_centerX);
     }];
 
     // 添加事件列表
