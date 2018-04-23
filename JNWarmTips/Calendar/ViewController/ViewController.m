@@ -123,6 +123,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
+    self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月 %li日", self.currentYear, self.currentMonth, self.currentDay];
+    [self reloadEventList];
 
     [self downFont];
 
@@ -160,6 +162,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     CGFloat width = (SCREEN_WIDTH-22) / kItemCount;
     CGFloat height = kCollectionViewHeight / 5;
     return CGSizeMake(width, height);
+}
+
+- (void) reloadEventList {
+
+    NSArray *dataList = [self.allEvents objectForKey:self.currentSelectDay];
+    if (dataList==nil || self.currentSelectDay.length == 0) {
+        self.placeHolderLabel.hidden = NO;
+        self.currentShowDateLabel.hidden = NO;
+    } else {
+        self.placeHolderLabel.hidden = YES;
+        self.currentShowDateLabel.hidden = YES;
+    }
+        [self.tableView reloadData];
 }
 
 - (void) downFont {
@@ -227,7 +242,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     JNDayModel *dayModel = monthArray[indexPath.row];
 
     self.currentSelectDay = [NSString stringWithFormat:@"%@-%@-%@", dayModel.year, dayModel.month, dayModel.day];
-    [self.tableView reloadData];
+    [self reloadEventList];
 
     self.currentShowDateLabel.text = [NSString stringWithFormat:@"%@年 %@月 %@日", dayModel.year, dayModel.month, dayModel.day];
 }
@@ -302,7 +317,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 滑动之后 清空事件列表
     self.currentSelectDay = @"";
-    [self.tableView reloadData];
+    [self reloadEventList];
     self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月", willShowYear, willShowMonth];
 }
 
