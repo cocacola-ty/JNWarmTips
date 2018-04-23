@@ -15,6 +15,13 @@
  * dataArray : 数据源 [@"2018-4", @"2018-5"] 通过key去cacheList中去取对应月份的数组
  * dataArrayInit : 最初始化的数据源 点击回到今天后重置的
  * cacheList : 加载过后缓存下来的日期 @"2018-04" : @[...]
+ *
+ * 事件格式：
+ *   @{
+ *      @"2018-4-23" ： @[@"15:04-今天没有什么事", @"今天真的没有什么事"]
+ *   }
+ *   以'-'分割，如果有时间，显示2018-4-23 15：04 如果没有只显示日期
+ *
  */
 
 #import "ViewController.h"
@@ -43,11 +50,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
+@property(nonatomic, strong) NSString *currentSelectDay;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *allEvents;
 @property (nonatomic, strong) NSString *eventsListPath;
-@property (nonatomic, strong) NSArray *tableViewDataArray;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
+@property (nonatomic, strong) UILabel *currentShowDateLabel;
 @end
 
 @implementation ViewController
@@ -61,6 +69,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self initDataSource];
 
     self.currentShowMonth = self.currentMonth;
+    self.currentSelectDay = [NSString stringWithFormat:@"%li-%li-%li", self.currentYear, self.currentMonth, self.currentDay];
 
     // 布局
     self.navigationController.navigationBar.hidden = YES;
@@ -106,13 +115,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 添加事件列表
     self.allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
-    NSString *eventInDayKey = [NSString stringWithFormat:@"%li-%li-%li", self.currentYear, self.currentMonth, self.currentDay];
-    NSArray *events = [self.allEvents objectForKey:eventInDayKey];
-    if (events) {
-        self.tableViewDataArray = events;
-    }else {
-        self.tableViewDataArray = [NSArray array];
-    }
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[JNDayEventTableViewCell class] forCellReuseIdentifier:DayEventTableViewCellReuseId];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -176,7 +178,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             NSLog(@"开始匹配");
         } else if (state == kCTFontDescriptorMatchingDidFinish) { // 下载完成
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.placeHolderLabel.font = [UIFont fontWithName:fontName size:14.0];
+                self.placeHolderLabel.font = [UIFont fontWithName:fontName size:15.0];
+                self.currentShowDateLabel.font = [UIFont fontWithName:fontName size:12.0];
             });
             NSLog(@"匹配完成");
         } else if (state == kCTFontDescriptorMatchingWillBeginDownloading) { // 开始下载
@@ -218,6 +221,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"did select");
+
+    NSString *key = self.dataArray[indexPath.section];
+    NSArray *monthArray = [self.cacheList objectForKey:key];
+    JNDayModel *dayModel = monthArray[indexPath.row];
+
+    self.currentSelectDay = [NSString stringWithFormat:@"%@-%@-%@", dayModel.year, dayModel.month, dayModel.day];
+    [self.tableView reloadData];
+
+    self.currentShowDateLabel.text = [NSString stringWithFormat:@"%@年 %@月 %@日", dayModel.year, dayModel.month, dayModel.day];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -286,17 +298,39 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     }
 
     self.currentShowMonth = willShowMonth;
+
+
+    // 滑动之后 清空事件列表
+    self.currentSelectDay = @"";
+    [self.tableView reloadData];
+    self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月", willShowYear, willShowMonth];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
+    NSString *event = eventsList[indexPath.row];
+    NSRange range = [event rangeOfString:@"-"];
+
+    NSString *eventStr;
+    NSString *dateStr;
+    if (range.length != 0) {
+        eventStr = [event substringFromIndex:range.location+1];
+        dateStr = [event substringToIndex:range.location];
+    } else {
+        eventStr = event;
+        dateStr = self.currentSelectDay;
+    };
+
     JNDayEventTableViewCell*cell = [[JNDayEventTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DayEventTableViewCellReuseId];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
+    [cell setDate:dateStr AndEventDetail:eventStr];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return self.tableViewDataArray.count;
+    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
+    return eventsList.count;
     return 2;
 }
 
@@ -351,10 +385,16 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
         [_tableView addSubview:self.placeHolderLabel];
         [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(_tableView.mas_centerY);
+            make.bottom.equalTo(_tableView.mas_centerY);
             make.centerX.equalTo(_tableView.mas_centerX);
             make.left.equalTo(_tableView.mas_left).offset(25);
             make.right.equalTo(_tableView.mas_right).offset(-25);
+        }];
+
+        [_tableView addSubview:self.currentShowDateLabel];
+        [self.currentShowDateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(_tableView.mas_centerX);
+            make.bottom.equalTo(self.placeHolderLabel.mas_top).offset(-50);
         }];
     }
     return _tableView;
@@ -391,6 +431,15 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _placeHolderLabel.numberOfLines = 0;
     }
     return _placeHolderLabel;
+}
+
+- (UILabel *)currentShowDateLabel {
+    if (!_currentShowDateLabel) {
+        _currentShowDateLabel = [UILabel new];
+        _currentShowDateLabel.textAlignment = NSTextAlignmentCenter;
+        _currentShowDateLabel.numberOfLines = 0;
+    }
+    return _currentShowDateLabel;
 }
 
 - (NSMutableArray *)dataArray {

@@ -7,8 +7,10 @@
 #import "Masonry.h"
 #import "JNWarmTipsPublicFile.h"
 
-
-static const int kContainerViewHeight = 90;
+/**
+ * TODO:
+ *  在cell右上角添加一个小✘，删除该条事件
+ */
 
 @interface JNDayEventTableViewCell ()
 @property (nonatomic, strong) UIView *containerView;
@@ -55,6 +57,11 @@ static const int kContainerViewHeight = 90;
 
     }
     return self;
+}
+
+- (void) setDate:(NSString *)dateStr AndEventDetail:(NSString *)eventStr {
+    self.dateLabel.text = dateStr;
+    self.eventLabel.text = eventStr;
 }
 
 #pragma mark - Getter & Setter

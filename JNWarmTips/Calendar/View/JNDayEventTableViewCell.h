@@ -6,4 +6,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JNDayEventTableViewCell : UITableViewCell
+- (void) setDate:(NSString *)dateStr AndEventDetail:(NSString *)eventStr;
 @end

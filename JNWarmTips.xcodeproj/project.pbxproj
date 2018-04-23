@@ -13,6 +13,7 @@
 		6108F14A207B119700590F4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6108F149207B119700590F4D /* Assets.xcassets */; };
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
+		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
 		8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */; };
 		8B8D82D0095163A877576A10 /* JNTopContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */; };
 		8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8323A3D6BA21634997CA /* JNDayModel.m */; };
@@ -23,6 +24,16 @@
 		8B8D8F9E8CBB8DE1D626BA5B /* JNDayEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D845045EF929195B9E64A /* JNDayEventTableViewCell.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6143384F208DBFD400DFB91F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6108F135207B119700590F4D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6108F13C207B119700590F4D;
+			remoteInfo = JNWarmTips;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6108F13D207B119700590F4D /* JNWarmTips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JNWarmTips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6108F140207B119700590F4D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -32,6 +43,9 @@
 		6108F14C207B119700590F4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6108F14E207B119700590F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6108F14F207B119700590F4D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JNWarmTipsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNWarmTipsTests.m; sourceTree = "<group>"; };
+		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B8D8138BCBDECACA0DA7C3D /* JNDayModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayModel.h; sourceTree = "<group>"; };
 		8B8D820CD58EE968EE8B7C5A /* ViewController+CalculateCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+CalculateCalendar.h"; sourceTree = "<group>"; };
 		8B8D82753B6EE75A38772E6D /* JNDayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayCollectionViewCell.h; sourceTree = "<group>"; };
@@ -61,6 +75,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		61433847208DBFD400DFB91F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -68,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				6108F13F207B119700590F4D /* JNWarmTips */,
+				6143384B208DBFD400DFB91F /* JNWarmTipsTests */,
 				6108F13E207B119700590F4D /* Products */,
 				E2A9711E8B18C9B9B8858DA3 /* Pods */,
 				DACDE275256ED8D23A761C31 /* Frameworks */,
@@ -78,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				6108F13D207B119700590F4D /* JNWarmTips.app */,
+				6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,6 +119,15 @@
 				8B8D87604E1A96A0CC8FFF17 /* PublicFile */,
 			);
 			path = JNWarmTips;
+			sourceTree = "<group>";
+		};
+		6143384B208DBFD400DFB91F /* JNWarmTipsTests */ = {
+			isa = PBXGroup;
+			children = (
+				6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */,
+				6143384E208DBFD400DFB91F /* Info.plist */,
+			);
+			path = JNWarmTipsTests;
 			sourceTree = "<group>";
 		};
 		8B8D861607060FC12B5B2431 /* Calendar */ = {
@@ -191,6 +223,24 @@
 			productReference = 6108F13D207B119700590F4D /* JNWarmTips.app */;
 			productType = "com.apple.product-type.application";
 		};
+		61433849208DBFD400DFB91F /* JNWarmTipsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61433853208DBFD400DFB91F /* Build configuration list for PBXNativeTarget "JNWarmTipsTests" */;
+			buildPhases = (
+				61433846208DBFD400DFB91F /* Sources */,
+				61433847208DBFD400DFB91F /* Frameworks */,
+				61433848208DBFD400DFB91F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61433850208DBFD400DFB91F /* PBXTargetDependency */,
+			);
+			name = JNWarmTipsTests;
+			productName = JNWarmTipsTests;
+			productReference = 6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -203,6 +253,11 @@
 					6108F13C207B119700590F4D = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+					};
+					61433849208DBFD400DFB91F = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 6108F13C207B119700590F4D;
 					};
 				};
 			};
@@ -220,6 +275,7 @@
 			projectRoot = "";
 			targets = (
 				6108F13C207B119700590F4D /* JNWarmTips */,
+				61433849208DBFD400DFB91F /* JNWarmTipsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -232,6 +288,13 @@
 				6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */,
 				6108F14A207B119700590F4D /* Assets.xcassets in Resources */,
 				6108F148207B119700590F4D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61433848208DBFD400DFB91F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,7 +369,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		61433846208DBFD400DFB91F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		61433850208DBFD400DFB91F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6108F13C207B119700590F4D /* JNWarmTips */;
+			targetProxy = 6143384F208DBFD400DFB91F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6108F146207B119700590F4D /* Main.storyboard */ = {
@@ -462,6 +541,34 @@
 			};
 			name = Release;
 		};
+		61433851208DBFD400DFB91F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JNWarmTipsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = JN.JNWarmTipsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JNWarmTips.app/JNWarmTips";
+			};
+			name = Debug;
+		};
+		61433852208DBFD400DFB91F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JNWarmTipsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = JN.JNWarmTipsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JNWarmTips.app/JNWarmTips";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -479,6 +586,15 @@
 			buildConfigurations = (
 				6108F154207B119700590F4D /* Debug */,
 				6108F155207B119700590F4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61433853208DBFD400DFB91F /* Build configuration list for PBXNativeTarget "JNWarmTipsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61433851208DBFD400DFB91F /* Debug */,
+				61433852208DBFD400DFB91F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
