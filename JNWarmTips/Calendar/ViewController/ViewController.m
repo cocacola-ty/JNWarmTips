@@ -300,10 +300,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return 2;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 110;
-}
-
 #pragma mark - Event Response
 
 - (BOOL)canBecomeFirstResponder {
@@ -350,6 +346,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
+        _tableView.estimatedRowHeight = 110;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
 
         [_tableView addSubview:self.placeHolderLabel];
         [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {

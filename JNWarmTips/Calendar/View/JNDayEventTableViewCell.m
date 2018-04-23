@@ -24,14 +24,6 @@ static const int kContainerViewHeight = 90;
     if (self) {
         self.contentView.backgroundColor = RGB(245, 245, 245);
 
-        [self.contentView addSubview:self.containerView];
-        [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView.mas_left).offset(CalendarDefaultMargin);
-            make.right.equalTo(self.contentView.mas_right).offset(-CalendarDefaultMargin);
-            make.bottom.equalTo(self.contentView.mas_bottom);
-            make.height.mas_equalTo(kContainerViewHeight);
-        }];
-
         [self.containerView addSubview:self.dateLabel];
         [self.dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.containerView.mas_left).offset(30);
@@ -42,7 +34,8 @@ static const int kContainerViewHeight = 90;
         [self.eventLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.dateLabel.mas_left);
             make.right.equalTo(self.containerView.mas_right).offset(-15);
-            make.bottom.equalTo(self.containerView.mas_bottom).offset(-30);
+            make.bottom.equalTo(self.containerView.mas_bottom).offset(-20);
+            make.top.equalTo(self.dateLabel.mas_bottom).offset(10);
         }];
 
         [self.containerView addSubview:self.dotView];
@@ -52,6 +45,13 @@ static const int kContainerViewHeight = 90;
             make.width.and.height.mas_equalTo(8);
         }];
 
+        [self.contentView addSubview:self.containerView];
+        [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.contentView.mas_left).offset(CalendarDefaultMargin);
+            make.right.equalTo(self.contentView.mas_right).offset(-CalendarDefaultMargin);
+            make.bottom.equalTo(self.contentView.mas_bottom);
+            make.top.equalTo(self.contentView.mas_top).offset(20);
+        }];
 
     }
     return self;
@@ -73,6 +73,7 @@ static const int kContainerViewHeight = 90;
         _dateLabel = [UILabel new];
         _dateLabel.font = [UIFont systemFontOfSize:12.0];
         _dateLabel.textColor = RGB(156, 156, 156);
+        _dateLabel.numberOfLines = 0;
         _dateLabel.text = @"15:28";
     }
     return _dateLabel;
@@ -84,7 +85,7 @@ static const int kContainerViewHeight = 90;
         _eventLabel.textColor = [UIColor blackColor];
         _eventLabel.font = [UIFont boldSystemFontOfSize:14.0];
         _eventLabel.numberOfLines = 0;
-        _eventLabel.text = @"今天吃的好好吃啊";
+        _eventLabel.text = @"今天吃的好好吃啊,明天吃什么啊，沙发嘎嘎发ad发答案发多少暗示法司法改革1231212了开发商";
     }
     return _eventLabel;
 }
