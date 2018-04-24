@@ -167,7 +167,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (CGSize) caculatorItemSize {
-    CGFloat width = (SCREEN_WIDTH-22) / kItemCount;
+    CGFloat width = (SCREEN_WIDTH-21) / kItemCount;
     CGFloat height = kCollectionViewHeight / 5;
     return CGSizeMake(width, height);
 }
@@ -305,6 +305,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
                 [self.cacheList setObject:loadData forKey:loadMonthKey];
                 [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
                 [self.collectionView reloadData];
+                [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
             }
         }
     } else if (willShowMonth > self.currentShowMonth || (willShowMonth == 1 && self.currentShowMonth == 12)) {
@@ -384,8 +385,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumInteritemSpacing = 0;
-        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0.1;
+        layout.minimumLineSpacing = 0.1;
         layout.itemSize = [self caculatorItemSize];
 //        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;

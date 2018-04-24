@@ -60,5 +60,12 @@ currentDateLabel :
     color : red blue yello ... random
 
 
+### ToDo:
+
+1. 事件Cell右上角添加一个小✘，点击之后删除该事件
+
+2. 点击日历左上角今天的日期 回到今天
+
+3. 点击某一天之后 在下面显示距离今天有多少天
 
 
