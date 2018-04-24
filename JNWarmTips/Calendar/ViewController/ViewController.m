@@ -56,6 +56,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property (nonatomic, strong) NSString *eventsListPath;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
 @property (nonatomic, strong) UILabel *currentShowDateLabel;
+
+@property (nonatomic, strong) UIImageView *addEventImageView;
 @end
 
 @implementation ViewController
@@ -128,6 +130,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     [self downFont];
 
+    [self.view addSubview:self.addEventImageView];
+    [self.addEventImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(60);
+        make.right.equalTo(_tableView.mas_right).offset(-20);
+        make.bottom.equalTo(_tableView.mas_bottom).offset(-60);
+    }];
 }
 
 #pragma mark - Private Method
@@ -211,6 +219,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
         return (bool)YES;
     });
+}
+
+- (void) addEvent {
+    NSLog(@"添加事件");
 }
 
 #pragma mark - Delegate & DataSources
@@ -411,6 +423,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             make.centerX.equalTo(_tableView.mas_centerX);
             make.bottom.equalTo(self.placeHolderLabel.mas_top).offset(-50);
         }];
+
     }
     return _tableView;
 }
@@ -484,4 +497,14 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return _eventsListPath;
 }
 
+- (UIImageView *)addEventImageView {
+    if (!_addEventImageView) {
+        _addEventImageView = [UIImageView new];
+        _addEventImageView.image = [UIImage imageNamed:@"publish_btn"];
+        UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addEvent)];
+        [_addEventImageView addGestureRecognizer:tapGes];
+        _addEventImageView.userInteractionEnabled = YES;
+    }
+    return _addEventImageView;
+}
 @end

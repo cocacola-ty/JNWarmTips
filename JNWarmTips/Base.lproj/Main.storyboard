@@ -56,7 +56,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bqt-9D-fRI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1391.2" y="702.99850074962524"/>
+            <point key="canvasLocation" x="1670" y="694"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Dls-Xh-FQn">
@@ -116,11 +116,11 @@
             </objects>
             <point key="canvasLocation" x="1052" y="702.09895052473769"/>
         </scene>
-        <!--Item-->
+        <!--Todo-->
         <scene sceneID="okZ-wn-aIa">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="arf-ky-y2S" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="T5z-rn-rXp"/>
+                    <tabBarItem key="tabBarItem" title="Todo" image="todo_list" id="T5z-rn-rXp"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1kb-0g-vkS">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -136,4 +136,7 @@
             <point key="canvasLocation" x="-434" y="755"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="todo_list" width="30" height="30"/>
+    </resources>
 </document>
