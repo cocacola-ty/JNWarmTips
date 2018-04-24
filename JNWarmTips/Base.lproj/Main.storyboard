@@ -97,11 +97,11 @@
             </objects>
             <point key="canvasLocation" x="297" y="-54"/>
         </scene>
-        <!--Item-->
+        <!--便签-->
         <scene sceneID="Jgt-Ph-z4c">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="krw-GM-ekh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="tCV-YR-q9W"/>
+                    <tabBarItem key="tabBarItem" title="便签" image="write_something" id="tCV-YR-q9W"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xeb-kY-oqz">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -138,5 +138,6 @@
     </scenes>
     <resources>
         <image name="todo_list" width="30" height="30"/>
+        <image name="write_something" width="30" height="30"/>
     </resources>
 </document>
