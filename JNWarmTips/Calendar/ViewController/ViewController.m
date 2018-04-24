@@ -395,6 +395,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.pagingEnabled = YES;
     }
     return _collectionView;
