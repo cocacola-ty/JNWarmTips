@@ -26,6 +26,7 @@
 
 #import "ViewController.h"
 #import "ViewController+CalculateCalendar.h"
+#import "ViewController+EventList.h"
 #import "JNTopContainerView.h"
 #import "JNDayModel.h"
 #import "JNWarmTipsPublicFile.h"
@@ -44,18 +45,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) JNTopContainerView *topContainerView;
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *weekView;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
-@property(nonatomic, strong) NSString *currentSelectDay;
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *allEvents;
 @property (nonatomic, strong) NSString *eventsListPath;
-@property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) UILabel *currentShowDateLabel;
 
 @property (nonatomic, strong) UIImageView *addEventImageView;
 @end
@@ -64,7 +60,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
 
     // 初始化设置
     self.cacheList = [[NSCache alloc] init];
@@ -103,7 +98,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right).offset(-10);
         make.height.mas_equalTo(kCollectionViewHeight);
     }];
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+//    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
     UIView *blankView = [UIView new];
     blankView.backgroundColor = [UIColor whiteColor];
@@ -136,6 +131,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(_tableView.mas_right).offset(-20);
         make.bottom.equalTo(_tableView.mas_bottom).offset(-60);
     }];
+
+    [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
+
 }
 
 #pragma mark - Private Method
@@ -172,18 +170,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return CGSizeMake(width, height);
 }
 
-- (void) reloadEventList {
-
-    NSArray *dataList = [self.allEvents objectForKey:self.currentSelectDay];
-    if (dataList==nil || self.currentSelectDay.length == 0) {
-        self.placeHolderLabel.hidden = NO;
-        self.currentShowDateLabel.hidden = NO;
-    } else {
-        self.placeHolderLabel.hidden = YES;
-        self.currentShowDateLabel.hidden = YES;
-    }
-        [self.tableView reloadData];
-}
 
 - (void) downFont {
 
@@ -221,9 +207,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     });
 }
 
-- (void) addEvent {
-    NSLog(@"添加事件");
-}
 
 #pragma mark - Delegate & DataSources
 
@@ -332,34 +315,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     self.currentSelectDay = @"";
     [self reloadEventList];
     self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月", willShowYear, willShowMonth];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
-    NSString *event = eventsList[indexPath.row];
-    NSRange range = [event rangeOfString:@"-"];
-
-    NSString *eventStr;
-    NSString *dateStr;
-    if (range.length != 0) {
-        eventStr = [event substringFromIndex:range.location+1];
-        dateStr = [event substringToIndex:range.location];
-    } else {
-        eventStr = event;
-        dateStr = self.currentSelectDay;
-    };
-
-    JNDayEventTableViewCell*cell = [[JNDayEventTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DayEventTableViewCellReuseId];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.backgroundColor = [UIColor whiteColor];
-    [cell setDate:dateStr AndEventDetail:eventStr];
-    return cell;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
-    return eventsList.count;
-    return 2;
 }
 
 #pragma mark - Event Response

@@ -17,5 +17,12 @@ static const int kCollectionViewHeight = 215;
 @property(nonatomic, assign, readonly) NSInteger currentDay;
 @property (nonatomic, strong) NSCache *cacheList;
 
+@property(nonatomic, strong) NSString *currentSelectDay;
+
+// 事件列表
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *allEvents;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UILabel *placeHolderLabel;
+@property (nonatomic, strong) UILabel *currentShowDateLabel;
 @end
 
