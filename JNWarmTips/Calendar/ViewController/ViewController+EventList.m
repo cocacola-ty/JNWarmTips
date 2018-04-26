@@ -5,6 +5,7 @@
 
 #import "ViewController+EventList.h"
 #import "JNDayEventTableViewCell.h"
+#import "JNEventEditorViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -44,6 +45,9 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
 - (void) addEvent {
     NSLog(@"添加事件");
+    JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
+    editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:editorVc animated:YES completion:nil];
 }
 
 - (void) reloadEventList {
