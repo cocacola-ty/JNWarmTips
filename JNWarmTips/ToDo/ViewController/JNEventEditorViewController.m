@@ -28,10 +28,12 @@
 
     JNTextView *textView1 = [JNTextView new];
     [self.view addSubview:textView1];
+    CGFloat height = textView1.font.lineHeight + textView1.textContainerInset.top + textView1.textContainerInset.bottom;
+    NSLog(@"init text view height = %lf", height);
     [textView1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(25);
         make.right.equalTo(self.view.mas_right).offset(-25);
-        make.height.mas_equalTo(90);
+        make.height.mas_equalTo(height);
         make.top.equalTo(self.view.mas_top).offset(120);
     }];
 
