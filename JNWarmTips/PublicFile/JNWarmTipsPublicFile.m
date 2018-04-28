@@ -8,8 +8,10 @@
 const CGFloat CalendarDefaultMargin = 20;
 
 @implementation JNWarmTipsPublicFile {
-
-}
-@end
+} @end
 
 NSString * const MOTIONEVENTNOTIFICATION = @"MOTIONEVENTNOTIFICATION";
+
+NSString * const FONT_NAME_WAWA = @"DFWaWaSC-W5";
+
+NSString * const FONT_DOWNLOAD_NOTIFICATION = @"FONTDOWNLOADFINISHNOTIFICATION";

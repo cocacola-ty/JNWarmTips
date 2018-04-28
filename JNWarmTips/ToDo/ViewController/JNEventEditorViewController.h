@@ -7,4 +7,6 @@
 
 @interface JNEventEditorViewController : UIViewController
 @property (nonatomic, strong) NSString *placeHoladerStr;
+
+@property (nonatomic, copy, nonnull) void(^editFinishBlock());
 @end

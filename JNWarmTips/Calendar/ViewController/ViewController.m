@@ -173,8 +173,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void) downFont {
 
-    NSString *fontName = @"DFWaWaSC-W5";
-    NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:fontName, kCTFontNameAttribute, nil];
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:FONT_NAME_WAWA, kCTFontNameAttribute, nil];
     CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attrs);
     NSMutableArray *descs = [NSMutableArray arrayWithCapacity:0];
     [descs addObject:(__bridge id)desc];
@@ -186,9 +185,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         if (state == kCTFontDescriptorMatchingDidBegin) {
             NSLog(@"开始匹配");
         } else if (state == kCTFontDescriptorMatchingDidFinish) { // 下载完成
+            [[NSNotificationCenter defaultCenter] postNotificationName:FONT_DOWNLOAD_NOTIFICATION object:nil];
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.placeHolderLabel.font = [UIFont fontWithName:fontName size:15.0];
-                self.currentShowDateLabel.font = [UIFont fontWithName:fontName size:12.0];
+                self.placeHolderLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:15.0];
+                self.currentShowDateLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:12.0];
             });
             NSLog(@"匹配完成");
         } else if (state == kCTFontDescriptorMatchingWillBeginDownloading) { // 开始下载
