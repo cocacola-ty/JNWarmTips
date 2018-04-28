@@ -315,6 +315,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 
     // 滑动之后 清空事件列表
+    // 取消CollectionView的选中
+    // 隐藏➕号
     self.currentSelectDay = @"";
     [self reloadEventList];
     self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月", willShowYear, willShowMonth];
@@ -343,8 +345,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumInteritemSpacing = 0.1;
-        layout.minimumLineSpacing = 0.1;
+        layout.minimumInteritemSpacing = 0.0;
+        layout.minimumLineSpacing = 0.0;
         layout.itemSize = [self caculatorItemSize];
 //        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -354,6 +356,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.pagingEnabled = YES;
     }
     return _collectionView;
