@@ -242,6 +242,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+
+    if (scrollView == self.tableView) {
+        return;
+    }
     NSArray *indexPathArray = [self.collectionView indexPathsForVisibleItems];
 
     // 找到最多的section
