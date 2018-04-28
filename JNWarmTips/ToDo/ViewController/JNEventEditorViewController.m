@@ -59,14 +59,16 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
     self.warningView.hidden = NO;
+    [self.view endEditing:YES];
+
     [UIView animateWithDuration:0.4 animations:^{
         self.warningView.transform = CGAffineTransformIdentity;
     }];
-//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) confirmAction {
-
+    self.editFinishBlock(self.textView.text);
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) cancleAction {

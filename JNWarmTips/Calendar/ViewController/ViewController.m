@@ -51,7 +51,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
 
-@property (nonatomic, strong) NSString *eventsListPath;
 
 @property (nonatomic, strong) UIImageView *addEventImageView;
 @end

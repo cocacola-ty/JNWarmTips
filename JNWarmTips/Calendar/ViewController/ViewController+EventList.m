@@ -38,7 +38,6 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
     return eventsList.count;
-    return 2;
 }
 
 #pragma mark - Event Response
@@ -48,6 +47,20 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
     editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorVc.placeHoladerStr = @"记录一下这天小事件...";
+    __weak typeof(self) weakSelf = self;
+    
+    editorVc.editFinishBlock = ^(NSString *text){
+        NSString *key = weakSelf.currentSelectDay;
+        NSMutableArray *events = [weakSelf.allEvents valueForKey:key];
+        if (events) {
+            [events addObject:text];
+
+        }else {
+            [weakSelf.allEvents setValue:@[text] forKey:weakSelf.currentSelectDay];
+        }
+        [weakSelf.allEvents writeToFile:weakSelf.eventsListPath atomically:YES];
+        [weakSelf reloadEventList];
+    };
     [self presentViewController:editorVc animated:YES completion:nil];
 }
 
