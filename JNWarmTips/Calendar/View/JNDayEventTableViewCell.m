@@ -101,7 +101,7 @@
     if (!_dotView) {
         _dotView = [UIView new];
         _dotView.layer.cornerRadius = 4;
-        _dotView.backgroundColor = RANDOMRGB;
+        _dotView.backgroundColor = RANDOM_COLOR;
     }
     return _dotView;
 }

@@ -10,7 +10,6 @@
 
 @interface JNTextView () <UITextViewDelegate >
 @property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) UIView *bottomLineView;
 @end
 
 @implementation JNTextView {
@@ -21,7 +20,8 @@
     self = [super init];
     if (self) {
         self.font = [UIFont systemFontOfSize:17.0];
-        self.backgroundColor = [UIColor greenColor];
+        self.backgroundColor = [UIColor clearColor];
+        self.textColor = RGB(54, 54, 54);
         self.delegate = self;
         self.scrollEnabled = NO;
 
@@ -33,19 +33,9 @@
         };
         self.typingAttributes = attributes;
 
-        [self addSubview:self.bottomLineView];
-        [self.bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.mas_bottom);
-            make.left.equalTo(self.mas_left);
-            make.right.equalTo(self.mas_right);
-            make.height.mas_equalTo(1);
-        }];
+        [self addSubview:self.placeHolderLabel];
+        [self setValue:self.placeHolderLabel forKey:@"_placeholderLabel"];
 
-        NSLog(@"self.textContainerInset.top = %lf", self.textContainerInset.top);
-        NSLog(@"self.textContainerInset.bottom = %lf", self.textContainerInset.bottom);
-        NSLog(@"self.textContainerInset.left = %lf", self.textContainerInset.left);
-        NSLog(@"self.font.lineHeight = %lf", self.font.lineHeight);
-        NSLog(@"self.font.pointSize = %lf", self.font.pointSize);
     }
     return self;
 }
@@ -62,22 +52,29 @@
 
     CGFloat linesHeight = size.height - textView.textContainerInset.top;
     CGFloat singleLineHeight = textView.font.lineHeight + 8;
-    int numOfLines = (int )(linesHeight / singleLineHeight);
+    int numOfLines = (int)(linesHeight / singleLineHeight);
 
     NSLog(@"numOfLines = %d", numOfLines );
 
-//    textView.frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, size.width, size.height);
     NSLog(@"size.height = %lf", size.height);
-    [self mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(size.height);
-    }];
+    if (numOfLines <= 5) {
+        textView.scrollEnabled = NO;
+        [self mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(size.height);
+        }];
+    } else {
+        textView.scrollEnabled = YES;
+    }
 }
 
-- (UIView *)bottomLineView {
-    if (!_bottomLineView) {
-        _bottomLineView = [UIView new];
-        _bottomLineView.backgroundColor = [UIColor blackColor];
+- (UILabel *)placeHolderLabel {
+    if (!_placeHolderLabel) {
+        _placeHolderLabel = [UILabel new];
+        _placeHolderLabel.font = [UIFont systemFontOfSize:17.];
+        _placeHolderLabel.textColor = GRAY_TEXT_COLOR;
+        _placeHolderLabel.text = @"记录点什么...";
     }
-    return _bottomLineView;
+    return _placeHolderLabel;
 }
+
 @end

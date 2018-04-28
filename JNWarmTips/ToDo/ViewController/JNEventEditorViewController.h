@@ -6,4 +6,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JNEventEditorViewController : UIViewController
+@property (nonatomic, strong) NSString *placeHoladerStr;
 @end
