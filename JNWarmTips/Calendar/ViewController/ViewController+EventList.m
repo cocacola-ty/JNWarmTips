@@ -47,6 +47,7 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     NSLog(@"添加事件");
     JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
     editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    editorVc.placeHoladerStr = @"记录一下这天小事件...";
     [self presentViewController:editorVc animated:YES completion:nil];
 }
 

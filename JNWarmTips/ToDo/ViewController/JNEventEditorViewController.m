@@ -50,8 +50,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)textViewDidChange:(UITextView *)textView {
+#pragma mark - Getter & Setter
 
+- (void)setPlaceHoladerStr:(NSString *)placeHoladerStr {
+    _placeHoladerStr = placeHoladerStr;
+    [self.textView setPlaceHolderStr:placeHoladerStr];
 }
 
 - (JNTextView *)textView {

@@ -67,12 +67,16 @@
     }
 }
 
+- (void)setPlaceHolderStr:(NSString *)placeHolderStr {
+    _placeHolderStr = placeHolderStr;
+    self.placeHolderLabel.text = placeHolderStr;
+}
+
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         _placeHolderLabel = [UILabel new];
-        _placeHolderLabel.font = [UIFont systemFontOfSize:17.];
+        _placeHolderLabel.font = [UIFont italicSystemFontOfSize:15.0];
         _placeHolderLabel.textColor = GRAY_TEXT_COLOR;
-        _placeHolderLabel.text = @"记录点什么...";
     }
     return _placeHolderLabel;
 }

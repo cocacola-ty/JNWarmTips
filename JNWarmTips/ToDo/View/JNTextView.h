@@ -7,4 +7,5 @@
 
 
 @interface JNTextView : UITextView
+@property (nonatomic, strong) NSString *placeHolderStr;
 @end
