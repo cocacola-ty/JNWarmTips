@@ -137,17 +137,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 }
 
-- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context {
-
-    if ([keyPath isEqualToString:@"currentSelectDay"]) {
-        NSString *value = [change valueForKey:@"new"];
-        [UIView animateWithDuration:0.25 animations:^{
-            self.addEventImageView.hidden = value.length == 0;
-        }];
-    }
-
-}
-
 #pragma mark - Private Method
 
 - (void) initDataSource {
@@ -221,6 +210,17 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 
 #pragma mark - Delegate & DataSources
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context {
+    
+    if ([keyPath isEqualToString:@"currentSelectDay"]) {
+        NSString *value = [change valueForKey:@"new"];
+        [UIView animateWithDuration:0.25 animations:^{
+            self.addEventImageView.hidden = value.length == 0;
+        }];
+    }
+    
+}
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
