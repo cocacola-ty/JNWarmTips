@@ -133,6 +133,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
 
+    [self addObserver:self forKeyPath:@"currentSelectDay" options:NSKeyValueObservingOptionNew context:nil];
+
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context {
+
+    if ([keyPath isEqualToString:@"currentSelectDay"]) {
+        NSString *value = [change valueForKey:@"new"];
+        [UIView animateWithDuration:0.25 animations:^{
+            self.addEventImageView.hidden = value.length == 0;
+        }];
+    }
+
 }
 
 #pragma mark - Private Method
