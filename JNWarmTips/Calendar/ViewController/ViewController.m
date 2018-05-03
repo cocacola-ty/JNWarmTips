@@ -300,7 +300,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData) {
+            if (loadData.count == 35) {
                 [self.cacheList setObject:loadData forKey:loadMonthKey];
                 [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
                 [self.collectionView reloadData];
@@ -316,7 +316,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData) {
+            if (loadData.count == 35) {
                 [self.cacheList setObject:loadData forKey:loadMonthKey];
                 [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
                 [self.collectionView reloadData];

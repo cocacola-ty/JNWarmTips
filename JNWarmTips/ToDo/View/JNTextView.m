@@ -24,6 +24,7 @@
         self.textColor = RGB(54, 54, 54);
         self.delegate = self;
         self.scrollEnabled = NO;
+        self.layoutManager.allowsNonContiguousLayout = NO;
 
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         paragraphStyle.lineSpacing = 8;

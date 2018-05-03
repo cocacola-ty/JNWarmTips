@@ -30,7 +30,6 @@
 
     [self.view addSubview:self.textView];
     CGFloat height = self.textView.font.lineHeight + self.textView.textContainerInset.top + self.textView.textContainerInset.bottom;
-    NSLog(@"init text view height = %lf", height);
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(25);
         make.right.equalTo(self.view.mas_right).offset(-30);
@@ -89,6 +88,9 @@
 - (JNTextView *)textView {
     if (!_textView) {
         _textView = [JNTextView new];
+        _textView.layer.shadowOffset = CGSizeMake(0, 0);
+        _textView.layer.shadowColor = [UIColor blackColor].CGColor;
+        _textView.layer.shadowOpacity = 0.3;
     }
     return _textView;
 }
