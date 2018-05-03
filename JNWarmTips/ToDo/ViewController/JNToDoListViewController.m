@@ -94,10 +94,10 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [UIView new];
-        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 100);
+        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, 100);
         _headerView.backgroundColor = [UIColor redColor];
 
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(12, 12)];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(12, 12)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = maskPath.CGPath;
         maskLayer.frame = _headerView.bounds;
