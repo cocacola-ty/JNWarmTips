@@ -33,7 +33,6 @@
 #import "JNDayCollectionViewCell.h"
 #import "JNDayEventTableViewCell.h"
 #import "Masonry.h"
-#import <CoreText/CTFont.h>
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 static CGFloat kTopContainerViewHeight = 64;
@@ -61,6 +60,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [super viewDidLoad];
 
     // 初始化设置
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
+
     self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
 
@@ -122,7 +123,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     self.currentShowDateLabel.text = [NSString stringWithFormat:@"%li年 %li月 %li日", self.currentYear, self.currentMonth, self.currentDay];
     [self reloadEventList];
 
-    [self downFont];
 
     [self.view addSubview:self.addEventImageView];
     [self.addEventImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -137,7 +137,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
 #pragma mark - Private Method
+
+- (void) refreshFont {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.placeHolderLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:15.0];
+        self.currentShowDateLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:12.0];
+    });
+}
 
 - (void) initDataSource {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -171,42 +183,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return CGSizeMake(width, height);
 }
 
-
-- (void) downFont {
-
-    NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:FONT_NAME_WAWA, kCTFontNameAttribute, nil];
-    CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attrs);
-    NSMutableArray *descs = [NSMutableArray arrayWithCapacity:0];
-    [descs addObject:(__bridge id)desc];
-    CFRelease(desc);
-
-    CTFontDescriptorMatchFontDescriptorsWithProgressHandler((__bridge CFArrayRef)descs, NULL, ^bool(CTFontDescriptorMatchingState state, CFDictionaryRef progressParameter) {
-        double progressValue = [[(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingPercentage] doubleValue];
-        // 字体已经匹配
-        if (state == kCTFontDescriptorMatchingDidBegin) {
-            NSLog(@"开始匹配");
-        } else if (state == kCTFontDescriptorMatchingDidFinish) { // 下载完成
-            [[NSNotificationCenter defaultCenter] postNotificationName:FONT_DOWNLOAD_NOTIFICATION object:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.placeHolderLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:15.0];
-                self.currentShowDateLabel.font = [UIFont fontWithName:FONT_NAME_WAWA size:12.0];
-            });
-            NSLog(@"匹配完成");
-        } else if (state == kCTFontDescriptorMatchingWillBeginDownloading) { // 开始下载
-        } else if (state == kCTFontDescriptorMatchingDownloading) { // 下载中
-            NSLog(@"download....");
-            NSLog(@"progressValue = %lf", progressValue);
-        } else if (state == kCTFontDescriptorMatchingDidFinishDownloading) {
-            NSLog(@"download done ");
-        } else if (state == kCTFontDescriptorMatchingDidFailWithError) {
-            NSError *error = [(__bridge NSDictionary *)progressParameter objectForKey:(id)kCTFontDescriptorMatchingError];
-            NSLog(@"error.userInfo = %@", error.userInfo);
-            NSLog(@"error");
-        }
-
-        return (bool)YES;
-    });
-}
 
 
 #pragma mark - Delegate & DataSources

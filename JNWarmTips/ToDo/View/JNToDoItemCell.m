@@ -23,6 +23,8 @@ static const int kSelectBtnHeight = 14;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
+
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
         [self.contentView addSubview:self.selectBtn];
@@ -68,6 +70,12 @@ static const int kSelectBtnHeight = 14;
     }
 }
 
+- (void) refreshFont {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.itemTitleLabel.font = [UIFont fontWithName:FONT_NAME_YAPI size:16.];
+    });
+}
+
 - (UIButton *)selectBtn {
     if (!_selectBtn) {
         _selectBtn = [UIButton new];
@@ -84,7 +92,7 @@ static const int kSelectBtnHeight = 14;
     if (!_itemTitleLabel) {
         _itemTitleLabel = [UILabel new];
         _itemTitleLabel.textColor = RGB(36, 36, 36);
-        _itemTitleLabel.text = @"要去吃饭";
+        _itemTitleLabel.font = [UIFont fontWithName:FONT_NAME_YAPI size:16.0];
     }
     return _itemTitleLabel;
 }

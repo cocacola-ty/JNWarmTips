@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "JNWarmTipsPublicFile.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    // 下载所有需要的字体
+    [JNWarmTipsPublicFile downFont:FONT_NAME_YAPI];
+    [JNWarmTipsPublicFile downFont:FONT_NAME_WAWA];
     return YES;
 }
 

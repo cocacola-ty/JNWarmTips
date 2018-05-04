@@ -6,6 +6,8 @@
 #import <UIKit/UIKit.h>
 
 @interface JNWarmTipsPublicFile : NSObject
+/*下载字体*/
++ (void) downFont:(NSString *)fontName ;
 @end
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -31,3 +33,9 @@ UIKIT_EXTERN NSString * const FONT_DOWNLOAD_NOTIFICATION;
 
 /*娃娃体字体名*/
 UIKIT_EXTERN NSString * const FONT_NAME_WAWA;
+
+/*手札体字体名*/
+UIKIT_EXTERN NSString * const FONT_NAME_SHOUZHA;
+
+/*雅痞字体*/
+UIKIT_EXTERN NSString * const FONT_NAME_YAPI ;
