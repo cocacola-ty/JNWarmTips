@@ -5,6 +5,9 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ * 如果该tag下没有item , 默认显示，快去添加吧
+ * */
 
 @interface JNToDoGroupListViewController : NSObject
 @end
