@@ -44,7 +44,14 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     JNToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:kToDoListCellReuseId];
+    [cell reloadCellWithTitle:@"明天不上班" taskFinishStatus:NO];
+
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    JNToDoItemCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell refreshTaskStatus:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -13,6 +13,7 @@ static const int kSelectBtnHeight = 14;
 @property (nonatomic, strong) UIButton *selectBtn;
 @property (nonatomic, strong) UILabel *itemTitleLabel;
 @property (nonatomic, strong) UIView *lineView;
+@property (nonatomic, strong) CAShapeLayer *finishLayer;
 @end
 
 @implementation JNToDoItemCell {
@@ -50,33 +51,21 @@ static const int kSelectBtnHeight = 14;
     return self;
 }
 
-- (void) taskFinish {
-//    [self.selectBtn setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithRoundedRect:self.selectBtn.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(6, 6)];
-    CAShapeLayer *coverLayer = [CAShapeLayer  layer];
-    coverLayer.path = circlePath.CGPath;
-    coverLayer.fillColor = MAIN_COLOR.CGColor;
-//    [self.selectBtn.layer addSublayer:coverLayer];
-
-    UIBezierPath *finishPath = [UIBezierPath bezierPath];
-    [finishPath moveToPoint:CGPointMake(3, 8)];
-    [finishPath addLineToPoint:CGPointMake(7, 11)];
-    [finishPath addLineToPoint:CGPointMake(12, 3)];
-
-    CAShapeLayer *finishLayer = [CAShapeLayer layer];
-    finishLayer.path = finishPath.CGPath;
-    finishLayer.strokeColor = MAIN_COLOR.CGColor;
-    finishLayer.fillColor = [UIColor clearColor].CGColor;
-    finishLayer.lineWidth = 2;
-    finishLayer.lineJoin = kCALineJoinRound;
-    finishLayer.lineCap = kCALineCapRound;
-    [self.selectBtn.layer addSublayer:finishLayer];
-
-    self.selectBtn.layer.borderColor = [UIColor clearColor].CGColor;
+- (void)reloadCellWithTitle:(NSString *)taskTitle taskFinishStatus:(BOOL)taskFinished {
+    self.itemTitleLabel.text = taskTitle;
+    [self refreshTaskStatus:taskFinished];
 }
 
-- (void) taskFinishedStatues {
-
+- (void)refreshTaskStatus:(BOOL)taskFinished {
+    if (taskFinished) {
+        self.selectBtn.layer.borderColor = [UIColor clearColor].CGColor;
+        [self.selectBtn.layer addSublayer:self.finishLayer];
+        self.itemTitleLabel.textColor = GRAY_TEXT_COLOR;
+    } else {
+        self.selectBtn.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
+        [self.finishLayer removeFromSuperlayer];
+        self.itemTitleLabel.textColor = RGB(36, 36, 36);
+    }
 }
 
 - (UIButton *)selectBtn {
@@ -106,6 +95,25 @@ static const int kSelectBtnHeight = 14;
         _lineView.backgroundColor = GRAY_BACKGROUND_COLOR;
     }
     return _lineView;
+}
+
+- (CAShapeLayer *)finishLayer {
+    if (!_finishLayer) {
+
+        UIBezierPath *finishPath = [UIBezierPath bezierPath];
+        [finishPath moveToPoint:CGPointMake(3, 8)];
+        [finishPath addLineToPoint:CGPointMake(7, 11)];
+        [finishPath addLineToPoint:CGPointMake(12, 3)];
+
+        _finishLayer = [CAShapeLayer layer];
+        _finishLayer.path = finishPath.CGPath;
+        _finishLayer.strokeColor = MAIN_COLOR.CGColor;
+        _finishLayer.fillColor = [UIColor clearColor].CGColor;
+        _finishLayer.lineWidth = 2;
+        _finishLayer.lineJoin = kCALineJoinRound;
+        _finishLayer.lineCap = kCALineCapRound;
+    }
+    return _finishLayer;
 }
 
 @end

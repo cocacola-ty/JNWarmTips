@@ -11,4 +11,6 @@
  * */
 
 @interface JNToDoItemCell : UITableViewCell
+- (void)reloadCellWithTitle:(NSString *)taskTitle taskFinishStatus:(BOOL)taskFinished ;
+- (void)refreshTaskStatus:(BOOL)taskFinished ;
 @end
