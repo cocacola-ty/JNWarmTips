@@ -17,6 +17,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
+@property (nonatomic, strong) UIImageView *addItemImageView;
 @end
 
 @implementation JNToDoListViewController {
@@ -38,6 +39,13 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     }];
 
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
+
+    [self.view addSubview:self.addItemImageView];
+    [self.addItemImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(50);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-10);
+        make.centerX.equalTo(self.view.mas_centerX);
+    }];
 
     // TEST
 }
@@ -127,6 +135,14 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         _headerTitleLabel.text = @"ALL";
     }
     return _headerTitleLabel;
+}
+
+- (UIImageView *)addItemImageView {
+    if (!_addItemImageView) {
+        _addItemImageView = [[UIImageView alloc] init];
+        _addItemImageView.image = [UIImage imageNamed:@"publish_btn"];
+    }
+    return _addItemImageView;
 }
 
 @end
