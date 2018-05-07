@@ -21,6 +21,8 @@
     // 下载所有需要的字体
     [JNWarmTipsPublicFile downFont:FONT_NAME_YAPI];
     [JNWarmTipsPublicFile downFont:FONT_NAME_WAWA];
+    
+    NSLog(@"%@", [UIFont familyNames]);
     return YES;
 }
 

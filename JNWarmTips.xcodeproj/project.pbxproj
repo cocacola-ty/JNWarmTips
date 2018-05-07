@@ -14,6 +14,7 @@
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
 		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
+		61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E4640220A002730045C737 /* HannotateSC-W5.ttf */; };
 		8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */; };
 		8B8D82D0095163A877576A10 /* JNTopContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */; };
 		8B8D8311A594230342333C5F /* JNEventEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */; };
@@ -53,6 +54,7 @@
 		6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JNWarmTipsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNWarmTipsTests.m; sourceTree = "<group>"; };
 		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61E4640220A002730045C737 /* HannotateSC-W5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HannotateSC-W5.ttf"; sourceTree = "<group>"; };
 		8B8D806D8F1DF3DC4714B271 /* JNToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoListViewController.h; sourceTree = "<group>"; };
 		8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoGroupListViewController.m; sourceTree = "<group>"; };
 		8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoItemCell.m; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		8B8D87604E1A96A0CC8FFF17 /* PublicFile */ = {
 			isa = PBXGroup;
 			children = (
+				61E4640220A002730045C737 /* HannotateSC-W5.ttf */,
 				8B8D846A78DB3E839387D207 /* ReadMe.md */,
 				8B8D8E2393819A8A628D2505 /* JNWarmTipsPublicFile.m */,
 				8B8D8D6D3A68F0B563FDB92B /* JNWarmTipsPublicFile.h */,
@@ -347,6 +350,7 @@
 				6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */,
 				6108F14A207B119700590F4D /* Assets.xcassets in Resources */,
 				6108F148207B119700590F4D /* Main.storyboard in Resources */,
+				61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
