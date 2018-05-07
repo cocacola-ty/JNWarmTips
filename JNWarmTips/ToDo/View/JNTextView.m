@@ -10,6 +10,7 @@
 
 @interface JNTextView () <UITextViewDelegate >
 @property (nonatomic, strong) UILabel *placeHolderLabel;
+@property (nonatomic, strong) UIView *accessoryView;
 @end
 
 @implementation JNTextView {
@@ -25,6 +26,10 @@
         self.delegate = self;
         self.scrollEnabled = NO;
         self.layoutManager.allowsNonContiguousLayout = NO;
+//        UIView *accessoryView = [UIView new];
+//        accessoryView.bounds = CGRectMake(0, 0, SCREEN_WIDTH, 40);
+//        accessoryView.backgroundColor = RANDOM_COLOR;
+        self.inputAccessoryView = self.accessoryView;
 
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         paragraphStyle.lineSpacing = 8;
@@ -55,9 +60,6 @@
     CGFloat singleLineHeight = textView.font.lineHeight + 8;
     int numOfLines = (int)(linesHeight / singleLineHeight);
 
-    NSLog(@"numOfLines = %d", numOfLines );
-
-    NSLog(@"size.height = %lf", size.height);
     if (numOfLines <= 5) {
         textView.scrollEnabled = NO;
         [self mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -67,6 +69,8 @@
         textView.scrollEnabled = YES;
     }
 }
+
+#pragma mark - Getter & Setter
 
 - (void)setPlaceHolderStr:(NSString *)placeHolderStr {
     _placeHolderStr = placeHolderStr;
@@ -80,6 +84,43 @@
         _placeHolderLabel.textColor = GRAY_TEXT_COLOR;
     }
     return _placeHolderLabel;
+}
+
+- (UIView *)accessoryView {
+    if (!_accessoryView) {
+        _accessoryView = [UIView new];
+        _accessoryView.bounds = CGRectMake(0, 0, SCREEN_WIDTH, 35);
+        _accessoryView.backgroundColor = [UIColor clearColor];
+
+        UIButton *timeBtn = [UIButton new];
+//        timeBtn.backgroundColor = RANDOM_COLOR;
+        [timeBtn setTitle:@"time" forState:UIControlStateNormal];
+        [timeBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+        timeBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        timeBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [_accessoryView addSubview:timeBtn];
+        [timeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_accessoryView.mas_left);
+            make.top.equalTo(_accessoryView.mas_top);
+            make.bottom.equalTo(_accessoryView.mas_bottom);
+            make.width.mas_equalTo(60);
+        }];
+
+        UIButton *tagBtn = [UIButton new];
+//        tagBtn.backgroundColor = RANDOM_COLOR;
+        [tagBtn setTitle:@"group" forState:UIControlStateNormal];
+        [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+        tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        tagBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [_accessoryView addSubview:tagBtn];
+        [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(timeBtn.mas_right);
+            make.top.equalTo(_accessoryView.mas_top);
+            make.bottom.equalTo(_accessoryView.mas_bottom);
+            make.width.mas_equalTo(60);
+        }];
+    }
+    return _accessoryView;
 }
 
 @end

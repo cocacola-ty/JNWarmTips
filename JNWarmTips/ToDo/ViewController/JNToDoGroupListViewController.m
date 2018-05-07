@@ -7,6 +7,7 @@
 #import "View+MASAdditions.h"
 #import "JNGroupListCell.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNToDoListViewController.h"
 
 static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
@@ -39,6 +40,11 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 3;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
+    [self.navigationController pushViewController:toDoListViewController animated:YES];
 }
 
 - (UITableView *)tableView {
