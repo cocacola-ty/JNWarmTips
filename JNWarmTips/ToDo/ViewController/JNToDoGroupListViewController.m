@@ -37,15 +37,19 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     return 3;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 90;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 125;
+//}
 
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.backgroundColor = GRAY_BACKGROUND_COLOR;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.estimatedRowHeight = 125;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
 
         _tableView.tableHeaderView = self.headerView;
     }
@@ -57,7 +61,7 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
         _headerView = [UIView new];
         CGFloat height = 64 + 50;
         _headerView.bounds = CGRectMake(0, 0, SCREEN_WIDTH, height);
-        _headerView.backgroundColor = RANDOM_COLOR;
+        _headerView.backgroundColor = GRAY_BACKGROUND_COLOR;
     }
     return _headerView;
 }
