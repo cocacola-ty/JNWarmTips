@@ -104,9 +104,9 @@ static const int kCircleViewHeight = 10;
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:17.0];
+        _titleLabel.font = [UIFont systemFontOfSize:17.0];
         _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.text = @"待办事项";
+        _titleLabel.text = @"ALL";
     }
     return _titleLabel;
 }

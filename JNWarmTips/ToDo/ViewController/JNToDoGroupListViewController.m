@@ -28,6 +28,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     }];
 }
 
+- (void) addTag {
+    NSLog(@"add tag ...");
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     JNGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:kGroupListCellReuseId];
     return cell;
@@ -58,6 +62,32 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
         CGFloat height = 64 + 50;
         _headerView.bounds = CGRectMake(0, 0, SCREEN_WIDTH, height);
         _headerView.backgroundColor = GRAY_BACKGROUND_COLOR;
+
+        CGFloat btnHeight = 18;
+        UIButton *addTagBtn = [UIButton new];
+        [addTagBtn addTarget:self action:@selector(addTag) forControlEvents:UIControlEventTouchUpInside];
+        addTagBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
+        UIBezierPath *path = [UIBezierPath bezierPathWithRect:addTagBtn.bounds];
+        [path moveToPoint:CGPointMake(btnHeight/2, 0)];
+        [path addLineToPoint:CGPointMake(btnHeight/2, btnHeight)];
+        [path moveToPoint:CGPointMake(0, btnHeight/2)];
+        [path addLineToPoint:CGPointMake(btnHeight, btnHeight/2)];
+
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = path.CGPath;
+        shapeLayer.frame = addTagBtn.bounds;
+        shapeLayer.strokeColor = [UIColor blackColor].CGColor;
+        shapeLayer.fillColor = [UIColor clearColor].CGColor;
+        shapeLayer.lineWidth = 2;
+        [addTagBtn.layer addSublayer:shapeLayer];
+
+        [_headerView addSubview:addTagBtn];
+        [addTagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(btnHeight);
+            make.right.equalTo(_headerView.mas_right).offset(-15);
+            make.top.equalTo(_headerView.mas_top).offset(35);
+        }];
+
     }
     return _headerView;
 }
