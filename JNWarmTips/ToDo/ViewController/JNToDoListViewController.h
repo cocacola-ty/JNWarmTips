@@ -13,6 +13,10 @@
  *
  *  1. select * from task_table where tag='life' and time!=null order by asc // 第一组数据
  *  2. select * form task_table where tag='life' group by category // 剩下的数据
+ *
+ *
+ * 测试点:
+ *  添加很多分类，但是每个分类下都没内容
  * */
 @interface JNToDoListViewController : UIViewController
 @end
