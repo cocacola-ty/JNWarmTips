@@ -57,6 +57,11 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
+    if (self.textView.text.length == 0) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    
     self.warningView.hidden = NO;
     [self.view endEditing:YES];
 
