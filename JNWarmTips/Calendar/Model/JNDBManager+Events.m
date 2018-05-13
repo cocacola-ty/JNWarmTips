@@ -33,4 +33,13 @@
     return result;
 }
 
+- (BOOL) addEvent:(JNEventModel *)eventModel {
+    __block BOOL result = NO;
+    [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ VALUES()", kJNDBEventsTable];
+         result = [db executeUpdate:@""];
+    }];
+    return result;
+}
+
 @end
