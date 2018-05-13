@@ -9,16 +9,28 @@
 #import "JNDBManager+Events.h"
 #import "JNDBManager.h"
 #import "FMDB.h"
+#import "JNEventModel.h"
 
 @implementation JNDBManager (Events)
 
-- (NSArray *) getAllEventsOfDay:(NSString *)day {
+- (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day {
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATA = %@", kJNDBEventsTable, day];
+    NSMutableArray *result = [NSMutableArray array];
+    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATA = '%@'", kJNDBEventsTable, day];
     [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
         FMResultSet *queryResult = [db executeQuery:sql];
+        while ([queryResult next]) {
+            JNEventModel *eventModel = [JNEventModel new];
+            eventModel.eventId = [queryResult longLongIntForColumn:@"EVENT_ID"];
+            eventModel.content = [queryResult stringForColumn:@"CONTENT"];
+            eventModel.startTime = [queryResult longLongIntForColumn:@"START_TIME"];
+            eventModel.endTime = [queryResult longLongIntForColumn:@"END_TIME"];
+            eventModel.showDate = day;
+            [result addObject:eventModel];
+        };
+        
     }];
-    return nil;
+    return result;
 }
 
 @end

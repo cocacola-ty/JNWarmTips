@@ -7,7 +7,8 @@
 //
 
 #import "JNDBManager.h"
+@class JNEventModel;
 
 @interface JNDBManager (Events)
-
+- (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
 @end

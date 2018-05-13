@@ -32,6 +32,8 @@
 #import "JNWarmTipsPublicFile.h"
 #import "JNDayCollectionViewCell.h"
 #import "JNDayEventTableViewCell.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Events.h"
 #import "Masonry.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
@@ -440,6 +442,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         }
     }
     return _allEvents;
+}
+
+- (NSMutableArray *)eventsArray {
+    if (!_eventsArray) {
+        _eventsArray = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllEventsOfDay:self.currentSelectDay]]; // 初始化获取当前日期的所有事件
+    }
+    return _eventsArray;
 }
 
 - (NSString *)eventsListPath {

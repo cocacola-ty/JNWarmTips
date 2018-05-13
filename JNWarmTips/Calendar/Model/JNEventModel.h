@@ -10,11 +10,11 @@
 
 @interface JNEventModel : NSObject
 
-@property (nonatomic,strong) NSString *eventId;
+@property (nonatomic,assign) long long eventId;
 @property (nonatomic,strong) NSString *showDate;
 @property (nonatomic,strong) NSString *content;
-@property (nonatomic,strong) NSString *startTime;
-@property (nonatomic,strong) NSString *endTime;
+@property (nonatomic,assign) long long startTime;
+@property (nonatomic,assign) long long endTime;
 
 
 @end
