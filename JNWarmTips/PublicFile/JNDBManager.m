@@ -22,13 +22,13 @@
     分组名不可重复
  */
 
-static NSString *const kJNDBListTable = @"list_table";
+NSString *const kJNDBListTable = @"list_table";
 
-static NSString *const kJNDBEventsTable = @"events_table";
+NSString *const kJNDBEventsTable = @"events_table";
 
-static NSString *const kJNDBGroupTable = @"group_table";
+NSString *const kJNDBGroupTable = @"group_table";
 
-static NSString *const kJNDBCategoryTable = @"category_table";
+NSString *const kJNDBCategoryTable = @"category_table";
 
 @implementation JNDBManager {
 
@@ -60,7 +60,8 @@ static NSString *const kJNDBCategoryTable = @"category_table";
 }
 
 - (void) createTables {
-    [self createDataBase];
+    BOOL dbOpenResult = [self createDataBase];
+    NSAssert(dbOpenResult, @"数据库创建失败");
     
     // 小组表
     if (![self tableExist:kJNDBGroupTable]) {

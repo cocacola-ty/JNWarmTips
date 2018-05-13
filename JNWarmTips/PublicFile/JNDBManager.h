@@ -3,7 +3,15 @@
 // Copyright (c) 2018 fengtianyu. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+UIKIT_EXTERN NSString *const kJNDBListTable;
+
+UIKIT_EXTERN NSString *const kJNDBEventsTable;
+
+UIKIT_EXTERN NSString *const kJNDBGroupTable;
+
+UIKIT_EXTERN NSString *const kJNDBCategoryTable;
 
 @class FMDatabaseQueue;
 

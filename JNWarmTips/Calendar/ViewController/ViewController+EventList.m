@@ -60,6 +60,10 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
         }
         [weakSelf.allEvents writeToFile:weakSelf.eventsListPath atomically:YES];
         [weakSelf reloadEventList];
+        
+        // 插入数据库
+        
+        
     };
     [self presentViewController:editorVc animated:YES completion:nil];
 }
