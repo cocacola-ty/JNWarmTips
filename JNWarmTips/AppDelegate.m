@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNDBManager.h"
 
 @interface AppDelegate ()
 
@@ -20,6 +21,10 @@
     // Override point for customization after application launch.
     // 下载所有需要的字体
     [JNWarmTipsPublicFile downFont:FONT_NAME_WAWA];
+    
+    // 初始化数据库
+    [[JNDBManager shareInstance] createTables];
+    
     return YES;
 }
 

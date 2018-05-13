@@ -8,5 +8,11 @@
 @class FMDatabaseQueue;
 
 @interface JNDBManager : NSObject
+
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
+
++ (instancetype) shareInstance;
+
+- (void) createTables;
+
 @end
