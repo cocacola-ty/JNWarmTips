@@ -84,7 +84,9 @@ currentDateLabel :
 
 4. ~~滑动之后 隐藏添加事件按钮~~ 
 
-5. ~~输入框没有内容的时候退出就不弹框了~~  
+5. ~~输入框没有内容的时候退出就不弹框了~~
+
+6. cellWillDisplay 添加cell出现动画
 
 
 ### todo list
