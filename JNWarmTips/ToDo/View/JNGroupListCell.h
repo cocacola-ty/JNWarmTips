@@ -7,4 +7,5 @@
 
 
 @interface JNGroupListCell : UITableViewCell
+- (void) updateContentWithTitle:(NSString *)title WithItemTitle:(NSString *)itemTitle WithItemCount:(NSInteger)itemCount;
 @end

@@ -9,5 +9,6 @@
 @interface JNGroupModel : NSObject
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) NSString *groupName;
+@property (nonatomic, assign) NSInteger itemCount;
 @property (nonatomic, strong) NSString *firstItemContent;
 @end

@@ -83,6 +83,16 @@ static const int kCircleViewHeight = 10;
         self.itemLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:15.0];
     });
 }
+
+- (void) updateContentWithTitle:(NSString *)title WithItemTitle:(NSString *)itemTitle WithItemCount:(NSInteger)itemCount {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.titleLabel.text = title;
+        self.itemLabel.text = itemTitle;
+    });
+}
+
+#pragma mark - Getter & Setter
+
 - (UIView *)containerView {
     if (!_containerView) {
         _containerView = [UIView new];
@@ -106,7 +116,6 @@ static const int kCircleViewHeight = 10;
         _titleLabel = [UILabel new];
         _titleLabel.font = [UIFont systemFontOfSize:17.0];
         _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.text = @"ALL";
     }
     return _titleLabel;
 }
@@ -122,7 +131,6 @@ static const int kCircleViewHeight = 10;
 - (UILabel *)itemLabel {
     if (!_itemLabel) {
         _itemLabel = [UILabel new];
-        _itemLabel.text = @"这个标签下还没有东西";
         _itemLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:14.0];
     }
     return _itemLabel;

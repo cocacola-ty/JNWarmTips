@@ -8,6 +8,9 @@
 #import "JNGroupListCell.h"
 #import "JNWarmTipsPublicFile.h"
 #import "JNToDoListViewController.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Group.h"
+#import "JNGroupModel.h"
 
 static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
@@ -37,12 +40,14 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 #pragma mark - Delegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    JNGroupModel *groupModel = self.groups[indexPath.row];
     JNGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:kGroupListCellReuseId];
+    [cell updateContentWithTitle:groupModel.groupName WithItemTitle:groupModel.firstItemContent WithItemCount:groupModel.itemCount];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return self.groups.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -103,9 +108,13 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     return _headerView;
 }
 
-- (NSMutableArray *)groups {
+- (NSMutableArray<JNGroupModel *> *)groups {
     if (!_groups) {
-
+        JNGroupModel *groupModel = [JNGroupModel new];
+        groupModel.groupName = @"All";
+        _groups = [NSMutableArray arrayWithObject:groupModel];
+        [_groups addObjectsFromArray:[[JNDBManager shareInstance] getAllGroups]];
     }
+    return _groups;
 }
 @end

@@ -6,5 +6,8 @@
 #import <Foundation/Foundation.h>
 #import "JNDBManager.h"
 
+@class JNGroupModel;
+
 @interface JNDBManager (Group)
+- (NSArray<JNGroupModel *> *)getAllGroups;
 @end
