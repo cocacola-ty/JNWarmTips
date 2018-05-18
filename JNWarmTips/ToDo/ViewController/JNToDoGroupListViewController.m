@@ -11,6 +11,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Group.h"
 #import "JNGroupModel.h"
+#import "JNAddGroupAlertViewController.h"
 
 static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
@@ -34,7 +35,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 }
 
 - (void) addTag {
-    NSLog(@"add tag ...");
+    JNAddGroupAlertViewController *addGroupAlertViewController = [[JNAddGroupAlertViewController alloc] init];
+    addGroupAlertViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:addGroupAlertViewController animated:YES completion:nil];
+
 }
 
 #pragma mark - Delegate
