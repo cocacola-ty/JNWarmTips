@@ -14,6 +14,7 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 @interface JNToDoGroupListViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) NSMutableArray *groups;
 @end
 
 @implementation JNToDoGroupListViewController {
@@ -33,6 +34,8 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     NSLog(@"add tag ...");
 }
 
+#pragma mark - Delegate
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     JNGroupListCell *cell = [tableView dequeueReusableCellWithIdentifier:kGroupListCellReuseId];
     return cell;
@@ -46,6 +49,8 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
     [self.navigationController pushViewController:toDoListViewController animated:YES];
 }
+
+#pragma mark - Getter & Setter
 
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -96,5 +101,11 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
     }
     return _headerView;
+}
+
+- (NSMutableArray *)groups {
+    if (!_groups) {
+
+    }
 }
 @end
