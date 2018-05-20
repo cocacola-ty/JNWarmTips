@@ -17,9 +17,12 @@
     分组id ：
     是否完成：默认为0
     是否需要通知：默认为0
- 
+
  * 分组表
     分组名不可重复
+
+ *  小组表
+ *  ID 小组名 小组第一条内容(默认为'该小组目前空空如也~') 小组内内容数量
  */
 
 NSString *const kJNDBListTable = @"list_table";
@@ -66,7 +69,7 @@ NSString *const kJNDBCategoryTable = @"category_table";
     // 小组表
     if (![self tableExist:kJNDBGroupTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (GROUP_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, GROUP_NAME TEXT NOT NULL)", kJNDBGroupTable];
+            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (GROUP_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, GROUP_NAME TEXT NOT NULL, GROUP_FIRST_CONTENT TEXT DEFAULT '该小组目前空空如也~', GROUP_ITEM_COUNT INTEGER DEFAULT 0)", kJNDBGroupTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"小组表创建失败");
         }];
