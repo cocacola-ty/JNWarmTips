@@ -4,7 +4,8 @@
 //
 
 #import <UIKit/UIKit.h>
+@class JNGroupModel;
 
 @interface JNAddGroupAlertViewController : UIViewController
-
+@property(nonatomic, copy) void (^finishAddGroup)(JNGroupModel *groupModel);
 @end

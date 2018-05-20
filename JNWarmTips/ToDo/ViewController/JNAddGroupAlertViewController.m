@@ -6,6 +6,9 @@
 #import "JNAddGroupAlertViewController.h"
 #import "View+MASAdditions.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNGroupModel.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Group.h"
 
 static const int kFinishBtnWidthAndHeight = 30;
 
@@ -15,9 +18,7 @@ static const int kFinishBtnWidthAndHeight = 30;
 @property (nonatomic, strong) UIButton *finishBtn;
 @end
 
-@implementation JNAddGroupAlertViewController {
-
-}
+@implementation JNAddGroupAlertViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -58,6 +59,29 @@ static const int kFinishBtnWidthAndHeight = 30;
     [self.finishBtn.layer addSublayer:[self finishBtnCoverLayer]];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) addGroup {
+
+    JNGroupModel *groupModel = [JNGroupModel new];
+    groupModel.groupName = self.inputField.text;
+
+    // 插入到数据库
+    [[JNDBManager shareInstance] addGroup:groupModel];
+
+    // 回调给上一个界面
+    if (self.finishAddGroup) {
+        self.finishAddGroup(groupModel);
+    }
+
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+#pragma mark - Getter & Setter
+
 - (UIView *)containerView {
     if (!_containerView) {
         _containerView = [UIView new];
@@ -78,7 +102,8 @@ static const int kFinishBtnWidthAndHeight = 30;
 - (UIButton *)finishBtn {
     if (!_finishBtn) {
         _finishBtn = [[UIButton alloc] init];
-        _finishBtn.backgroundColor = [UIColor redColor];
+        _finishBtn.backgroundColor = MAIN_COLOR;
+        [_finishBtn addTarget:self action:@selector(addGroup) forControlEvents:UIControlEventTouchUpInside];
     }
     return _finishBtn;
 }
@@ -95,7 +120,7 @@ static const int kFinishBtnWidthAndHeight = 30;
     finishBtnCoverLayer.path = path.CGPath;
     finishBtnCoverLayer.lineWidth = 2;
     finishBtnCoverLayer.lineJoin = kCALineJoinRound;
-    finishBtnCoverLayer.strokeColor = [UIColor greenColor].CGColor;
+    finishBtnCoverLayer.strokeColor = [UIColor whiteColor].CGColor;
     finishBtnCoverLayer.fillColor = [UIColor clearColor].CGColor;
 
     return finishBtnCoverLayer;

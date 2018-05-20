@@ -10,4 +10,7 @@
 
 @interface JNDBManager (Group)
 - (NSArray<JNGroupModel *> *)getAllGroups;
+
+/*添加小组到数据库*/
+- (BOOL) addGroup:(JNGroupModel *)groupModel;
 @end

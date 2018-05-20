@@ -28,4 +28,17 @@
     }];
     return resultArray;
 }
+
+- (BOOL) addGroup:(JNGroupModel *)groupModel {
+    __block BOOL result;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@(GROUP_NAME) VALUES('%@')", kJNDBGroupTable, groupModel.groupName];
+        result = [db executeUpdate:sql];
+
+        if (!result) {
+            rollback = YES;
+        }
+    }];
+    return result;
+}
 @end
