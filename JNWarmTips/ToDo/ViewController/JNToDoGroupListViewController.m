@@ -37,6 +37,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 - (void) addTag {
     JNAddGroupAlertViewController *addGroupAlertViewController = [[JNAddGroupAlertViewController alloc] init];
     addGroupAlertViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    addGroupAlertViewController.finishAddGroup = ^(JNGroupModel *groupModel) {
+        [self.groups addObject:groupModel];
+        [self.tableView reloadData];
+    };
     [self presentViewController:addGroupAlertViewController animated:YES completion:nil];
 
 }
