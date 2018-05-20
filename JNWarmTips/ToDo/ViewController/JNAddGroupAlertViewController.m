@@ -4,7 +4,14 @@
 //
 
 #import "JNAddGroupAlertViewController.h"
+#import "View+MASAdditions.h"
 
+@interface JNAddGroupAlertViewController()
+@property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) UITextField *inputField;
+@property (nonatomic, strong) CAShapeLayer *bottomLayer;
+@property (nonatomic, strong) UIButton *finishBtn;
+@end
 
 @implementation JNAddGroupAlertViewController {
 
@@ -12,7 +19,65 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
 
-    self.view.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    [self.view addSubview:self.containerView];
+    [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(40);
+        make.right.equalTo(self.view.mas_right).offset(-40);
+        make.centerY.equalTo(self.view.mas_centerY);
+        make.height.mas_equalTo(200);
+    }];
+
+    [self.containerView addSubview:self.inputField];
+    [self.inputField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.containerView.mas_left).offset(15);
+        make.right.equalTo(self.containerView.mas_right).offset(-15);
+        make.top.equalTo(self.containerView.mas_top).offset(50);
+    }];
+
+    [self.containerView addSubview:self.finishBtn];
+    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(self.containerView.mas_bottom).offset(-25);
+        make.width.height.mas_equalTo(50);
+    }];
+    self.finishBtn.layer.cornerRadius = 25;
+}
+
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [UIView new];
+        _containerView.backgroundColor = [UIColor whiteColor];
+        _containerView.layer.cornerRadius = 8;
+    }
+    return _containerView;
+}
+
+- (UITextField *)inputField {
+    if (!_inputField) {
+        _inputField = [[UITextField alloc] init];
+        _inputField.placeholder = @"为小组起一个响亮的名字";
+
+        UIBezierPath *path = [UIBezierPath bezierPath];
+//        [path moveToPoint:CGPointMake(0, <#CGFloat y#>)];
+//        CAShapeLayer *bottomLayer = [CAShapeLayer layer];
+    }
+    return _inputField;
+}
+
+- (UIButton *)finishBtn {
+    if (!_finishBtn) {
+        _finishBtn = [[UIButton alloc] init];
+        _finishBtn.backgroundColor = [UIColor redColor];
+    }
+    return _finishBtn;
+}
+
+- (CAShapeLayer *)bottomLayer {
+    if (!_bottomLayer) {
+
+    }
+    return _bottomLayer;
 }
 @end
