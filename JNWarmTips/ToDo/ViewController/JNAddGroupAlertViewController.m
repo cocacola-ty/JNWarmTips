@@ -6,6 +6,8 @@
 #import "JNAddGroupAlertViewController.h"
 #import "View+MASAdditions.h"
 
+static const int kFinishBtnWidthAndHeight = 30;
+
 @interface JNAddGroupAlertViewController()
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
@@ -40,9 +42,10 @@
     [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(self.containerView.mas_bottom).offset(-25);
-        make.width.height.mas_equalTo(50);
+        make.width.height.mas_equalTo(kFinishBtnWidthAndHeight);
     }];
-    self.finishBtn.layer.cornerRadius = 25;
+    self.finishBtn.layer.cornerRadius = kFinishBtnWidthAndHeight/2;
+    [self.finishBtn.layer addSublayer:[self finishBtnCoverLayer]];
 }
 
 - (UIView *)containerView {
@@ -72,6 +75,25 @@
         _finishBtn.backgroundColor = [UIColor redColor];
     }
     return _finishBtn;
+}
+
+- (CAShapeLayer *)finishBtnCoverLayer {
+    CGPoint midPoint = CGPointMake(kFinishBtnWidthAndHeight / 2, kFinishBtnWidthAndHeight / 2 + 6);
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(midPoint.x - 6, midPoint.y - 6)];
+    [path addLineToPoint:midPoint];
+    [path addLineToPoint:CGPointMake(midPoint.x + 6, midPoint.y - 12)];
+
+    CAShapeLayer *finishBtnCoverLayer = [CAShapeLayer layer];
+    finishBtnCoverLayer.frame = self.finishBtn.frame;
+    finishBtnCoverLayer.path = path.CGPath;
+    finishBtnCoverLayer.lineWidth = 2;
+    finishBtnCoverLayer.lineJoin = kCALineJoinRound;
+    finishBtnCoverLayer.strokeColor = [UIColor greenColor].CGColor;
+    finishBtnCoverLayer.fillColor = [UIColor clearColor].CGColor;
+
+    return finishBtnCoverLayer;
+
 }
 
 - (CAShapeLayer *)bottomLayer {
