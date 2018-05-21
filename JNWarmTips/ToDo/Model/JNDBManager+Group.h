@@ -13,4 +13,7 @@
 
 /*添加小组到数据库*/
 - (BOOL) addGroup:(JNGroupModel *)groupModel;
+
+/*删除小组*/
+- (void)deleteGroup:(JNGroupModel *)groupModel;
 @end
