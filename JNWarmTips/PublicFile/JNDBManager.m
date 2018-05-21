@@ -72,6 +72,9 @@ NSString *const kJNDBCategoryTable = @"category_table";
             NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (GROUP_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, GROUP_NAME TEXT NOT NULL, GROUP_FIRST_CONTENT TEXT DEFAULT '该小组目前空空如也~', GROUP_ITEM_COUNT INTEGER DEFAULT 0)", kJNDBGroupTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"小组表创建失败");
+            // 初始化第一条数据
+            NSString *initSql = [NSString stringWithFormat:@"INSERT INTO %@('GROUP_NAME') VALUES ('All')", kJNDBGroupTable];
+            [db executeUpdate:initSql];
         }];
     }
     

@@ -28,7 +28,7 @@ static const int kFinishBtnWidthAndHeight = 30;
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(40);
         make.right.equalTo(self.view.mas_right).offset(-40);
-        make.centerY.equalTo(self.view.mas_centerY);
+        make.centerY.equalTo(self.view.mas_centerY).offset(-60);
         make.height.mas_equalTo(150);
     }];
 

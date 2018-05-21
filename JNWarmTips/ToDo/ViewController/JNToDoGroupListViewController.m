@@ -118,10 +118,8 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
 - (NSMutableArray<JNGroupModel *> *)groups {
     if (!_groups) {
-        JNGroupModel *groupModel = [JNGroupModel new];
-        groupModel.groupName = @"All";
-        _groups = [NSMutableArray arrayWithObject:groupModel];
         [_groups addObjectsFromArray:[[JNDBManager shareInstance] getAllGroups]];
+        _groups = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllGroups]];
     }
     return _groups;
 }
