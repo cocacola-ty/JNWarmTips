@@ -46,8 +46,11 @@
 - (void)deleteGroup:(JNGroupModel *)groupModel {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         /*将所有属于该表的item的group_id更新为0*/
-        NSString *updateSql = [NSString stringWithFormat:@"update %@ set group_id='0' where group_id = '%@' ", kJNDBListTable, groupModel.groupId];
+        NSString *updateSql = [NSString stringWithFormat:@"update %@ set group_id='0', CATEGORY_ID=null where group_id = '%@' ", kJNDBListTable, groupModel.groupId];
         [db executeUpdate:updateSql];
+
+        NSString *deleteCategorySql = [NSString stringWithFormat:@"delete from %@ where group_id='%@'", kJNDBCategoryTable, groupModel.groupId];
+        [db executeUpdate:deleteCategorySql];
 
         NSString *deleteSql = [NSString stringWithFormat:@"delete from %@ where group_id = '%@'", kJNDBGroupTable, groupModel.groupId];
         [db executeUpdate:deleteSql];
