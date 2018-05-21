@@ -8,6 +8,9 @@
 @interface JNWarmTipsPublicFile : NSObject
 /*下载字体*/
 + (void) downFont:(NSString *)fontName ;
+
+/*格式化日期字符串*/
++ (NSString *)dateStringFormat:(NSInteger)year month:(NSInteger)month day:(NSInteger)day ;
 @end
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width

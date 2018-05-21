@@ -25,6 +25,6 @@ static const int kCollectionViewHeight = 215;
 @property (nonatomic, strong) NSMutableArray *eventsArray;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) UILabel *currentShowDateLabel;
+@property (nonatomic, strong) UILabel *currentDateShowLabel;
 @end
 

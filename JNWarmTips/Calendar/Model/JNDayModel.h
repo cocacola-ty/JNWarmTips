@@ -7,9 +7,9 @@
 
 
 @interface JNDayModel : NSObject
-@property (nonatomic, strong) NSString *day;
-@property (nonatomic, strong) NSString *month;
-@property (nonatomic, strong) NSString *year;
+@property (nonatomic, assign) NSInteger day;
+@property (nonatomic, assign) NSInteger month;
+@property (nonatomic, assign) NSInteger year;
 @property(nonatomic, assign) BOOL needShowFlag;
 @property(nonatomic, assign) BOOL isCurrentMonth;
 @property(nonatomic, assign) BOOL isToday;

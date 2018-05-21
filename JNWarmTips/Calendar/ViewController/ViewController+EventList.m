@@ -73,10 +73,10 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     NSArray *dataList = [self.allEvents objectForKey:self.currentSelectDay];
     if (dataList==nil || self.currentSelectDay.length == 0) {
         self.placeHolderLabel.hidden = NO;
-        self.currentShowDateLabel.hidden = NO;
+        self.currentDateShowLabel.hidden = NO;
     } else {
         self.placeHolderLabel.hidden = YES;
-        self.currentShowDateLabel.hidden = YES;
+        self.currentDateShowLabel.hidden = YES;
     }
     [self.tableView reloadData];
 }

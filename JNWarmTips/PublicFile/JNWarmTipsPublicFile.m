@@ -10,6 +10,13 @@
 @implementation JNWarmTipsPublicFile {
 }
 
++ (NSString *)dateStringFormat:(NSInteger)year month:(NSInteger)month day:(NSInteger)day {
+    if (day == nil) {
+        return [NSString stringWithFormat:@"%d-%02d", year, month];
+    }
+    return [NSString stringWithFormat:@"%d-%02d-%02d", year, month, day];
+}
+
 + (void) downFont:(NSString *)fontName {
 
     NSMutableDictionary *attrs = [NSMutableDictionary dictionaryWithObjectsAndKeys:fontName, kCTFontNameAttribute, nil];

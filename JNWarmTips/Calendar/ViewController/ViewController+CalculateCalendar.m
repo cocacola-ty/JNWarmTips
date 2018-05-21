@@ -5,17 +5,18 @@
 
 #import "ViewController+CalculateCalendar.h"
 #import "JNDayModel.h"
+#import "JNWarmTipsPublicFile.h"
 
 
 @implementation ViewController (CalculateCalendar)
 
 - (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
-    NSLog(@"month = %li", month);
-    NSLog(@"year = %li", year);
+    NSLog(@"month = %d", month);
+    NSLog(@"year = %d", year);
     /*
      * 检查缓存中是否有，如果没有日算对应月份所有日期
      */
-    NSString *key = [NSString stringWithFormat:@"%ld-%ld", year, month];
+    NSString *key = [JNWarmTipsPublicFile dateStringFormat:year month:month day:nil];
     id value = [self.cacheList objectForKey:key];
     if (value) {
         return nil;
@@ -26,7 +27,7 @@
     // 获取本月1号是周几
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *firstDayStr = [NSString stringWithFormat:@"%ld-%ld-01",year,month];
+    NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
     NSDate *firstDay = [dateFormatter dateFromString:firstDayStr];
     NSDateComponents *weekComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstDay];
     NSInteger firstDayInWeek = weekComponents.weekday;
@@ -41,7 +42,7 @@
         lastMonthInYear = year - 1;
         lastMonthInt = 12;
     }
-    NSString *lastMonthStr = [NSString stringWithFormat:@"%ld-%ld-01", lastMonthInYear, lastMonthInt];
+    NSString *lastMonthStr = [JNWarmTipsPublicFile dateStringFormat:lastMonthInYear month:lastMonthInt day:1];
     NSDate *lastMonth = [dateFormatter dateFromString:lastMonthStr];
     NSRange lastMonthRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:lastMonth];
     NSInteger daysOflastMonth = lastMonthRange.length;
@@ -51,9 +52,9 @@
     // 需要显示的上个月的天数
     for (int index = 1; index < firstDayInWeek; index++) {
         JNDayModel *dayModel = [JNDayModel new];
-        dayModel.day = [NSString stringWithFormat:@"%ld", (daysOflastMonth - firstDayInWeek + index + 1)];
-        dayModel.month = [NSString stringWithFormat:@"%ld",lastMonthInt];
-        dayModel.year = [NSString stringWithFormat:@"%ld", lastMonthInYear];
+        dayModel.day =  (daysOflastMonth - firstDayInWeek + index + 1);
+        dayModel.month = lastMonthInt;
+        dayModel.year =  lastMonthInYear;
         dayModel.needShowFlag = NO;
         dayModel.isCurrentMonth = NO;
         dayModel.isCurrentMonth = NO;
@@ -63,9 +64,9 @@
     // 本月的天数
     for (int i = 1; i <= range.length; i++) {
         JNDayModel *dayModel = [JNDayModel new];
-        dayModel.day = [NSString stringWithFormat:@"%i", i];
-        dayModel.month = [NSString stringWithFormat:@"%ld", month];
-        dayModel.year = [NSString stringWithFormat:@"%ld", year];
+        dayModel.day = i;
+        dayModel.month = month;
+        dayModel.year = year;
         dayModel.needShowFlag = NO;
         dayModel.isCurrentMonth = YES;
         dayModel.isToday = (i == self.currentDay && month == self.currentMonth && year == self.currentYear);
@@ -82,9 +83,9 @@
         NSInteger nextDays = 35 - days.count;
         for (int i = 1; i <= nextDays; i++) {
             JNDayModel *dayModel = [JNDayModel new];
-            dayModel.day = [NSString stringWithFormat:@"%i", i];
-            dayModel.month = [NSString stringWithFormat:@"%ld", nextMonthInt];
-            dayModel.year = [NSString stringWithFormat:@"%ld", nextMonthInYear];
+            dayModel.day = i;
+            dayModel.month = nextMonthInt;
+            dayModel.year = nextMonthInYear;
             dayModel.needShowFlag = NO;
             dayModel.isCurrentMonth = NO;
             [days addObject:dayModel];
@@ -103,7 +104,7 @@
         lastYear = currentYear - 1;
     }
 
-    return [NSString stringWithFormat:@"%ld-%ld", lastYear, lastMonth];
+    return [JNWarmTipsPublicFile dateStringFormat:lastYear month:lastMonth day:nil];
 }
 
 - (NSString *) getNextMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
@@ -115,7 +116,7 @@
         nextMonth = 1;
         nextYear = currentYear + 1;
     }
-    return [NSString stringWithFormat:@"%ld-%ld", nextYear, nextMonth];
+    return [JNWarmTipsPublicFile dateStringFormat:nextYear month:nextMonth day:nil];
 
 }
 @end
