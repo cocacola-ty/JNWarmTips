@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *eventLabel;
 @property (nonatomic, strong) UIView *dotView;
+@property (nonatomic, strong) UIButton *deleteBtn;
 @end
 
 @implementation JNDayEventTableViewCell
@@ -47,6 +48,14 @@
             make.width.and.height.mas_equalTo(8);
         }];
 
+        [self.containerView addSubview:self.deleteBtn];
+        [self.deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(20);
+            make.top.equalTo(self.containerView.mas_top).offset(8);
+            make.right.equalTo(self.containerView.mas_right).offset(-8);
+        }];
+        [self.deleteBtn.layer addSublayer:[self deleteLayer]];
+
         [self.contentView addSubview:self.containerView];
         [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView.mas_left).offset(CalendarDefaultMargin);
@@ -62,6 +71,24 @@
 - (void) setDate:(NSString *)dateStr AndEventDetail:(NSString *)eventStr {
     self.dateLabel.text = dateStr;
     self.eventLabel.text = eventStr;
+}
+
+- (CAShapeLayer *)deleteLayer {
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(5, 5)];
+    [path addLineToPoint:CGPointMake(16, 16)];
+    [path moveToPoint:CGPointMake(7, 15)];
+    [path addLineToPoint:CGPointMake(13, 5)];
+
+    CAShapeLayer *deleteLayer = [CAShapeLayer layer];
+    deleteLayer.frame = self.deleteBtn.frame;
+    deleteLayer.path = path.CGPath;
+    deleteLayer.lineWidth = 2;
+    deleteLayer.lineJoin = kCALineJoinRound;
+    deleteLayer.lineCap = kCALineCapRound;
+    deleteLayer.strokeColor = [UIColor blackColor].CGColor;
+    deleteLayer.fillColor = [UIColor clearColor].CGColor;
+    return deleteLayer;
 }
 
 #pragma mark - Getter & Setter
@@ -104,6 +131,14 @@
         _dotView.backgroundColor = RANDOM_COLOR;
     }
     return _dotView;
+}
+
+- (UIButton *)deleteBtn {
+    if (!_deleteBtn) {
+        _deleteBtn = [UIButton new];
+        _deleteBtn.backgroundColor = [UIColor clearColor];
+    }
+    return _deleteBtn;
 }
 
 @end
