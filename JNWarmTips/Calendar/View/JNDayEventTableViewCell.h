@@ -7,4 +7,6 @@
 
 @interface JNDayEventTableViewCell : UITableViewCell
 - (void) setDate:(NSString *)dateStr AndEventDetail:(NSString *)eventStr;
+
+@property(nonatomic, copy) void (^deleteClickBlock)();
 @end

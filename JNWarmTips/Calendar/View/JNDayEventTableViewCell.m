@@ -7,10 +7,6 @@
 #import "Masonry.h"
 #import "JNWarmTipsPublicFile.h"
 
-/**
- * TODO:
- *  在cell右上角添加一个小✘，删除该条事件
- */
 
 @interface JNDayEventTableViewCell ()
 @property (nonatomic, strong) UIView *containerView;
@@ -68,10 +64,20 @@
     return self;
 }
 
+#pragma mark - Public Method & Event Response
+
 - (void) setDate:(NSString *)dateStr AndEventDetail:(NSString *)eventStr {
     self.dateLabel.text = dateStr;
     self.eventLabel.text = eventStr;
 }
+
+- (void) deleteBtnClick {
+    if (self.deleteClickBlock) {
+        self.deleteClickBlock();
+    }
+}
+
+#pragma mark - Private Method
 
 - (CAShapeLayer *)deleteLayer {
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -137,6 +143,7 @@
     if (!_deleteBtn) {
         _deleteBtn = [UIButton new];
         _deleteBtn.backgroundColor = [UIColor clearColor];
+        [_deleteBtn addTarget:self action:@selector(deleteBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteBtn;
 }

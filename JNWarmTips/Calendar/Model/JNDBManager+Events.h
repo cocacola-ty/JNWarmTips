@@ -10,7 +10,11 @@
 @class JNEventModel;
 
 @interface JNDBManager (Events)
+
 - (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
+
+/*删除事件*/
+- (void) deleteEvent:(long long) eventId ;
 
 /*添加事件*/
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate ;

@@ -17,24 +17,16 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 #pragma mark - Delegate & DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    NSArray *eventsList = [self.oneDayEventsArray objectForKey:self.currentSelectDay];
-//    NSString *event = eventsList[indexPath.row];
     JNEventModel *eventModel = self.oneDayEventsArray[indexPath.row];
-
-
-//    NSString *eventStr;
-//    NSString *dateStr;
-//    if (range.length != 0) {
-//        eventStr = [event substringFromIndex:range.location+1];
-//        dateStr = [event substringToIndex:range.location];
-//    } else {
-//        eventStr = event;
-//        dateStr = self.currentSelectDay;
-//    };
 
     JNDayEventTableViewCell*cell = [[JNDayEventTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DayEventTableViewCellReuseId];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
+    __weak typeof(self) ws = self;
+    cell.deleteClickBlock = ^() {
+        [[JNDBManager shareInstance] deleteEvent:eventModel.eventId];
+        [ws reloadEventList];
+    };
     [cell setDate:eventModel.showDate AndEventDetail:eventModel.content];
     return cell;
 }

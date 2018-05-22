@@ -33,6 +33,16 @@
     return result;
 }
 
+- (void) deleteEvent:(long long)eventId {
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *sql = [NSString stringWithFormat:@"delete from %@ where event_id = '%lld'", kJNDBEventsTable, eventId];
+        NSLog(@"sql = %@", sql);
+        [db executeUpdate:sql];
+    }];
+}
+
+#pragma mark - 添加事件
+
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate {
     NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@('CONTENT', 'SHOW_DATE') VALUES('%@', '%@')", kJNDBEventsTable, content, showDate];
     [self addEvent:sql];
