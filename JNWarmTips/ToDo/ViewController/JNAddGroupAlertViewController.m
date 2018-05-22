@@ -10,7 +10,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Group.h"
 
-static const int kFinishBtnWidthAndHeight = 30;
+static const int kFinishBtnWidthAndHeight = 35;
 
 @interface JNAddGroupAlertViewController()
 @property (nonatomic, strong) UIView *containerView;
@@ -29,8 +29,9 @@ static const int kFinishBtnWidthAndHeight = 30;
         make.left.equalTo(self.view.mas_left).offset(40);
         make.right.equalTo(self.view.mas_right).offset(-40);
         make.centerY.equalTo(self.view.mas_centerY).offset(-60);
-        make.height.mas_equalTo(150);
+        make.height.mas_equalTo(160);
     }];
+    self.containerView.transform = CGAffineTransformMakeTranslation(0, -500);
 
     [self.containerView addSubview:self.inputField];
     [self.inputField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -57,14 +58,36 @@ static const int kFinishBtnWidthAndHeight = 30;
     }];
     self.finishBtn.layer.cornerRadius = kFinishBtnWidthAndHeight / 2;
     [self.finishBtn.layer addSublayer:[self finishBtnCoverLayer]];
+
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [UIView animateWithDuration:0.35 animations:^{
+        self.containerView.transform = CGAffineTransformIdentity;
+    }];
+}
+
+- (void) dismiss {
+    [UIView animateWithDuration:0.35 animations:^{
+        self.containerView.transform = CGAffineTransformMakeTranslation(0, 900);
+    } completion:^(BOOL finished){
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }];
+}
+
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismiss];
 }
 
 - (void) addGroup {
 
+    NSString *groupName = self.inputField.text;
+    if (groupName.length == 0) {
+        [self shakeAnimationForView:self.inputField];
+        return;
+    }
     JNGroupModel *groupModel = [JNGroupModel new];
     groupModel.groupName = self.inputField.text;
 
@@ -76,8 +99,25 @@ static const int kFinishBtnWidthAndHeight = 30;
         self.finishAddGroup(groupModel);
     }
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismiss];
 
+}
+
+/*左右摇动画*/
+- (void) shakeAnimationForView:(UIView *)view {
+    CALayer *layer = view.layer;
+    CGPoint point = layer.position;
+    CGPoint start = CGPointMake(point.x - 10, point.y);
+    CGPoint end = CGPointMake(point.x + 10, point.y);
+
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [animation setFromValue:[NSValue valueWithCGPoint:start]];
+    [animation setToValue:[NSValue valueWithCGPoint:end]];
+    animation.autoreverses = YES;
+    animation.duration = 0.15;
+    animation.repeatCount = 2;
+    [layer addAnimation:animation forKey:nil];
 }
 
 #pragma mark - Getter & Setter

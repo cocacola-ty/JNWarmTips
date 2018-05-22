@@ -41,7 +41,7 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
         [self.groups addObject:groupModel];
         [self.tableView reloadData];
     };
-    [self presentViewController:addGroupAlertViewController animated:YES completion:nil];
+    [self presentViewController:addGroupAlertViewController animated:NO completion:nil];
 
 }
 
