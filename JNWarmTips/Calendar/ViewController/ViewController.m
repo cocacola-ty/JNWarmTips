@@ -114,7 +114,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     }];
 
     // 添加事件列表
-    self.allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[JNDayEventTableViewCell class] forCellReuseIdentifier:DayEventTableViewCellReuseId];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -431,17 +430,11 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return _dataArray;
 }
 
-- (NSMutableDictionary<NSString *, NSArray *> *)allEvents {
-    if (!_allEvents) {
-        _allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:self.eventsListPath]) {
-            _allEvents = [NSMutableDictionary dictionaryWithContentsOfFile:self.eventsListPath];
-        } else {
-            _allEvents = [NSMutableDictionary dictionary];
-            [_allEvents writeToFile:self.eventsListPath atomically:YES];
-        }
+- (NSArray<JNEventModel *> *)oneDayEventsArray {
+    if (!_oneDayEventsArray) {
+        _oneDayEventsArray = [[JNDBManager shareInstance] getAllEventsOfDay:self.currentSelectDay];
     }
-    return _allEvents;
+    return _oneDayEventsArray;
 }
 
 - (NSMutableArray *)eventsArray {

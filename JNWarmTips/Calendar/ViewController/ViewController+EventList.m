@@ -6,6 +6,9 @@
 #import "ViewController+EventList.h"
 #import "JNDayEventTableViewCell.h"
 #import "JNEventEditorViewController.h"
+#import "JNEventModel.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Events.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -14,30 +17,30 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 #pragma mark - Delegate & DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
-    NSString *event = eventsList[indexPath.row];
-    NSRange range = [event rangeOfString:@"-"];
+//    NSArray *eventsList = [self.oneDayEventsArray objectForKey:self.currentSelectDay];
+//    NSString *event = eventsList[indexPath.row];
+    JNEventModel *eventModel = self.oneDayEventsArray[indexPath.row];
 
-    NSString *eventStr;
-    NSString *dateStr;
-    if (range.length != 0) {
-        eventStr = [event substringFromIndex:range.location+1];
-        dateStr = [event substringToIndex:range.location];
-    } else {
-        eventStr = event;
-        dateStr = self.currentSelectDay;
-    };
+
+//    NSString *eventStr;
+//    NSString *dateStr;
+//    if (range.length != 0) {
+//        eventStr = [event substringFromIndex:range.location+1];
+//        dateStr = [event substringToIndex:range.location];
+//    } else {
+//        eventStr = event;
+//        dateStr = self.currentSelectDay;
+//    };
 
     JNDayEventTableViewCell*cell = [[JNDayEventTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DayEventTableViewCellReuseId];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
-    [cell setDate:dateStr AndEventDetail:eventStr];
+    [cell setDate:eventModel.showDate AndEventDetail:eventModel.content];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *eventsList = [self.allEvents objectForKey:self.currentSelectDay];
-    return eventsList.count;
+    return self.oneDayEventsArray.count;
 }
 
 #pragma mark - Event Response
@@ -50,28 +53,18 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     __weak typeof(self) weakSelf = self;
     
     editorVc.editFinishBlock = ^(NSString *text){
-        NSString *key = weakSelf.currentSelectDay;
-        NSMutableArray *events = [weakSelf.allEvents valueForKey:key];
-        if (events) {
-            [events addObject:text];
-
-        }else {
-            [weakSelf.allEvents setValue:@[text] forKey:weakSelf.currentSelectDay];
-        }
-        [weakSelf.allEvents writeToFile:weakSelf.eventsListPath atomically:YES];
-        [weakSelf reloadEventList];
-        
         // 插入数据库
-        
-        
+        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
+        [weakSelf reloadEventList];
+
     };
     [self presentViewController:editorVc animated:YES completion:nil];
 }
 
 - (void) reloadEventList {
 
-    NSArray *dataList = [self.allEvents objectForKey:self.currentSelectDay];
-    if (dataList==nil || self.currentSelectDay.length == 0) {
+    self.oneDayEventsArray = [[JNDBManager shareInstance] getAllEventsOfDay:self.currentSelectDay];
+    if (self.oneDayEventsArray.count == 0 || self.currentSelectDay.length == 0) {
         self.placeHolderLabel.hidden = NO;
         self.currentDateShowLabel.hidden = NO;
     } else {

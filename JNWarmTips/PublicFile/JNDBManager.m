@@ -25,7 +25,8 @@
  * 分组表
  *      id 分组名 小组id(所属于的小组)
  *      分组名不可重复
- *
+ * 时间表
+ *      id content(事件内容,必要) show_date(事件日期，必要) start_time(开始时间) end_time(结束时间) group_id(所属于小组，同步到清单中时需要) category_id(所属分类，同步到清单时需要) notification(是否需要通知 默认0 不需要) finished(是否完成 默认0 不需要)
  */
 
 NSString *const kJNDBListTable = @"list_table";
@@ -102,7 +103,7 @@ NSString *const kJNDBCategoryTable = @"category_table";
     // 事件表
     if (![self tableExist:kJNDBEventsTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (EVENT_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CONTENT TEXT NOT NULL, SHOW_DATE DATE NOT NULL, START_TIME INTEGER DEFAULT NULL, END_TIME INTEGER DEFAULT NULL, GROUP_ID INTEGER, CATEGORY_ID INTEGER , NOTIFICATION INTEGER DEFAULT 0, FINISHED INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID), FOREIGN KEY(CATEGORY_ID) REFERENCES %@(CATEGORY_ID))", kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
+            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (EVENT_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CONTENT TEXT NOT NULL, SHOW_DATE DATE NOT NULL, START_TIME INTEGER DEFAULT NULL, END_TIME INTEGER DEFAULT NULL, GROUP_ID INTEGER, CATEGORY_ID INTEGER , NOTIFICATION INTEGER DEFAULT 0, FINISHED INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID), FOREIGN KEY(CATEGORY_ID) REFERENCES %@(CATEGORY_ID))", kJNDBEventsTable, kJNDBGroupTable, kJNDBCategoryTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"事件表创建失败");
         }];

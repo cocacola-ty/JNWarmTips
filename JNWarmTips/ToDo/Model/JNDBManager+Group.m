@@ -15,7 +15,6 @@
 
     NSMutableArray *resultArray = [NSMutableArray array];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-//        NSString *sql = [NSString stringWithFormat:@"select t1.group_id, t1.group_name, t2.content, temp.count from %@ as t1, %@ as t2, (select max(item_id) as id, group_id, sum(group_id) as count from %@ group by group_id) as temp where temp.id=t2.item_id and t1.group_id=temp.group_id", kJNDBGroupTable,kJNDBListTable,kJNDBListTable];
         NSString *sql = [NSString stringWithFormat:@"select * from %@", kJNDBGroupTable];
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {

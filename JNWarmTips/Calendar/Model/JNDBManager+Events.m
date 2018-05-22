@@ -13,11 +13,11 @@
 
 @implementation JNDBManager (Events)
 
-- (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day {
-    
+- (NSArray<JNEventModel *> *)getAllEventsOfDay:(NSString *)day {
+
     NSMutableArray *result = [NSMutableArray array];
-    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATA = '%@'", kJNDBEventsTable, day];
-    [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATE = '%@'", kJNDBEventsTable, day];
+    [self.dbQueue inTransaction:^(FMDatabase *_Nonnull db, BOOL *_Nonnull rollback) {
         FMResultSet *queryResult = [db executeQuery:sql];
         while ([queryResult next]) {
             JNEventModel *eventModel = [JNEventModel new];
@@ -28,18 +28,27 @@
             eventModel.showDate = day;
             [result addObject:eventModel];
         };
-        
+
     }];
     return result;
 }
 
-- (BOOL) addEvent:(JNEventModel *)eventModel {
-    __block BOOL result = NO;
-    [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ VALUES()", kJNDBEventsTable];
-         result = [db executeUpdate:@""];
-    }];
-    return result;
+- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate {
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@('CONTENT', 'SHOW_DATE') VALUES('%@', '%@')", kJNDBEventsTable, content, showDate];
+    [self addEvent:sql];
 }
+
+- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndStartTime:(long long)startTime AndEndTime:(long long)endTime AndNotification:(BOOL)notification AndFinished:(BOOL)finished {
+    NSString *sql = [NSString stringWithFormat:@""];
+    [self addEvent:sql];
+}
+
+- (void)addEvent:(NSString *)sql {
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [db executeUpdate:sql];
+    }];
+}
+
 
 @end
+

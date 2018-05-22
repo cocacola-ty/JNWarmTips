@@ -11,8 +11,6 @@
 @implementation ViewController (CalculateCalendar)
 
 - (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
-    NSLog(@"month = %d", month);
-    NSLog(@"year = %d", year);
     /*
      * 检查缓存中是否有，如果没有日算对应月份所有日期
      */
