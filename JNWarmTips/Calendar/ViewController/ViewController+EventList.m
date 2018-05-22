@@ -24,8 +24,19 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     cell.backgroundColor = [UIColor whiteColor];
     __weak typeof(self) ws = self;
     cell.deleteClickBlock = ^() {
-        [[JNDBManager shareInstance] deleteEvent:eventModel.eventId];
-        [ws reloadEventList];
+        UIAlertController *confirmAlertController = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除这个事件?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+
+        }];
+        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [[JNDBManager shareInstance] deleteEvent:eventModel.eventId];
+            [ws reloadEventList];
+        }];
+        [confirmAlertController addAction:cancleAction];
+        [confirmAlertController addAction:deleteAction];
+
+        [ws presentViewController:confirmAlertController animated:YES completion:nil];
+
     };
     [cell setDate:eventModel.showDate AndEventDetail:eventModel.content];
     return cell;

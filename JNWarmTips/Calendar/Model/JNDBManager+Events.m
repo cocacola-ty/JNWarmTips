@@ -36,7 +36,6 @@
 - (void) deleteEvent:(long long)eventId {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *sql = [NSString stringWithFormat:@"delete from %@ where event_id = '%lld'", kJNDBEventsTable, eventId];
-        NSLog(@"sql = %@", sql);
         [db executeUpdate:sql];
     }];
 }
