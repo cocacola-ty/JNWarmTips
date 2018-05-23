@@ -13,8 +13,11 @@
 
 - (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
 
+/*获取按照时间排序后的所有事件*/
+- (NSArray<JNEventModel *> *)getAllSortEvents;
+
 /*删除事件*/
-- (void) deleteEvent:(long long) eventId ;
+- (void)deleteEvent:(long long)eventId;
 
 /*添加事件*/
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate ;
