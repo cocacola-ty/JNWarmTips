@@ -44,7 +44,9 @@ static CGFloat kWeekViewHeight = 30;
 static CGFloat kItemCount = 7;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
-@interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource> {
+    BOOL onceToken;
+}
 @property (nonatomic, strong) JNTopContainerView *topContainerView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *weekView;
@@ -58,6 +60,14 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @end
 
 @implementation ViewController
+
+- (instancetype) init {
+    self = [super init];
+    if (self) {
+        onceToken = NO;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -133,10 +143,16 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.bottom.equalTo(_tableView.mas_bottom).offset(-60);
     }];
 
-    [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
-
     [self addObserver:self forKeyPath:@"currentSelectDay" options:NSKeyValueObservingOptionNew context:nil];
 
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (!onceToken) {
+        [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
+        onceToken = YES;
+    }
 }
 
 - (void)dealloc {
