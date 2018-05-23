@@ -63,6 +63,21 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     [self.navigationController pushViewController:toDoListViewController animated:YES];
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.row != 0;
+}
+
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewRowAction *action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        JNGroupModel *groupModel = self.groups[indexPath.row];
+        [[JNDBManager shareInstance] deleteGroup:groupModel];
+
+        [self.groups removeObject:groupModel];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }];
+    return @[action];
+}
+
 #pragma mark - Getter & Setter
 
 - (UITableView *)tableView {

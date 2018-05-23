@@ -78,11 +78,42 @@ static const int kCircleViewHeight = 10;
     return self;
 }
 
+#pragma mark - Private Method
+
 - (void) fontChange {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.itemLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:15.0];
     });
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    for (UIView *subView in self.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UITableViewCellDeleteConfirmationView")]) {
+            subView.backgroundColor = GRAY_BACKGROUND_COLOR;
+
+            for (UIView *btnView in subView.subviews) {
+                if ([btnView isKindOfClass:NSClassFromString(@"_UITableViewCellActionButton")]) {
+                    UIButton *btn = (UIButton *)btnView;
+                    btn.bounds = CGRectMake(0, 0, 50, 50);
+                    btn.backgroundColor = [UIColor whiteColor];
+                    btn.layer.cornerRadius = 25;
+                    [btn setBackgroundImage:[UIImage imageNamed:@"item_delete_icon"] forState:UIControlStateNormal];
+
+                    // 移除标题
+                    for (UIView *view in btn.subviews) {
+                        if ([view isKindOfClass:NSClassFromString(@"UIButtonLabel")]) {
+                            [view removeFromSuperview];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#pragma mark - Public Method
 
 - (void) updateContentWithTitle:(NSString *)title WithItemTitle:(NSString *)itemTitle WithItemCount:(NSInteger)itemCount {
     dispatch_async(dispatch_get_main_queue(), ^{
