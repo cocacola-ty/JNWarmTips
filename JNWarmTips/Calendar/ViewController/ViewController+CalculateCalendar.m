@@ -77,8 +77,8 @@
         nextMonthInt = 1;
         nextMonthInYear = year + 1;
     }
-    if (days.count < 35) {
-        NSInteger nextDays = 35 - days.count;
+    if (days.count < 42) {
+        NSInteger nextDays = 42 - days.count;
         for (int i = 1; i <= nextDays; i++) {
             JNDayModel *dayModel = [JNDayModel new];
             dayModel.day = i;

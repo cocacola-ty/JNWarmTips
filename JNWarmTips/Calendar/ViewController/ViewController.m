@@ -41,7 +41,8 @@ static const int kCalendarViewMargin = 10;
 static CGFloat kTopContainerViewHeight = 64;
 static CGFloat kWeekViewHeight = 30;
 
-static CGFloat kItemCount = 7;
+static NSInteger kItemCount = 7;
+static NSInteger kItemLines = 6;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource> {
@@ -197,7 +198,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (CGSize) caculatorItemSize {
     CGFloat width = (SCREEN_WIDTH-21) / kItemCount;
-    CGFloat height = kCollectionViewHeight / 5;
+    CGFloat height = kCollectionViewHeight / kItemLines;
     return CGSizeMake(width, height);
 }
 
@@ -228,7 +229,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 35;
+    return kItemLines * kItemCount;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
