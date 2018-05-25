@@ -13,6 +13,19 @@
 
 @implementation JNDBManager (Events)
 
+- (NSArray<NSString *> *)getAllEventsDate {
+
+    NSMutableArray *result = [NSMutableArray array];
+    NSString *sql = [NSString stringWithFormat:@"select show_date from %@", kJNDBEventsTable];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+        while ([resultSet next]) {
+            NSString *date = [resultSet stringForColumnIndex:0];
+            [result addObject:date];
+        }
+    }];
+    return result;
+}
 - (NSArray<JNEventModel *> *)getAllSortEvents {
 
     NSString *sql = [NSString stringWithFormat:@"select * from %@ order by show_date", kJNDBEventsTable];

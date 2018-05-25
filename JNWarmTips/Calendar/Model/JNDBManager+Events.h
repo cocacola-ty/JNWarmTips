@@ -13,6 +13,9 @@
 
 - (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
 
+/*获取所有有事件的日期*/
+- (NSArray<NSString *> *)getAllEventsDate ;
+
 /*获取按照时间排序后的所有事件*/
 - (NSArray<JNEventModel *> *)getAllSortEvents;
 
