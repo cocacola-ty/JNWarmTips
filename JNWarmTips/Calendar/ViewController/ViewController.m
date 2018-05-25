@@ -285,7 +285,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 加载下一个要显示月份到数据源 检查要加载的是否在数据源中已经存在，如果存在则不加载, 否则添加到数据源中
     NSInteger currentIndex = [self.dataArray indexOfObject:key];
-    if (willShowMonth < self.currentShowMonth || (willShowMonth == 12 && self.currentShowMonth == 1)) {
+    if ((willShowMonth < self.currentShowMonth && willShowMonth != 1) || (willShowMonth == 12 && self.currentShowMonth == 1)) {
         NSString *loadMonthKey = [self getLastMonth:willShowMonth currentYear:willShowYear];
         //向上翻
         if (![self.dataArray containsObject:loadMonthKey]) {
@@ -294,7 +294,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData.count == 35) {
+            if (loadData.count == kItemCount * kItemLines) {
                 [self.cacheList setObject:loadData forKey:loadMonthKey];
                 [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
                 [self.collectionView reloadData];
@@ -310,7 +310,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
             NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
 
             NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData.count == 35) {
+            if (loadData.count == kItemCount * kItemLines) {
                 [self.cacheList setObject:loadData forKey:loadMonthKey];
                 [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
                 [self.collectionView reloadData];

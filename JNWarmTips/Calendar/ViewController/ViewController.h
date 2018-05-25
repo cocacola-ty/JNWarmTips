@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class JNEventModel;
 
-static const int kCollectionViewHeight = 215;
+static const int kCollectionViewHeight = 216;
 
 @interface ViewController : UIViewController
 
