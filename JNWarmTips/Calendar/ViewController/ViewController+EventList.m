@@ -9,6 +9,7 @@
 #import "JNEventModel.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
+#import "JNDayModel.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -59,7 +60,14 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
         // 插入数据库
         [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
         [weakSelf reloadEventList];
-
+        // 刷新日历
+        NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];
+        NSIndexPath *indexPath = selectItems.firstObject;
+        NSString *key = self.dataArray[indexPath.section];
+        NSArray *monthArray = [self.cacheList objectForKey:key];
+        JNDayModel *dayModel = monthArray[indexPath.row];
+        dayModel.needShowFlag = YES;
+        [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
     };
     [self presentViewController:editorVc animated:YES completion:nil];
 }

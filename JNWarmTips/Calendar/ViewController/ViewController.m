@@ -49,10 +49,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     BOOL onceToken;
 }
 @property (nonatomic, strong) JNTopContainerView *topContainerView;
-@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *weekView;
 
-@property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
 

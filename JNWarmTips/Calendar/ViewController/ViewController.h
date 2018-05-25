@@ -13,6 +13,9 @@ static const int kCollectionViewHeight = 216;
 
 @interface ViewController : UIViewController
 
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @property(nonatomic, assign, readonly) NSInteger currentYear;
 @property(nonatomic, assign, readonly) NSInteger currentMonth;
 @property(nonatomic, assign, readonly) NSInteger currentDay;
