@@ -25,9 +25,11 @@
 		8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8323A3D6BA21634997CA /* JNDayModel.m */; };
 		8B8D842A580DC3564C2750C7 /* JNAddGroupAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */; };
 		8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */; };
+		8B8D86B6145EC54C09D364E3 /* JNEventsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D87DB454D20F68D450D45 /* JNEventsListViewController.m */; };
 		8B8D86D32D7E51E3AA147856 /* JNToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8EB4D6432615CCFF0F86 /* JNToDoListViewController.m */; };
 		8B8D8727352533082FF59CB9 /* JNTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E4ED5067973DAE46442 /* JNTextView.m */; };
 		8B8D88133F6F1A66CCD3D5E3 /* JNDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D87E6ADAEE37DC7A9FD7D /* JNDBManager.m */; };
+		8B8D88CC5B46E850014E2E6F /* JNEventTimeLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D89592C8F0E9DF51D5A9F /* JNEventTimeLineTableViewCell.m */; };
 		8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8A132EEA90F3E88CE985 /* ViewController.m */; };
 		8B8D89F341B7F932E80ADC31 /* JNGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D84A3FFA3DC8CF3E6E3A3 /* JNGroupModel.m */; };
 		8B8D8A37811E949BBE125B55 /* JNToDoGroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */; };
@@ -69,6 +71,7 @@
 		8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoGroupListViewController.m; sourceTree = "<group>"; };
 		8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoItemCell.m; sourceTree = "<group>"; };
 		8B8D8102465C8DF8C8CA53F6 /* JNGroupListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNGroupListCell.m; sourceTree = "<group>"; };
+		8B8D812148AFBE267C327D8C /* JNEventsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventsListViewController.h; sourceTree = "<group>"; };
 		8B8D8138BCBDECACA0DA7C3D /* JNDayModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayModel.h; sourceTree = "<group>"; };
 		8B8D820CD58EE968EE8B7C5A /* ViewController+CalculateCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+CalculateCalendar.h"; sourceTree = "<group>"; };
 		8B8D82753B6EE75A38772E6D /* JNDayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayCollectionViewCell.h; sourceTree = "<group>"; };
@@ -85,12 +88,15 @@
 		8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayCollectionViewCell.m; sourceTree = "<group>"; };
 		8B8D8788B0D63F1584690E4C /* JNToDoItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoItemCell.h; sourceTree = "<group>"; };
 		8B8D87AF7C4F4E7EDF8ACCAA /* JNToDoGroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoGroupListViewController.h; sourceTree = "<group>"; };
+		8B8D87DB454D20F68D450D45 /* JNEventsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventsListViewController.m; sourceTree = "<group>"; };
 		8B8D87E6ADAEE37DC7A9FD7D /* JNDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDBManager.m; sourceTree = "<group>"; };
 		8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddGroupAlertViewController.m; sourceTree = "<group>"; };
 		8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+CalculateCalendar.m"; sourceTree = "<group>"; };
 		8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventEditorViewController.m; sourceTree = "<group>"; };
 		8B8D88EC2C8D6080D16B04B5 /* JNDBManager+Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JNDBManager+Group.m"; sourceTree = "<group>"; };
+		8B8D89592C8F0E9DF51D5A9F /* JNEventTimeLineTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventTimeLineTableViewCell.m; sourceTree = "<group>"; };
 		8B8D8A132EEA90F3E88CE985 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8B8D8A4C4BA7EF77945B0E67 /* JNEventTimeLineTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventTimeLineTableViewCell.h; sourceTree = "<group>"; };
 		8B8D8AF5F9761F22DBBE7530 /* ViewController+EventList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+EventList.h"; sourceTree = "<group>"; };
 		8B8D8C11F809578247CF45DB /* ViewController+EventList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+EventList.m"; sourceTree = "<group>"; };
 		8B8D8C544E8CCA8E17938B80 /* JNGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNGroupModel.h; sourceTree = "<group>"; };
@@ -229,6 +235,8 @@
 				8B8D863217D9B0BFC1D6834C /* JNDayEventTableViewCell.h */,
 				8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */,
 				8B8D854C7EB7027EF019EE08 /* JNTopContainerView.h */,
+				8B8D89592C8F0E9DF51D5A9F /* JNEventTimeLineTableViewCell.m */,
+				8B8D8A4C4BA7EF77945B0E67 /* JNEventTimeLineTableViewCell.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -242,6 +250,8 @@
 				8B8D820CD58EE968EE8B7C5A /* ViewController+CalculateCalendar.h */,
 				8B8D8C11F809578247CF45DB /* ViewController+EventList.m */,
 				8B8D8AF5F9761F22DBBE7530 /* ViewController+EventList.h */,
+				8B8D87DB454D20F68D450D45 /* JNEventsListViewController.m */,
+				8B8D812148AFBE267C327D8C /* JNEventsListViewController.h */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -480,6 +490,8 @@
 				8B8D803497D44711656242FD /* JNDBManager+Group.m in Sources */,
 				8B8D89F341B7F932E80ADC31 /* JNGroupModel.m in Sources */,
 				8B8D842A580DC3564C2750C7 /* JNAddGroupAlertViewController.m in Sources */,
+				8B8D86B6145EC54C09D364E3 /* JNEventsListViewController.m in Sources */,
+				8B8D88CC5B46E850014E2E6F /* JNEventTimeLineTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
