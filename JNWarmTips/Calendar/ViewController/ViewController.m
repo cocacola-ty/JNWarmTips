@@ -224,7 +224,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSArray *monthArray = [self.cacheList objectForKey:key];
     JNDayModel *dayModel = monthArray[indexPath.row];
 
-    [cell setupContent:[NSString stringWithFormat:@"%d",dayModel.day] andHighLight:dayModel.isCurrentMonth andIsToday:dayModel.isToday];
+    [cell setupContent:[NSString stringWithFormat:@"%d",dayModel.day] andHighLight:dayModel.isCurrentMonth andIsToday:dayModel.isToday andShowFlag:dayModel.needShowFlag];
     return cell;
 }
 

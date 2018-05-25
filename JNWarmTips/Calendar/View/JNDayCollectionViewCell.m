@@ -5,11 +5,13 @@
 
 #import "JNDayCollectionViewCell.h"
 #import "JNWarmTipsPublicFile.h"
+#import "View+MASAdditions.h"
 
 
 @interface JNDayCollectionViewCell()
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UIView *selectedView;
+@property (nonatomic, strong) UIView *markView;
 @end
 
 @implementation JNDayCollectionViewCell
@@ -21,16 +23,23 @@
         self.textLabel.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         [self.contentView addSubview:self.textLabel];
         self.selectedBackgroundView = self.selectedView;
+
+        [self.contentView addSubview:self.markView];
+        [self.markView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(4);
+            make.centerX.equalTo(self.contentView.mas_centerX);
+            make.bottom.equalTo(self.contentView.mas_bottom).offset(-4);
+        }];
+        self.markView.layer.cornerRadius = 2;
     }
     return self;
 }
 
-- (void) setupContent:(NSString *)content andHighLight:(BOOL)highLight andIsToday:(BOOL)isToday{
+- (void) setupContent:(NSString *)content andHighLight:(BOOL)highLight andIsToday:(BOOL)isToday andShowFlag:(BOOL)showFlag{
     self.textLabel.text = content;
 
+    self.markView.hidden = !showFlag;
     if (isToday) {
-//        self.textLabel.layer.cornerRadius = self.frame.size.height/1.3;
-//        self.textLabel.layer.masksToBounds = YES;
         self.textLabel.backgroundColor = RGB(0, 191, 255);
         self.textLabel.textColor = [UIColor whiteColor];
     }else if(highLight) {
@@ -59,5 +68,14 @@
         _selectedView.layer.borderWidth = 2;
     }
     return _selectedView;
+}
+
+- (UIView *)markView {
+    if (!_markView) {
+        _markView = [UIView new];
+        _markView.backgroundColor = RANDOM_COLOR;
+        _markView.hidden = YES;
+    }
+    return _markView;
 }
 @end

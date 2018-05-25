@@ -6,5 +6,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JNDayCollectionViewCell : UICollectionViewCell
-- (void) setupContent:(NSString *)content andHighLight:(BOOL)highLight andIsToday:(BOOL)isToday;
+- (void) setupContent:(NSString *)content andHighLight:(BOOL)highLight andIsToday:(BOOL)isToday andShowFlag:(BOOL)showFlag;
 @end
