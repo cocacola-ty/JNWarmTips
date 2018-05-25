@@ -6,6 +6,8 @@
 #import "ViewController+CalculateCalendar.h"
 #import "JNDayModel.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Events.h"
 
 
 @implementation ViewController (CalculateCalendar)
@@ -20,6 +22,8 @@
         return nil;
     }
 
+    NSArray *allEventsDate = [[JNDBManager shareInstance] getAllEventsDate];
+    NSLog(@"allEventsDate = %@", allEventsDate);
     NSCalendar *calendar = [NSCalendar currentCalendar];
 
     // 获取本月1号是周几
@@ -53,7 +57,7 @@
         dayModel.day =  (daysOflastMonth - firstDayInWeek + index + 1);
         dayModel.month = lastMonthInt;
         dayModel.year =  lastMonthInYear;
-        dayModel.needShowFlag = NO;
+        dayModel.needShowFlag = [allEventsDate containsObject:[JNWarmTipsPublicFile dateStringFormat:dayModel.year month:dayModel.month day:dayModel.day]];
         dayModel.isCurrentMonth = NO;
         dayModel.isCurrentMonth = NO;
         dayModel.isToday = NO;
@@ -65,7 +69,7 @@
         dayModel.day = i;
         dayModel.month = month;
         dayModel.year = year;
-        dayModel.needShowFlag = NO;
+        dayModel.needShowFlag = [allEventsDate containsObject:[JNWarmTipsPublicFile dateStringFormat:dayModel.year month:dayModel.month day:dayModel.day]];
         dayModel.isCurrentMonth = YES;
         dayModel.isToday = (i == self.currentDay && month == self.currentMonth && year == self.currentYear);
         [days addObject:dayModel];
@@ -84,7 +88,7 @@
             dayModel.day = i;
             dayModel.month = nextMonthInt;
             dayModel.year = nextMonthInYear;
-            dayModel.needShowFlag = NO;
+            dayModel.needShowFlag = [allEventsDate containsObject:[JNWarmTipsPublicFile dateStringFormat:dayModel.year month:dayModel.month day:dayModel.day]];
             dayModel.isCurrentMonth = NO;
             [days addObject:dayModel];
         }
