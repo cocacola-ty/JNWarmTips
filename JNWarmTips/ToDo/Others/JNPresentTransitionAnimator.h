@@ -5,5 +5,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*当前转场类型 present / dismiss */
+typedef NS_OPTIONS(NSInteger , JNPresentTransitionType) {
+    JNPresentTransitionTypePresent = 0,
+    JNPresentTransitionTypeDismiss = 1,
+};
+
 @interface JNPresentTransitionAnimator : NSObject <UIViewControllerAnimatedTransitioning>
+- (instancetype)initWithType:(JNPresentTransitionType)type ;
 @end
