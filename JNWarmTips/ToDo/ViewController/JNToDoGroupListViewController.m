@@ -60,7 +60,8 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
-    [self.navigationController pushViewController:toDoListViewController animated:YES];
+//    [self.navigationController pushViewController:toDoListViewController animated:YES];
+    [self presentViewController:toDoListViewController animated:YES completion:nil];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
