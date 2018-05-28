@@ -7,4 +7,6 @@
 #import "JNDBManager.h"
 
 @interface JNDBManager (Items)
+- (NSArray *) getAllItemsByShowDate:(NSString *)showDate;
+- (NSArray *) getAllDateSection ;
 @end

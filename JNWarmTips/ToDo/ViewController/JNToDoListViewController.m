@@ -8,6 +8,9 @@
 #import "JNToDoItemCell.h"
 #import "View+MASAdditions.h"
 #import "JNEventEditorViewController.h"
+#import "JNGroupModel.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Items.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -18,7 +21,8 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIButton *addItemBtn;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSArray *sectionArray;
 @end
 
 @implementation JNToDoListViewController {
@@ -85,18 +89,22 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return self.sectionArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    NSDictionary *dict = self.sectionArray[section];
+    return [dict[@"count"] integerValue];
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSDictionary *dict = self.sectionArray[section];
+    NSString *sectionTitle = [dict valueForKey:@"name"];
+
     UIView *sectionView = [UIView new];
     sectionView.backgroundColor = [UIColor whiteColor];
     UILabel *sectionTitleLabel = [UILabel new];
-    sectionTitleLabel.text = @"未分类";
+    sectionTitleLabel.text = sectionTitle;
     sectionTitleLabel.textColor = GRAY_TEXT_COLOR;
     sectionTitleLabel.font = [UIFont systemFontOfSize:15.0];
     sectionTitleLabel.frame = CGRectMake(20, 0, SCREEN_WIDTH, kToDoListSectionHeaderViewHeight);
@@ -150,7 +158,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         _headerTitleLabel = [UILabel new];
         _headerTitleLabel.font = [UIFont systemFontOfSize:18.0];
         _headerTitleLabel.textColor = [UIColor whiteColor];
-        _headerTitleLabel.text = @"ALL";
+        _headerTitleLabel.text = self.groupModel.groupName;
     }
     return _headerTitleLabel;
 }
@@ -165,11 +173,18 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     return _addItemBtn;
 }
 
-- (NSArray *)dataArray {
+- (NSMutableArray *)dataArray {
     if (!_dataArray) {
-
+        _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
+- (NSArray *)sectionArray {
+    if (!_sectionArray) {
+        _sectionArray = [[JNDBManager shareInstance] getAllDateSection];
+        NSLog(@"_sectionArray = %@", _sectionArray);
+    }
+    return _sectionArray;
+}
 @end
