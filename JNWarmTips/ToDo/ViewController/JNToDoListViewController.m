@@ -7,6 +7,7 @@
 #import "JNWarmTipsPublicFile.h"
 #import "JNToDoItemCell.h"
 #import "View+MASAdditions.h"
+#import "JNEventEditorViewController.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -17,32 +18,26 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIImageView *addItemImageView;
+@property (nonatomic, strong) NSArray *dataArray;
 @end
 
 @implementation JNToDoListViewController {
 
 }
-- (instancetype) init {
-    self = [super init];
-    if (self) {
-        [self.view addSubview:self.tableView];
-        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.view.mas_top).offset(70);
-            make.left.equalTo(self.view.mas_left).offset(8);
-            make.right.equalTo(self.view.mas_right).offset(-8);
-            make.bottom.equalTo(self.view.mas_bottom).offset(-70);
-        }];
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
+
     [super viewDidLoad];
     self.view.backgroundColor = RGB(240, 240, 240);
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tabBarController.tabBar.hidden = YES;
 
-
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).offset(70);
+        make.left.equalTo(self.view.mas_left).offset(8);
+        make.right.equalTo(self.view.mas_right).offset(-8);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-70);
+    }];
 
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
 
@@ -53,18 +48,29 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         make.centerX.equalTo(self.view.mas_centerX);
     }];
 
-    // TEST
 }
+
+#pragma mark - Event Response
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void) addItem {
+    JNEventEditorViewController *editorViewController = [[JNEventEditorViewController alloc] init];
+    editorViewController.editFinishBlock = ^(NSString *text) {
+        // 插入数据库
+        // 刷新当前视图
+    };
+    [self presentViewController:editorViewController animated:YES completion:nil];
+}
+
+#pragma mark - Delegate & DataSource
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     JNToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:kToDoListCellReuseId];
     [cell reloadCellWithTitle:@"明天不上班" taskFinishStatus:NO];
-
     return cell;
 }
 
@@ -78,7 +84,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -89,7 +95,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     UIView *sectionView = [UIView new];
     sectionView.backgroundColor = [UIColor whiteColor];
     UILabel *sectionTitleLabel = [UILabel new];
-    sectionTitleLabel.text = @"即将要做的";
+    sectionTitleLabel.text = @"未分类";
     sectionTitleLabel.textColor = GRAY_TEXT_COLOR;
     sectionTitleLabel.font = [UIFont systemFontOfSize:15.0];
     sectionTitleLabel.frame = CGRectMake(20, 0, SCREEN_WIDTH, kToDoListSectionHeaderViewHeight);
@@ -152,8 +158,18 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     if (!_addItemImageView) {
         _addItemImageView = [[UIImageView alloc] init];
         _addItemImageView.image = [UIImage imageNamed:@"publish_btn"];
+        _addItemImageView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addItem)];
+        [_addItemImageView addGestureRecognizer:tapGestureRecognizer];
     }
     return _addItemImageView;
+}
+
+- (NSArray *)dataArray {
+    if (!_dataArray) {
+
+    }
+    return _dataArray;
 }
 
 @end
