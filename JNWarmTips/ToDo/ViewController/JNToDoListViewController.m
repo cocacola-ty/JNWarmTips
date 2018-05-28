@@ -21,6 +21,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIButton *addItemBtn;
+@property (nonatomic, strong) UILabel *placeHolderLabel;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSArray *sectionArray;
 @end
@@ -41,6 +42,11 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         make.left.equalTo(self.view.mas_left).offset(8);
         make.right.equalTo(self.view.mas_right).offset(-8);
         make.bottom.equalTo(self.view.mas_bottom).offset(-70);
+    }];
+    [self.tableView addSubview:self.placeHolderLabel];
+    [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tableView.mas_centerX);
+        make.centerY.equalTo(self.tableView.mas_centerY);
     }];
 
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
@@ -99,7 +105,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSDictionary *dict = self.sectionArray[section];
-    NSString *sectionTitle = [dict valueForKey:@"name"];
+    NSString *sectionTitle = [dict valueForKey:@"showName"];
 
     UIView *sectionView = [UIView new];
     sectionView.backgroundColor = [UIColor whiteColor];
@@ -115,6 +121,8 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return kToDoListSectionHeaderViewHeight;
 }
+
+#pragma mark - Getter & Setter
 
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -173,9 +181,24 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     return _addItemBtn;
 }
 
+- (UILabel *)placeHolderLabel {
+    if (!_placeHolderLabel) {
+        _placeHolderLabel = [UILabel new];
+        _placeHolderLabel.text = @"这里啥子都么得..";
+        _placeHolderLabel.textColor = GRAY_TEXT_COLOR;
+        _placeHolderLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:18.0];
+    }
+    return _placeHolderLabel;
+}
+
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
+        for (NSDictionary *dict in self.sectionArray) {
+            NSString *showDate = dict[@"name"];
+            NSArray *array = [[JNDBManager shareInstance] getAllItemsByShowDate:showDate];
+            [_dataArray addObject:array];
+        }
     }
     return _dataArray;
 }
@@ -184,6 +207,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     if (!_sectionArray) {
         _sectionArray = [[JNDBManager shareInstance] getAllDateSection];
         NSLog(@"_sectionArray = %@", _sectionArray);
+        self.placeHolderLabel.hidden = _sectionArray.count != 0;
     }
     return _sectionArray;
 }

@@ -37,9 +37,13 @@
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {
             NSString *sectionName = [resultSet stringForColumn:@"show_date"];
-            sectionName = sectionName.length == 0 ? @"未分类" : sectionName;
+            NSString *showName = sectionName.length == 0 ? @"未分类" : sectionName;
             NSInteger count = [resultSet intForColumn:@"count"];
-            NSDictionary *dict = @{@"name" : sectionName, @"count": @(count)};
+            NSDictionary *dict = @{
+                    @"name" : sectionName,
+                    @"showName" : showName,
+                    @"count": @(count)
+            };
             [result addObject:dict];
         }
     }];
