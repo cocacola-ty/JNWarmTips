@@ -4,6 +4,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class JNGroupModel;
 
 /*
  * section的个数规则：
@@ -20,4 +21,5 @@
  * */
 @interface JNToDoListViewController : UIViewController
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) JNGroupModel *groupModel;
 @end

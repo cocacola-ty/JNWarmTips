@@ -10,7 +10,7 @@
  * 事件表和清单表的字段为
     id 
     内容 
-    show_date ：该事件的日期。清单中无该字段。清单向日历同步时该字段为清单的start_time中的日期
+    show_date ：该事件的日期。清单中该字段用于分类时使用，该字段为startTime格式化之后，没有选时间则该字段为null。日历中用于决定哪一天显示事件，事件表中该字段不能为空。
     开始时间 ：时间戳。用于显示时间段
     结束时间 ：时间戳
     标签id ：
@@ -94,7 +94,7 @@ NSString *const kJNDBCategoryTable = @"category_table";
     // 清单表
     if (![self tableExist:kJNDBListTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CONTENT TEXT NOT NULL, START_TIME INTEGER DEFAULT NULL, END_TIME INTEGER DEFAULT NULL, GROUP_ID INTEGER, CATEGORY_ID INTEGER , NOTIFICATION INTEGER DEFAULT 0, FINISHED INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID), FOREIGN KEY(GROUP_ID) REFERENCES %@(CATEGORY_ID))", kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
+            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CONTENT TEXT NOT NULL, SHOW_DATE DATE DEFAULT NULL, START_TIME INTEGER DEFAULT NULL, END_TIME INTEGER DEFAULT NULL, GROUP_ID INTEGER, CATEGORY_ID INTEGER , NOTIFICATION INTEGER DEFAULT 0, FINISHED INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID), FOREIGN KEY(GROUP_ID) REFERENCES %@(CATEGORY_ID))", kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"清单表创建失败");
         }];
