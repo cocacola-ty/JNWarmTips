@@ -6,7 +6,10 @@
 #import <Foundation/Foundation.h>
 #import "JNDBManager.h"
 
+@class JNItemModel;
+
 @interface JNDBManager (Items)
 - (NSArray *) getAllItemsByShowDate:(NSString *)showDate;
 - (NSArray *) getAllDateSection ;
+- (void) addItem:(JNItemModel *)itemModel ;
 @end

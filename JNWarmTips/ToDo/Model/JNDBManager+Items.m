@@ -49,4 +49,24 @@
     }];
     return result;
 }
+
+- (void) addItem:(JNItemModel *)itemModel {
+
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:itemModel.startTime];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *dateString = [formatter stringFromDate:date];
+    NSString *show_date = (itemModel.startTime == nil || itemModel.startTime == 0) ? @"''" : dateString;
+    NSString *startTime = (itemModel.startTime == nil || itemModel.startTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.startTime];
+    NSString *endTime = (itemModel.endTime == nil || itemModel.endTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.endTime];
+    NSString *groupId = [NSString stringWithFormat:@"%d", itemModel.groupId];
+    NSString *notification = [NSString stringWithFormat:@"%d", itemModel.notification];
+    NSString *finish = [NSString stringWithFormat:@"%d", itemModel.finished];
+
+    NSString *sql = [NSString stringWithFormat:@"insert into %@(content, show_date, start_time, end_time, group_id, NOTIFICATION, finished) values ('%@', %@, %@, %@, %@, %@, %@)", kJNDBListTable, itemModel.content, show_date, startTime, endTime, groupId, notification, finish];
+
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [db executeUpdate:sql];
+    }];
+}
 @end

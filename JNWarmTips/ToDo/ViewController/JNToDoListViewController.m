@@ -11,6 +11,7 @@
 #import "JNGroupModel.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
+#import "JNItemModel.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -72,7 +73,25 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     editorViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorViewController.editFinishBlock = ^(NSString *text) {
         // 插入数据库
+
         // 刷新当前视图
+        JNItemModel *itemModel = [JNItemModel new];
+        itemModel.content = text;
+        itemModel.finished = NO;
+        itemModel.startTime = 0;
+        itemModel.endTime = 0;
+        itemModel.notification = NO;
+        itemModel.groupId = [self.groupModel.groupId integerValue];
+
+        [[JNDBManager shareInstance] addItem:itemModel];
+
+        self.sectionArray = nil;
+        self.dataArray = nil;
+        [self.tableView reloadData];
+
+//        NSMutableArray *array = self.dataArray[0];
+//        [array addObject:itemModel];
+//        [self.tableView reloadData];
     };
     [self presentViewController:editorViewController animated:YES completion:nil];
 }
@@ -80,8 +99,11 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 #pragma mark - Delegate & DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *itemArray = self.dataArray[indexPath.section];
+    JNItemModel *itemModel = itemArray[indexPath.row];
+
     JNToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:kToDoListCellReuseId];
-    [cell reloadCellWithTitle:@"明天不上班" taskFinishStatus:NO];
+    [cell reloadCellWithTitle:itemModel.content taskFinishStatus:itemModel.finished];
     return cell;
 }
 
