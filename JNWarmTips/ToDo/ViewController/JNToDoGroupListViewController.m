@@ -12,11 +12,11 @@
 #import "JNDBManager+Group.h"
 #import "JNGroupModel.h"
 #import "JNAddGroupAlertViewController.h"
+#import "JNPresentTransitionAnimator.h"
 
 static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
-@interface JNToDoGroupListViewController() <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
+@interface JNToDoGroupListViewController() <UITableViewDelegate, UITableViewDataSource, UIViewControllerTransitioningDelegate>
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) NSMutableArray *groups;
 @end
@@ -59,8 +59,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.currentSelectIndexPath = indexPath;
+
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
-//    [self.navigationController pushViewController:toDoListViewController animated:YES];
+    toDoListViewController.transitioningDelegate = self;
     [self presentViewController:toDoListViewController animated:YES completion:nil];
 }
 
@@ -78,6 +80,12 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     }];
     return @[action];
 }
+
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return [[JNPresentTransitionAnimator alloc] initWithType:JNPresentTransitionTypePresent];
+}
+
 
 #pragma mark - Getter & Setter
 

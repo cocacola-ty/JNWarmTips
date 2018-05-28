@@ -14,7 +14,6 @@ static const int kToDoListSectionHeaderViewHeight = 60;
 static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIImageView *addItemImageView;
@@ -23,6 +22,19 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @implementation JNToDoListViewController {
 
 }
+- (instancetype) init {
+    self = [super init];
+    if (self) {
+        [self.view addSubview:self.tableView];
+        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view.mas_top).offset(70);
+            make.left.equalTo(self.view.mas_left).offset(8);
+            make.right.equalTo(self.view.mas_right).offset(-8);
+            make.bottom.equalTo(self.view.mas_bottom).offset(-70);
+        }];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,13 +42,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tabBarController.tabBar.hidden = YES;
 
-    [self.view addSubview:self.tableView];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(70);
-        make.left.equalTo(self.view.mas_left).offset(8);
-        make.right.equalTo(self.view.mas_right).offset(-8);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-70);
-    }];
+
 
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
 
@@ -48,6 +54,11 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     }];
 
     // TEST
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -19,4 +19,5 @@
  *  添加很多分类，但是每个分类下都没内容
  * */
 @interface JNToDoListViewController : UIViewController
+@property (nonatomic, strong) UITableView *tableView;
 @end
