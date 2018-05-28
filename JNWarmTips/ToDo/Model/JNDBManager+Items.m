@@ -69,4 +69,11 @@
         [db executeUpdate:sql];
     }];
 }
+
+- (void) updateFinishStatus:(BOOL) finished withItemId:(NSInteger)itemId {
+    NSString *sql = [NSString stringWithFormat:@"update %@ set finished = %d where item_id = %d", kJNDBListTable, finished, itemId];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [db executeUpdate:sql];
+    }];
+}
 @end

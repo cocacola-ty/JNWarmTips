@@ -109,7 +109,14 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     JNToDoItemCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell refreshTaskStatus:YES];
+
+    NSArray *itemArray = self.dataArray[indexPath.section];
+    JNItemModel *itemModel = itemArray[indexPath.row];
+    itemModel.finished = !itemModel.finished;
+    [[JNDBManager shareInstance] updateFinishStatus:itemModel.finished withItemId:itemModel.itemId];
+
+    [cell refreshTaskStatus: itemModel.finished];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

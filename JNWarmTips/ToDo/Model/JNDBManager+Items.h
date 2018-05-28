@@ -12,4 +12,5 @@
 - (NSArray *) getAllItemsByShowDate:(NSString *)showDate;
 - (NSArray *) getAllDateSection ;
 - (void) addItem:(JNItemModel *)itemModel ;
+- (void) updateFinishStatus:(BOOL) finished withItemId:(NSInteger)itemId ;
 @end
