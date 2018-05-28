@@ -17,7 +17,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
-@property (nonatomic, strong) UIImageView *addItemImageView;
+@property (nonatomic, strong) UIButton *addItemBtn;
 @property (nonatomic, strong) NSArray *dataArray;
 @end
 
@@ -41,8 +41,8 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
 
-    [self.view addSubview:self.addItemImageView];
-    [self.addItemImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.addItemBtn];
+    [self.addItemBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(50);
         make.bottom.equalTo(self.view.mas_bottom).offset(-10);
         make.centerX.equalTo(self.view.mas_centerX);
@@ -59,6 +59,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 - (void) addItem {
     JNEventEditorViewController *editorViewController = [[JNEventEditorViewController alloc] init];
+    editorViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorViewController.editFinishBlock = ^(NSString *text) {
         // 插入数据库
         // 刷新当前视图
@@ -154,15 +155,14 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     return _headerTitleLabel;
 }
 
-- (UIImageView *)addItemImageView {
-    if (!_addItemImageView) {
-        _addItemImageView = [[UIImageView alloc] init];
-        _addItemImageView.image = [UIImage imageNamed:@"publish_btn"];
-        _addItemImageView.userInteractionEnabled = YES;
+- (UIButton *)addItemBtn {
+    if (!_addItemBtn) {
+        _addItemBtn = [[UIButton alloc] init];
+        [_addItemBtn setBackgroundImage:[UIImage imageNamed:@"publish_btn"] forState:UIControlStateNormal];
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addItem)];
-        [_addItemImageView addGestureRecognizer:tapGestureRecognizer];
+        [_addItemBtn addGestureRecognizer:tapGestureRecognizer];
     }
-    return _addItemImageView;
+    return _addItemBtn;
 }
 
 - (NSArray *)dataArray {
