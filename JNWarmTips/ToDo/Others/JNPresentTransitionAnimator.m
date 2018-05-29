@@ -8,6 +8,7 @@
 #import "JNToDoListViewController.h"
 #import "JNWarmTipsPublicFile.h"
 #import "View+MASAdditions.h"
+#import "JNGroupModel.h"
 
 
 @implementation JNPresentTransitionAnimator {
@@ -69,6 +70,17 @@
     topView.image = fromVc.cellBackGroundImage;
     topView.frame = CGRectMake(0, 0, realFrame.size.width, 70);
 
+
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = toVc.groupModel.groupName;
+    titleLabel.textColor = [UIColor whiteColor];
+    [titleLabel sizeToFit];
+    titleLabel.center = CGPointMake(realFrame.size.width / 2, 35);
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [topView addSubview:titleLabel];
+
+
     // 拿到执行转场动画的容器视图
     UIView *containerView = [transitionContext containerView];
     // 将转场开始时视图添加到容器中
@@ -81,6 +93,7 @@
     [UIView animateWithDuration:0.4 animations:^{
         animateView.frame = CGRectMake(8, 70, endWidth, endHeight);
         topView.frame = CGRectMake(0, 0, endWidth, 100);
+        titleLabel.center = CGPointMake(endWidth / 2, 50);
     } completion:^(BOOL finished) {
         toVc.view.hidden = NO;
         [transitionContext completeTransition:YES];

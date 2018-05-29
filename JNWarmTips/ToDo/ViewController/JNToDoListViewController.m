@@ -175,7 +175,6 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
         _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, 100);
         _headerView.image = self.headerImage;
-//        _headerView.backgroundColor = [UIColor redColor];
 
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(12, 12)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
