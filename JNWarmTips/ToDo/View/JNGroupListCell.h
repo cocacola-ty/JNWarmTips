@@ -7,5 +7,6 @@
 
 
 @interface JNGroupListCell : UITableViewCell
+@property (nonatomic, strong) UIImage *backgroundImage;
 - (void) updateContentWithTitle:(NSString *)title WithItemTitle:(NSString *)itemTitle WithItemCount:(NSInteger)itemCount;
 @end

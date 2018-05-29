@@ -19,7 +19,7 @@ static const int kToDoListSectionHeaderViewHeight = 60;
 static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIButton *addItemBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
@@ -169,11 +169,13 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     return _tableView;
 }
 
-- (UIView *)headerView {
+- (UIImageView *)headerView {
     if (!_headerView) {
-        _headerView = [UIView new];
+        _headerView = [UIImageView  new];
+        _headerView.contentMode = UIViewContentModeScaleAspectFill;
         _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, 100);
-        _headerView.backgroundColor = [UIColor redColor];
+        _headerView.image = self.headerImage;
+//        _headerView.backgroundColor = [UIColor redColor];
 
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(12, 12)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];

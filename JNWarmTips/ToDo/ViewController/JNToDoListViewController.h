@@ -22,4 +22,5 @@
 @interface JNToDoListViewController : UIViewController
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) JNGroupModel *groupModel;
+@property (nonatomic, strong) UIImage *headerImage;
 @end

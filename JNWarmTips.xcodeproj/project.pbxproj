@@ -14,6 +14,8 @@
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
 		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
+		61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8D20BCEF430050CB51 /* group_bg1.jpg */; };
+		61550C9020BCEF430050CB51 /* gruop_bg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8E20BCEF430050CB51 /* gruop_bg2.jpg */; };
 		61B9287C20AEC2AB0040732F /* JNEventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287820AEC2AB0040732F /* JNEventModel.m */; };
 		61B9287D20AEC2AB0040732F /* JNDBManager+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287920AEC2AB0040732F /* JNDBManager+Events.m */; };
 		61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E4640220A002730045C737 /* HannotateSC-W5.ttf */; };
@@ -65,6 +67,8 @@
 		6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JNWarmTipsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNWarmTipsTests.m; sourceTree = "<group>"; };
 		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61550C8D20BCEF430050CB51 /* group_bg1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg1.jpg; sourceTree = "<group>"; };
+		61550C8E20BCEF430050CB51 /* gruop_bg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gruop_bg2.jpg; sourceTree = "<group>"; };
 		61B9287820AEC2AB0040732F /* JNEventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventModel.m; sourceTree = "<group>"; };
 		61B9287920AEC2AB0040732F /* JNDBManager+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JNDBManager+Events.m"; sourceTree = "<group>"; };
 		61B9287A20AEC2AB0040732F /* JNEventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventModel.h; sourceTree = "<group>"; };
@@ -164,6 +168,7 @@
 		6108F13F207B119700590F4D /* JNWarmTips */ = {
 			isa = PBXGroup;
 			children = (
+				61550C8C20BCEF300050CB51 /* Resources */,
 				6108F140207B119700590F4D /* AppDelegate.h */,
 				6108F141207B119700590F4D /* AppDelegate.m */,
 				6108F146207B119700590F4D /* Main.storyboard */,
@@ -185,6 +190,15 @@
 				6143384E208DBFD400DFB91F /* Info.plist */,
 			);
 			path = JNWarmTipsTests;
+			sourceTree = "<group>";
+		};
+		61550C8C20BCEF300050CB51 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				61550C8D20BCEF430050CB51 /* group_bg1.jpg */,
+				61550C8E20BCEF430050CB51 /* gruop_bg2.jpg */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		8B8D813DE1C35F121D6A15C2 /* Others */ = {
@@ -419,7 +433,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */,
+				61550C9020BCEF430050CB51 /* gruop_bg2.jpg in Resources */,
 				6108F14A207B119700590F4D /* Assets.xcassets in Resources */,
+				61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */,
 				6108F148207B119700590F4D /* Main.storyboard in Resources */,
 				61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */,
 			);

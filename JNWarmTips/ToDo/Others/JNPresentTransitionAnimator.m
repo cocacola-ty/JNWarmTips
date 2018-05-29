@@ -24,7 +24,7 @@
 
 /*转场动画执行时间*/
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.5;
+    return 0.7;
 }
 
 /*转场动画的动画过程*/
@@ -62,9 +62,11 @@
     animateView.backgroundColor = [UIColor whiteColor];
     animateView.frame = realFrame;
 
-    UIView *topView = [UIView new];
+    UIImageView *topView = [UIImageView new];
     [animateView addSubview:topView];
-    topView.backgroundColor = RANDOM_COLOR;
+    topView.contentMode = UIViewContentModeScaleAspectFill;
+    topView.layer.masksToBounds = YES;
+    topView.image = fromVc.cellBackGroundImage;
     topView.frame = CGRectMake(0, 0, realFrame.size.width, 70);
 
     // 拿到执行转场动画的容器视图
@@ -74,12 +76,39 @@
     // 将转场结束后的视图添加到容器中
     [containerView addSubview:toVc.view];
 
-    [UIView animateWithDuration:0.5 animations:^{
-        animateView.frame = CGRectMake(8, 70, SCREEN_WIDTH - 16, SCREEN_HEIGHT - 140);
-        topView.frame = CGRectMake(0, 0, SCREEN_WIDTH - 16, 100);
+    CGFloat endWidth = SCREEN_WIDTH - 16;
+    CGFloat endHeight = SCREEN_HEIGHT - 140;
+    [UIView animateWithDuration:0.4 animations:^{
+        animateView.frame = CGRectMake(8, 70, endWidth, endHeight);
+        topView.frame = CGRectMake(0, 0, endWidth, 100);
     } completion:^(BOOL finished) {
-        [transitionContext completeTransition:YES];
         toVc.view.hidden = NO;
+        [transitionContext completeTransition:YES];
+
+        /*
+        animateView.backgroundColor = [UIColor clearColor];
+
+        UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, endWidth, endHeight)];
+        UIBezierPath *startPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 0, endHeight)];
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.frame = animateView.bounds;
+        layer.path = startPath.CGPath;
+        layer.fillColor = [UIColor greenColor].CGColor;
+        animateView.layer.mask = layer;
+
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+        animation.beginTime = CACurrentMediaTime();
+        animation.fromValue = [NSValue valueWithPointer:startPath.CGPath];
+        animation.toValue = [NSValue valueWithPointer:endPath.CGPath];
+        animation.fillMode = kCAFillModeForwards;
+        animation.duration = 0.3;
+        animation.removedOnCompletion = NO;
+        [layer addAnimation:animation forKey:@"maskAnimation"];
+
+        dispatch_after(0.3, dispatch_get_main_queue(), ^{
+            [transitionContext completeTransition:YES];
+        });
+         */
     }];
 
 }

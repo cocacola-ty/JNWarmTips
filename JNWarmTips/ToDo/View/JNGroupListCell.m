@@ -137,7 +137,10 @@ static const int kCircleViewHeight = 10;
 - (UIImageView *)bannerImageView {
     if (!_bannerImageView) {
         _bannerImageView = [UIImageView new];
-        _bannerImageView.backgroundColor = RANDOM_COLOR;
+        _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
+        // TODO : 图片库随机取图片
+        _bannerImageView.image = [UIImage imageNamed:@"group_bg1.jpg"];
+        _backgroundImage = _bannerImageView.image;
     }
     return _bannerImageView;
 }

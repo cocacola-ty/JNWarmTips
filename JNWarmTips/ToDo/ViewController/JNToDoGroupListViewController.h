@@ -12,4 +12,5 @@
 @interface JNToDoGroupListViewController : UIViewController
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSIndexPath *currentSelectIndexPath;
+@property (nonatomic, strong) UIImage *cellBackGroundImage;
 @end
