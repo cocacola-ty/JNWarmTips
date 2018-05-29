@@ -130,15 +130,10 @@ static const int kCornerRadius = 8;
     UIView *contentView = cell.subviews.firstObject;
     UIView *realCellView = contentView.subviews.firstObject;
     CGRect endFrame = [contentView convertRect:realCellView.frame toView:toVc.tableView];
-    NSLog(@"endFrame.x = %f", endFrame.origin.x);
-    NSLog(@"endFrame.y = %f", endFrame.origin.y);
-    NSLog(@"endFrame.size.width = %f", endFrame.size.width);
-    NSLog(@"endFrame.size.height = %f", endFrame.size.height);
     CGFloat reduceWidth = endFrame.size.width;
 
     UIView *containerView = [transitionContext containerView];
     containerView.backgroundColor = GRAY_BACKGROUND_COLOR;
-//    [containerView addSubview:toVc.view];
 
     UIView *animationView = [UIView new];
     animationView.layer.cornerRadius = kCornerRadius;
