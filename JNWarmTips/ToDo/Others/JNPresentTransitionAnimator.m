@@ -70,7 +70,6 @@
     topView.image = fromVc.cellBackGroundImage;
     topView.frame = CGRectMake(0, 0, realFrame.size.width, 70);
 
-
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = toVc.groupModel.groupName;
     titleLabel.textColor = [UIColor whiteColor];
@@ -83,10 +82,10 @@
 
     // 拿到执行转场动画的容器视图
     UIView *containerView = [transitionContext containerView];
+    // 将转场结束后的视图添加到容器中
+   [containerView addSubview:toVc.view];
     // 将转场开始时视图添加到容器中
     [containerView addSubview:animateView];
-    // 将转场结束后的视图添加到容器中
-    [containerView addSubview:toVc.view];
 
     CGFloat endWidth = SCREEN_WIDTH - 16;
     CGFloat endHeight = SCREEN_HEIGHT - 140;
@@ -96,11 +95,13 @@
         titleLabel.center = CGPointMake(endWidth / 2, 50);
     } completion:^(BOOL finished) {
         toVc.view.hidden = NO;
+        [animateView removeFromSuperview];
+
         [transitionContext completeTransition:YES];
 
-        /*
-        animateView.backgroundColor = [UIColor clearColor];
+//        animateView.backgroundColor = [UIColor clearColor];
 
+        /*
         UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, endWidth, endHeight)];
         UIBezierPath *startPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 0, endHeight)];
         CAShapeLayer *layer = [CAShapeLayer layer];
@@ -111,8 +112,8 @@
 
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
         animation.beginTime = CACurrentMediaTime();
-        animation.fromValue = [NSValue valueWithPointer:startPath.CGPath];
-        animation.toValue = [NSValue valueWithPointer:endPath.CGPath];
+        animation.fromValue = (__bridge id) startPath.CGPath;
+        animation.toValue = (__bridge id) endPath.CGPath;
         animation.fillMode = kCAFillModeForwards;
         animation.duration = 0.3;
         animation.removedOnCompletion = NO;
@@ -130,5 +131,4 @@
 - (void) dismissTransion:(id <UIViewControllerContextTransitioning>)transitionContext  {
 
 }
-
 @end

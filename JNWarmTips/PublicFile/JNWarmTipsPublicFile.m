@@ -49,6 +49,49 @@
     });
 }
 
++ (void) hiddenTabbar:(UITabBarController *)vc {
+    [UIView animateWithDuration:0.25 animations:^{
+        for(UIView *view in vc.view.subviews)
+        {
+            if([view isKindOfClass:[UITabBar class]])
+            {
+                [view setFrame:CGRectMake(view.frame.origin.x,
+                        view.frame.origin.y + 50,
+                        view.frame.size.width,
+                        view.frame.size.height)];
+            }
+            else
+            {
+                [view setFrame:CGRectMake(view.frame.origin.x,
+                        view.frame.origin.y,
+                        view.frame.size.width,
+                        view.frame.size.height + 50)];
+            }
+        }
+    }];
+}
+
++ (void) showTabbar:(UITabBarController *)vc {
+    [UIView animateWithDuration:0.25 animations:^{
+        for(UIView *view in vc.view.subviews)
+        {
+            if([view isKindOfClass:[UITabBar class]])
+            {
+                [view setFrame:CGRectMake(view.frame.origin.x,
+                        view.frame.origin.y - 50,
+                        view.frame.size.width,
+                        view.frame.size.height)];
+            }
+            else
+            {
+                [view setFrame:CGRectMake(view.frame.origin.x,
+                        view.frame.origin.y,
+                        view.frame.size.width,
+                        view.frame.size.height - 50)];
+            }
+        }
+    }];
+}
 @end
 
 const CGFloat CalendarDefaultMargin = 20;

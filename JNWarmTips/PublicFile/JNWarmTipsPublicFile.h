@@ -11,6 +11,10 @@
 
 /*格式化日期字符串*/
 + (NSString *)dateStringFormat:(NSInteger)year month:(NSInteger)month day:(NSInteger)day ;
+
+/*隐藏tabbar*/
++ (void) hiddenTabbar:(UITabBarController *)vc ;
++ (void) showTabbar:(UITabBarController *)vc ;
 @end
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width

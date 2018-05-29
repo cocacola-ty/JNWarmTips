@@ -18,9 +18,12 @@ static const int kToDoListSectionHeaderViewHeight = 60;
 
 static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
+static const int kTableViewHeaderViewHeight = 100;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
+@property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) UIButton *addItemBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -35,7 +38,6 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     [super viewDidLoad];
     self.view.backgroundColor = RGB(240, 240, 240);
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tabBarController.tabBar.hidden = YES;
 
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -49,7 +51,16 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         make.centerX.equalTo(self.tableView.mas_centerX);
         make.centerY.equalTo(self.tableView.mas_centerY);
     }];
-
+    UIView *coverView = [UIView new];
+    self.coverView = coverView;
+    coverView.backgroundColor = [UIColor redColor];
+    [self.tableView addSubview:coverView];
+    [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.tableView.mas_left);
+        make.top.equalTo(self.tableView.mas_top);
+        make.bottom.equalTo(self.tableView.mas_bottom);
+        make.right.equalTo(self.tableView.mas_right);
+    }];
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
 
     [self.view addSubview:self.addItemBtn];
@@ -58,13 +69,32 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         make.bottom.equalTo(self.view.mas_bottom).offset(-10);
         make.centerX.equalTo(self.view.mas_centerX);
     }];
+    self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
+    [UIView animateWithDuration:0.25 animations:^{
+        self.addItemBtn.transform = CGAffineTransformIdentity;
+    }];
 
+
+
+    /*
+    CGRect startRect = CGRectMake(70, kTableViewHeaderViewHeight, 20, 20);
+    UIBezierPath *startPath = [UIBezierPath bezierPathWithOvalInRect:startRect];
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.frame = CGRectMake(0, kTableViewHeaderViewHeight, SCREEN_WIDTH - 16, SCREEN_HEIGHT - 140);
+    maskLayer.path = startPath.CGPath;
+    maskLayer.fillColor = [UIColor redColor].CGColor;
+    self.tableView.layer.mask = maskLayer;
+     */
 }
+
+#pragma mark - Private Method
 
 #pragma mark - Event Response
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
+
+    [JNWarmTipsPublicFile showTabbar:[UIApplication sharedApplication].delegate.window.rootViewController];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -88,10 +118,6 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         self.sectionArray = nil;
         self.dataArray = nil;
         [self.tableView reloadData];
-
-//        NSMutableArray *array = self.dataArray[0];
-//        [array addObject:itemModel];
-//        [self.tableView reloadData];
     };
     [self presentViewController:editorViewController animated:YES completion:nil];
 }
@@ -162,7 +188,7 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
         _tableView.delegate = self;
         _tableView.dataSource = self;
 
-        _tableView.layer.cornerRadius = 12;
+        _tableView.layer.cornerRadius = 8;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.tableHeaderView = self.headerView;
     }
@@ -173,10 +199,10 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
     if (!_headerView) {
         _headerView = [UIImageView  new];
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
-        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, 100);
+        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, kTableViewHeaderViewHeight);
         _headerView.image = self.headerImage;
 
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(12, 12)];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = maskPath.CGPath;
         maskLayer.frame = _headerView.bounds;

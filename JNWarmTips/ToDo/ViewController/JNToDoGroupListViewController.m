@@ -59,6 +59,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    /*隐藏tabbar */
+    [JNWarmTipsPublicFile hiddenTabbar:self.tabBarController];
+
     JNGroupListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     self.cellBackGroundImage = cell.backgroundImage;
     self.currentSelectIndexPath = indexPath;
