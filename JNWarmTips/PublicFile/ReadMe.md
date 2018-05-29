@@ -108,6 +108,8 @@ currentDateLabel :
 
 13. 添加item的左滑删除
 
+14. dismiss转场的时候添加title
+
 
 ### list
 
