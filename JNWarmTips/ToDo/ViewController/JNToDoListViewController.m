@@ -24,7 +24,7 @@ static const int kLeftAndRightMargin = 8;
 
 static const int kTopAndBottomMargin = 70;
 
-@interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource, CAAnimationDelegate>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIView *coverView;
@@ -73,18 +73,27 @@ static const int kTopAndBottomMargin = 70;
     }];
     self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
 
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    // 添加遮罩展开动画
+    [self.tableView bringSubviewToFront:self.coverView];
+
+    [self viewShowanimation];
+}
+
+#pragma mark - Private Method
+
+/*界面显示时候的动画*/
+- (void) viewShowanimation {
+
+    // 添加按钮动画
     [UIView animateWithDuration:0.35 animations:^{
         self.addItemBtn.transform = CGAffineTransformIdentity;
     }];
 
-    // 添加遮罩展开动画
-    [self.tableView bringSubviewToFront:self.coverView];
-
+    // tableView 遮罩动画
     CGFloat centerX = (SCREEN_WIDTH - kLeftAndRightMargin * 2) / 2;
     CGFloat centerY = (SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight) / 2;
 
@@ -104,13 +113,38 @@ static const int kTopAndBottomMargin = 70;
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
     [maskLayer addAnimation:animation forKey:nil];
-
-//    dispatch_after(0.65, dispatch_get_main_queue(), ^{
-//        [self.coverView removeFromSuperview];
-//    });
 }
 
-#pragma mark - Private Method
+/*界面退出时的动画*/
+- (void) viewDismissAnimation {
+
+    // 添加按钮动画
+    [UIView animateWithDuration:0.35 animations:^{
+        self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
+    }];
+
+    // tableView 遮罩动画
+    CGFloat centerX = (SCREEN_WIDTH - kLeftAndRightMargin * 2) / 2;
+    CGFloat centerY = (SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight) / 2;
+
+    CGRect startRect = CGRectMake(centerX, centerY, 0, 0);
+    UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:self.coverView.bounds];
+    UIBezierPath *startPath = [UIBezierPath bezierPathWithOvalInRect:startRect];
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.path = startPath.CGPath;
+    maskLayer.fillColor = [UIColor redColor].CGColor;
+    self.coverView.layer.mask = maskLayer;
+
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+    animation.delegate = self;
+    animation.fromValue = (__bridge id) startPath.CGPath;
+    animation.toValue = (__bridge id) endPath.CGPath;
+    animation.duration = 0.65;
+    animation.beginTime = CACurrentMediaTime();
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    [maskLayer addAnimation:animation forKey:nil];
+}
 
 #pragma mark - Event Response
 
@@ -118,7 +152,7 @@ static const int kTopAndBottomMargin = 70;
     [super touchesBegan:touches withEvent:event];
 
     [JNWarmTipsPublicFile showTabbar:[UIApplication sharedApplication].delegate.window.rootViewController];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self viewDismissAnimation];
 }
 
 - (void) addItem {
@@ -146,6 +180,11 @@ static const int kTopAndBottomMargin = 70;
 }
 
 #pragma mark - Delegate & DataSource
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    NSLog(@"anim = %@", anim);
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *itemArray = self.dataArray[indexPath.section];
