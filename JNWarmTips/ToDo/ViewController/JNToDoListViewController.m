@@ -57,6 +57,7 @@ static const int kTopAndBottomMargin = 70;
     }];
 
     UIView *coverView = [UIView new];
+    coverView.userInteractionEnabled = NO;
     self.coverView = coverView;
     coverView.backgroundColor = [UIColor whiteColor];
     coverView.frame = CGRectMake(0, kTableViewHeaderViewHeight, SCREEN_WIDTH - kLeftAndRightMargin * 2, SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight);
@@ -77,7 +78,6 @@ static const int kTopAndBottomMargin = 70;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSLog(@"self.tableView.subviews = %@", self.tableView.subviews);
     [UIView animateWithDuration:0.35 animations:^{
         self.addItemBtn.transform = CGAffineTransformIdentity;
     }];
@@ -88,9 +88,9 @@ static const int kTopAndBottomMargin = 70;
     CGFloat centerX = (SCREEN_WIDTH - kLeftAndRightMargin * 2) / 2;
     CGFloat centerY = (SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight) / 2;
 
-    CGRect endRect = CGRectMake(centerX - 10, centerY - 10, 20, 20);
+    CGRect endRect = CGRectMake(centerX, centerY, 0, 0);
     UIBezierPath *startPath = [UIBezierPath bezierPathWithRect:self.coverView.bounds];
-    UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:endRect];
+    UIBezierPath *endPath = [UIBezierPath bezierPathWithOvalInRect:endRect];
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     maskLayer.path = startPath.CGPath;
     maskLayer.fillColor = [UIColor redColor].CGColor;
@@ -104,6 +104,10 @@ static const int kTopAndBottomMargin = 70;
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
     [maskLayer addAnimation:animation forKey:nil];
+
+//    dispatch_after(0.65, dispatch_get_main_queue(), ^{
+//        [self.coverView removeFromSuperview];
+//    });
 }
 
 #pragma mark - Private Method
