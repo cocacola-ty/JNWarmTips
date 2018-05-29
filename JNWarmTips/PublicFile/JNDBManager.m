@@ -85,7 +85,7 @@ NSString *const kJNDBCategoryTable = @"category_table";
     // 分类表
     if (![self tableExist:kJNDBCategoryTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CATEGORY_NAME TEXT NOT NULL , GROUP_ID INTEGER, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID))", kJNDBCategoryTable, kJNDBGroupTable];
+            NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CATEGORY_NAME TEXT NOT NULL , GROUP_ID INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID))", kJNDBCategoryTable, kJNDBGroupTable];
             BOOL result = [db executeUpdate:sql];
              NSAssert(result, @"分类表创建失败");
         }];

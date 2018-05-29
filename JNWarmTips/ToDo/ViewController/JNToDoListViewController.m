@@ -314,7 +314,7 @@ static const int kTopAndBottomMargin = 70;
         _dataArray = [NSMutableArray array];
         for (NSDictionary *dict in self.sectionArray) {
             NSString *showDate = dict[@"name"];
-            NSArray *array = [[JNDBManager shareInstance] getAllItemsByShowDate:showDate];
+            NSArray *array = [[JNDBManager shareInstance] getAllItemsByShowDate:showDate WithGroupId:self.groupModel.groupId];
             [_dataArray addObject:array];
         }
     }
@@ -323,8 +323,7 @@ static const int kTopAndBottomMargin = 70;
 
 - (NSArray *)sectionArray {
     if (!_sectionArray) {
-        _sectionArray = [[JNDBManager shareInstance] getAllDateSection];
-        NSLog(@"_sectionArray = %@", _sectionArray);
+        _sectionArray = [[JNDBManager shareInstance] getAllDateSectionInGroup:self.groupModel.groupId];
         self.placeHolderLabel.hidden = _sectionArray.count != 0;
     }
     return _sectionArray;

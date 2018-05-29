@@ -11,9 +11,14 @@
 
 @implementation JNDBManager (Items)
 
-- (NSArray *) getAllItemsByShowDate:(NSString *)showDate {
+- (NSArray *)getAllItemsByShowDate:(NSString *)showDate WithGroupId:(NSString *)groupId {
+
     NSString *date = showDate == nil ? @"NULL" : [NSString stringWithFormat:@"'%@'", showDate];
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ where show_date = %@", kJNDBListTable, date];
+    NSString *condition = @"";
+    if (groupId) {
+        condition = [NSString stringWithFormat:@" and group_id = %@ ", groupId];
+    }
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where show_date = %@%@", kJNDBListTable, date, condition];
 
     NSMutableArray *result = [NSMutableArray array];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -29,8 +34,12 @@
     return result;
 }
 
-- (NSArray *) getAllDateSection {
-    NSString *sql = [NSString stringWithFormat:@"select show_date, count(show_date) as count from %@ group by show_date order by show_date", kJNDBListTable];
+- (NSArray *) getAllDateSectionInGroup:(NSString *)groupId {
+    NSString *condition = @"";
+    if (groupId) {
+        condition = [NSString stringWithFormat:@"where group_id = %@ ", groupId];
+    }
+    NSString *sql = [NSString stringWithFormat:@"select show_date, count(show_date) as count from %@ %@group by show_date order by show_date", kJNDBListTable, condition];
     NSMutableArray *result = [NSMutableArray array];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
