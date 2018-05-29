@@ -12,6 +12,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
 #import "JNItemModel.h"
+#import "JNPresentTransitionAnimator.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -182,7 +183,6 @@ static const int kTopAndBottomMargin = 70;
 #pragma mark - Delegate & DataSource
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    NSLog(@"anim = %@", anim);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -95,6 +95,9 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     return [[JNPresentTransitionAnimator alloc] initWithType:JNPresentTransitionTypePresent];
 }
 
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return [[JNPresentTransitionAnimator alloc] initWithType:JNPresentTransitionTypeDismiss];
+}
 
 #pragma mark - Getter & Setter
 

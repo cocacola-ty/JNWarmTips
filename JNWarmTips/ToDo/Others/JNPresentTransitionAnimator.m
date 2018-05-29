@@ -13,6 +13,16 @@
 
 static const double kAnimationDuration = 0.4;
 
+static const int kTopImageViewExpansionHeight = 100;
+
+static const int kTopImageViewReduceHeight = 70;
+
+static const int kExpansionLeftAndRightMargin = 8;
+
+static const int kExpansionTopAndBottomMargin = 70;
+
+static const int kCornerRadius = 8;
+
 @implementation JNPresentTransitionAnimator {
     JNPresentTransitionType _type;
 }
@@ -60,26 +70,26 @@ static const double kAnimationDuration = 0.4;
 
     // 做一个和转场前cell一样的视图
     UIView *animateView = [UIView new];
-    animateView.layer.cornerRadius = 8;
+    animateView.layer.cornerRadius = kCornerRadius;
     animateView.layer.masksToBounds = YES;
     animateView.backgroundColor = [UIColor whiteColor];
     animateView.frame = realFrame;
 
-    UIImageView *topView = [UIImageView new];
-    [animateView addSubview:topView];
-    topView.contentMode = UIViewContentModeScaleAspectFill;
-    topView.layer.masksToBounds = YES;
-    topView.image = fromVc.cellBackGroundImage;
-    topView.frame = CGRectMake(0, 0, realFrame.size.width, 70);
+    UIImageView *topImageView = [UIImageView new];
+    [animateView addSubview:topImageView];
+    topImageView.contentMode = UIViewContentModeScaleAspectFill;
+    topImageView.layer.masksToBounds = YES;
+    topImageView.image = fromVc.cellBackGroundImage;
+    topImageView.frame = CGRectMake(0, 0, realFrame.size.width, kTopImageViewReduceHeight);
 
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = toVc.groupModel.groupName;
     titleLabel.textColor = [UIColor whiteColor];
     [titleLabel sizeToFit];
-    titleLabel.center = CGPointMake(realFrame.size.width / 2, 35);
+    titleLabel.center = CGPointMake(realFrame.size.width / 2, kTopImageViewReduceHeight/2);
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont systemFontOfSize:17.0];
-    [topView addSubview:titleLabel];
+    [topImageView addSubview:titleLabel];
 
 
     // 拿到执行转场动画的容器视图
@@ -89,12 +99,13 @@ static const double kAnimationDuration = 0.4;
     // 将转场开始时视图添加到容器中
     [containerView addSubview:animateView];
 
-    CGFloat endWidth = SCREEN_WIDTH - 16;
-    CGFloat endHeight = SCREEN_HEIGHT - 140;
+    CGFloat endWidth = SCREEN_WIDTH - kExpansionLeftAndRightMargin * 2;
+    CGFloat endHeight = SCREEN_HEIGHT - kExpansionTopAndBottomMargin * 2;
+
     [UIView animateWithDuration:kAnimationDuration animations:^{
-        animateView.frame = CGRectMake(8, 70, endWidth, endHeight);
-        topView.frame = CGRectMake(0, 0, endWidth, 100);
-        titleLabel.center = CGPointMake(endWidth / 2, 50);
+        animateView.frame = CGRectMake(kExpansionLeftAndRightMargin, kExpansionTopAndBottomMargin, endWidth, endHeight);
+        topImageView.frame = CGRectMake(0, 0, endWidth, kTopImageViewExpansionHeight);
+        titleLabel.center = CGPointMake(endWidth / 2, kTopImageViewExpansionHeight/2);
     } completion:^(BOOL finished) {
         toVc.view.hidden = NO;
         [animateView removeFromSuperview];
@@ -105,6 +116,53 @@ static const double kAnimationDuration = 0.4;
 
 /*当dismiss时候的转场动画*/
 - (void) dismissTransion:(id <UIViewControllerContextTransitioning>)transitionContext  {
+
+    CGFloat expansionWidth = SCREEN_WIDTH - kExpansionLeftAndRightMargin * 2;
+    CGFloat expansionHeight = SCREEN_HEIGHT - kExpansionTopAndBottomMargin * 2;
+
+    // 拿到转场前后的两个控制器
+    JNToDoListViewController *fromVc = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UITabBarController *toVcs = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    JNToDoGroupListViewController *toVc = toVcs.childViewControllers.lastObject;
+
+    // 拿到要缩放到的cell
+    UITableViewCell *cell = [toVc.tableView cellForRowAtIndexPath:toVc.currentSelectIndexPath];
+    UIView *contentView = cell.subviews.firstObject;
+    UIView *realCellView = contentView.subviews.firstObject;
+    CGRect endFrame = [contentView convertRect:realCellView.frame toView:toVc.tableView];
+    NSLog(@"endFrame.x = %f", endFrame.origin.x);
+    NSLog(@"endFrame.y = %f", endFrame.origin.y);
+    NSLog(@"endFrame.size.width = %f", endFrame.size.width);
+    NSLog(@"endFrame.size.height = %f", endFrame.size.height);
+    CGFloat reduceWidth = endFrame.size.width;
+
+    UIView *containerView = [transitionContext containerView];
+    containerView.backgroundColor = GRAY_BACKGROUND_COLOR;
+//    [containerView addSubview:toVc.view];
+
+    UIView *animationView = [UIView new];
+    animationView.layer.cornerRadius = kCornerRadius;
+    animationView.layer.masksToBounds = YES;
+    animationView.backgroundColor = [UIColor whiteColor];
+    animationView.frame = CGRectMake(kExpansionLeftAndRightMargin, kExpansionTopAndBottomMargin, expansionWidth, expansionHeight);
+    [containerView addSubview:animationView];
+
+    UIImageView *topImageView = [UIImageView new];
+    topImageView.frame = CGRectMake(0, 0, expansionWidth, kTopImageViewExpansionHeight);
+    topImageView.image = toVc.cellBackGroundImage;
+    topImageView.contentMode = UIViewContentModeScaleAspectFill;
+    topImageView.layer.masksToBounds = YES;
+    [animationView addSubview:topImageView];
+
+    fromVc.view.hidden = YES;
+
+    [UIView animateWithDuration:kAnimationDuration animations:^{
+        animationView.frame = endFrame;
+        topImageView.frame = CGRectMake(0, 0, reduceWidth, kTopImageViewReduceHeight);
+        
+    } completion:^(BOOL finished) {
+        [transitionContext completeTransition:YES];
+    }];
 
 }
 @end
