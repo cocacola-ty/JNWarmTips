@@ -11,6 +11,8 @@
 #import "JNGroupModel.h"
 
 
+static const double kAnimationDuration = 0.4;
+
 @implementation JNPresentTransitionAnimator {
     JNPresentTransitionType _type;
 }
@@ -25,7 +27,7 @@
 
 /*转场动画执行时间*/
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.7;
+    return kAnimationDuration;
 }
 
 /*转场动画的动画过程*/
@@ -89,40 +91,14 @@
 
     CGFloat endWidth = SCREEN_WIDTH - 16;
     CGFloat endHeight = SCREEN_HEIGHT - 140;
-    [UIView animateWithDuration:0.4 animations:^{
+    [UIView animateWithDuration:kAnimationDuration animations:^{
         animateView.frame = CGRectMake(8, 70, endWidth, endHeight);
         topView.frame = CGRectMake(0, 0, endWidth, 100);
         titleLabel.center = CGPointMake(endWidth / 2, 50);
     } completion:^(BOOL finished) {
         toVc.view.hidden = NO;
         [animateView removeFromSuperview];
-
         [transitionContext completeTransition:YES];
-
-//        animateView.backgroundColor = [UIColor clearColor];
-
-        /*
-        UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, endWidth, endHeight)];
-        UIBezierPath *startPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 0, endHeight)];
-        CAShapeLayer *layer = [CAShapeLayer layer];
-        layer.frame = animateView.bounds;
-        layer.path = startPath.CGPath;
-        layer.fillColor = [UIColor greenColor].CGColor;
-        animateView.layer.mask = layer;
-
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-        animation.beginTime = CACurrentMediaTime();
-        animation.fromValue = (__bridge id) startPath.CGPath;
-        animation.toValue = (__bridge id) endPath.CGPath;
-        animation.fillMode = kCAFillModeForwards;
-        animation.duration = 0.3;
-        animation.removedOnCompletion = NO;
-        [layer addAnimation:animation forKey:@"maskAnimation"];
-
-        dispatch_after(0.3, dispatch_get_main_queue(), ^{
-            [transitionContext completeTransition:YES];
-        });
-         */
     }];
 
 }

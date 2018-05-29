@@ -20,6 +20,10 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 static const int kTableViewHeaderViewHeight = 100;
 
+static const int kLeftAndRightMargin = 8;
+
+static const int kTopAndBottomMargin = 70;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
@@ -41,26 +45,23 @@ static const int kTableViewHeaderViewHeight = 100;
 
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(70);
-        make.left.equalTo(self.view.mas_left).offset(8);
-        make.right.equalTo(self.view.mas_right).offset(-8);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-70);
+        make.top.equalTo(self.view.mas_top).offset(kTopAndBottomMargin);
+        make.left.equalTo(self.view.mas_left).offset(kLeftAndRightMargin);
+        make.right.equalTo(self.view.mas_right).offset(-kLeftAndRightMargin);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-kTopAndBottomMargin);
     }];
     [self.tableView addSubview:self.placeHolderLabel];
     [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.tableView.mas_centerX);
         make.centerY.equalTo(self.tableView.mas_centerY);
     }];
+
     UIView *coverView = [UIView new];
     self.coverView = coverView;
-    coverView.backgroundColor = [UIColor redColor];
+    coverView.backgroundColor = [UIColor whiteColor];
+    coverView.frame = CGRectMake(0, kTableViewHeaderViewHeight, SCREEN_WIDTH - kLeftAndRightMargin * 2, SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight);
     [self.tableView addSubview:coverView];
-    [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.tableView.mas_left);
-        make.top.equalTo(self.tableView.mas_top);
-        make.bottom.equalTo(self.tableView.mas_bottom);
-        make.right.equalTo(self.tableView.mas_right);
-    }];
+
     [self.tableView registerClass:[JNToDoItemCell class] forCellReuseIdentifier:kToDoListCellReuseId];
 
     [self.view addSubview:self.addItemBtn];
@@ -70,21 +71,39 @@ static const int kTableViewHeaderViewHeight = 100;
         make.centerX.equalTo(self.view.mas_centerX);
     }];
     self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
-    [UIView animateWithDuration:0.25 animations:^{
+
+
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSLog(@"self.tableView.subviews = %@", self.tableView.subviews);
+    [UIView animateWithDuration:0.35 animations:^{
         self.addItemBtn.transform = CGAffineTransformIdentity;
     }];
 
+    // 添加遮罩展开动画
+    [self.tableView bringSubviewToFront:self.coverView];
 
+    CGFloat centerX = (SCREEN_WIDTH - kLeftAndRightMargin * 2) / 2;
+    CGFloat centerY = (SCREEN_HEIGHT - kTopAndBottomMargin * 2 - kTableViewHeaderViewHeight) / 2;
 
-    /*
-    CGRect startRect = CGRectMake(70, kTableViewHeaderViewHeight, 20, 20);
-    UIBezierPath *startPath = [UIBezierPath bezierPathWithOvalInRect:startRect];
+    CGRect endRect = CGRectMake(centerX - 10, centerY - 10, 20, 20);
+    UIBezierPath *startPath = [UIBezierPath bezierPathWithRect:self.coverView.bounds];
+    UIBezierPath *endPath = [UIBezierPath bezierPathWithRect:endRect];
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.frame = CGRectMake(0, kTableViewHeaderViewHeight, SCREEN_WIDTH - 16, SCREEN_HEIGHT - 140);
     maskLayer.path = startPath.CGPath;
     maskLayer.fillColor = [UIColor redColor].CGColor;
-    self.tableView.layer.mask = maskLayer;
-     */
+    self.coverView.layer.mask = maskLayer;
+
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+    animation.fromValue = (__bridge id) startPath.CGPath;
+    animation.toValue = (__bridge id) endPath.CGPath;
+    animation.duration = 0.65;
+    animation.beginTime = CACurrentMediaTime();
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    [maskLayer addAnimation:animation forKey:nil];
 }
 
 #pragma mark - Private Method
@@ -199,7 +218,7 @@ static const int kTableViewHeaderViewHeight = 100;
     if (!_headerView) {
         _headerView = [UIImageView  new];
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
-        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-16, kTableViewHeaderViewHeight);
+        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-kLeftAndRightMargin*2, kTableViewHeaderViewHeight);
         _headerView.image = self.headerImage;
 
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
