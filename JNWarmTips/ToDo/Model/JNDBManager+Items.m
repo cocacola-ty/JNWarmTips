@@ -73,9 +73,11 @@
     NSString *finish = [NSString stringWithFormat:@"%d", itemModel.finished];
 
     NSString *sql = [NSString stringWithFormat:@"insert into %@(content, show_date, start_time, end_time, group_id, NOTIFICATION, finished) values ('%@', %@, %@, %@, %@, %@, %@)", kJNDBListTable, itemModel.content, show_date, startTime, endTime, groupId, notification, finish];
+    NSString *updateGroupSql = [NSString stringWithFormat:@"update %@ set group_first_content = '%@' where group_id='%@'", kJNDBGroupTable, itemModel.content, groupId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];
+        [db executeUpdate:updateGroupSql];
     }];
 }
 
