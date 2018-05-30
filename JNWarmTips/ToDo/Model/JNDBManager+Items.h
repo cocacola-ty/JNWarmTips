@@ -16,4 +16,7 @@
 
 - (void) addItem:(JNItemModel *)itemModel ;
 - (void) updateFinishStatus:(BOOL) finished withItemId:(NSInteger)itemId ;
+
+/*删除一条item*/
+- (void) deleteItem:(NSInteger)itemId ;
 @end

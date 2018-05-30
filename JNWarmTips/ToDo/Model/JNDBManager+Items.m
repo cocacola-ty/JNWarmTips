@@ -85,4 +85,12 @@
         [db executeUpdate:sql];
     }];
 }
+
+- (void) deleteItem:(NSInteger)itemId {
+    NSString *sql = [NSString stringWithFormat:@"delete from %@ where item_id = %d", kJNDBListTable, itemId];
+
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [db executeUpdate:sql];
+    }];
+}
 @end

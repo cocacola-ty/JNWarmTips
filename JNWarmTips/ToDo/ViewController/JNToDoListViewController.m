@@ -12,7 +12,6 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
 #import "JNItemModel.h"
-#import "JNPresentTransitionAnimator.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -31,7 +30,7 @@ static const int kTopAndBottomMargin = 70;
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) UIButton *addItemBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray<NSMutableArray *> *dataArray;
 @property (nonatomic, strong) NSArray *sectionArray;
 @end
 
@@ -187,7 +186,7 @@ static const int kTopAndBottomMargin = 70;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *itemArray = self.dataArray[indexPath.section];
+    NSMutableArray *itemArray = self.dataArray[indexPath.section];
     JNItemModel *itemModel = itemArray[indexPath.row];
 
     JNToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:kToDoListCellReuseId];
@@ -216,8 +215,8 @@ static const int kTopAndBottomMargin = 70;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDictionary *dict = self.sectionArray[section];
-    return [dict[@"count"] integerValue];
+    NSArray *items = self.dataArray[section];
+    return items.count;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -237,6 +236,34 @@ static const int kTopAndBottomMargin = 70;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return kToDoListSectionHeaderViewHeight;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewRowAction *action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        NSMutableArray *array = self.dataArray[indexPath.section];
+        JNItemModel *itemModel = array[indexPath.row];
+        [[JNDBManager shareInstance] deleteItem:itemModel.itemId];
+
+        [array removeObject:itemModel];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+
+        NSLog(@"self.dataArray.count = %u", self.dataArray.count);
+        NSLog(@"self.dataArray = %@", self.dataArray);
+
+        BOOL hidden = NO;
+        for (NSArray *items in self.dataArray) {
+            if (items.count != 0) {
+                hidden = YES;
+                break;
+            }
+        }
+        self.placeHolderLabel.hidden = hidden;
+    }];
+    return @[action];
 }
 
 #pragma mark - Getter & Setter
@@ -314,7 +341,7 @@ static const int kTopAndBottomMargin = 70;
         _dataArray = [NSMutableArray array];
         for (NSDictionary *dict in self.sectionArray) {
             NSString *showDate = dict[@"name"];
-            NSArray *array = [[JNDBManager shareInstance] getAllItemsByShowDate:showDate WithGroupId:self.groupModel.groupId];
+            NSMutableArray *array = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllItemsByShowDate:showDate WithGroupId:self.groupModel.groupId]];
             [_dataArray addObject:array];
         }
     }
