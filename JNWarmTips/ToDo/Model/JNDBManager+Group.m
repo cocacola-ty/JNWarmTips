@@ -32,7 +32,7 @@
 - (BOOL) addGroup:(JNGroupModel *)groupModel {
     __block BOOL result;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@(GROUP_NAME) VALUES('%@')", kJNDBGroupTable, groupModel.groupName];
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@(GROUP_ID, GROUP_NAME) VALUES(%@, '%@')", kJNDBGroupTable, groupModel.groupId, groupModel.groupName];
         result = [db executeUpdate:sql];
 
         if (!result) {
@@ -45,8 +45,9 @@
 - (void)deleteGroup:(JNGroupModel *)groupModel {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         /*将所有属于该表的item的group_id更新为0*/
-        NSString *updateListSql = [NSString stringWithFormat:@"update %@ set group_id='0', CATEGORY_ID=null where group_id = '%@' ", kJNDBListTable, groupModel.groupId];
-        [db executeUpdate:updateListSql];
+//        NSString *updateListSql = [NSString stringWithFormat:@"update %@ set group_id='0', CATEGORY_ID=null where group_id = '%@' ", kJNDBListTable, groupModel.groupId];
+        NSString *deleteItemsSql = [NSString stringWithFormat:@"delete from %@ where group_id = %@", kJNDBListTable, groupModel.groupId];
+        [db executeUpdate:deleteItemsSql];
 
         NSString *deleteCategorySql = [NSString stringWithFormat:@"delete from %@ where group_id='%@'", kJNDBCategoryTable, groupModel.groupId];
         [db executeUpdate:deleteCategorySql];

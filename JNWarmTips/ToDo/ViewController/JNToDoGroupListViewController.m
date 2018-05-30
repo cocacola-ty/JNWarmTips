@@ -32,9 +32,10 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
+
 }
 
-- (void) addTag {
+- (void)addGroup {
     JNAddGroupAlertViewController *addGroupAlertViewController = [[JNAddGroupAlertViewController alloc] init];
     addGroupAlertViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     addGroupAlertViewController.finishAddGroup = ^(JNGroupModel *groupModel) {
@@ -125,7 +126,7 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
 
         CGFloat btnHeight = 18;
         UIButton *addTagBtn = [UIButton new];
-        [addTagBtn addTarget:self action:@selector(addTag) forControlEvents:UIControlEventTouchUpInside];
+        [addTagBtn addTarget:self action:@selector(addGroup) forControlEvents:UIControlEventTouchUpInside];
         addTagBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
         UIBezierPath *path = [UIBezierPath bezierPathWithRect:addTagBtn.bounds];
         [path moveToPoint:CGPointMake(btnHeight/2, 0)];
