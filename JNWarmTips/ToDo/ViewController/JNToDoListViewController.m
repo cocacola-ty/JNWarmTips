@@ -251,9 +251,6 @@ static const int kTopAndBottomMargin = 70;
         [array removeObject:itemModel];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 
-        NSLog(@"self.dataArray.count = %u", self.dataArray.count);
-        NSLog(@"self.dataArray = %@", self.dataArray);
-
         BOOL hidden = NO;
         for (NSArray *items in self.dataArray) {
             if (items.count != 0) {

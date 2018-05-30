@@ -15,7 +15,7 @@
 
     NSString *date = showDate == nil ? @"NULL" : [NSString stringWithFormat:@"'%@'", showDate];
     NSString *condition = @"";
-    if (groupId) {
+    if (![groupId isEqualToString:@"0"]) {
         condition = [NSString stringWithFormat:@" and group_id = %@ ", groupId];
     }
     NSString *sql = [NSString stringWithFormat:@"select * from %@ where show_date = %@%@", kJNDBListTable, date, condition];
@@ -36,7 +36,7 @@
 
 - (NSArray *) getAllDateSectionInGroup:(NSString *)groupId {
     NSString *condition = @"";
-    if (groupId) {
+    if (![groupId isEqualToString:@"0"]) {
         condition = [NSString stringWithFormat:@"where group_id = %@ ", groupId];
     }
     NSString *sql = [NSString stringWithFormat:@"select show_date, count(show_date) as count from %@ %@group by show_date order by show_date", kJNDBListTable, condition];
