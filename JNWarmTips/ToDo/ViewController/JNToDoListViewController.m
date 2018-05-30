@@ -175,6 +175,11 @@ static const int kTopAndBottomMargin = 70;
         self.sectionArray = nil;
         self.dataArray = nil;
         [self.tableView reloadData];
+
+        // 回调更新group页面
+        if (self.updateItemInGorup) {
+            self.updateItemInGorup(text);
+        }
     };
     [self presentViewController:editorViewController animated:YES completion:nil];
 }

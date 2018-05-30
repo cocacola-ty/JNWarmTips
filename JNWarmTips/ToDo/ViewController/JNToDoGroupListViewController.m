@@ -69,10 +69,16 @@ static NSString *const kGroupListCellReuseId = @"JNGroupListCellReuseId";
     self.currentSelectIndexPath = indexPath;
     JNGroupModel *groupModel = self.groups[indexPath.row];
 
+    __weak typeof(self) ws = self;
+
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
     toDoListViewController.transitioningDelegate = self;
     toDoListViewController.groupModel = groupModel;
     toDoListViewController.headerImage = cell.backgroundImage;
+    toDoListViewController.updateItemInGorup = ^(NSString *content) {
+        groupModel.firstItemContent = content;
+        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    };
     [self presentViewController:toDoListViewController animated:YES completion:nil];
 }
 

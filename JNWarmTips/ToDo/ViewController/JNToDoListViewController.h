@@ -23,4 +23,5 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) JNGroupModel *groupModel;
 @property (nonatomic, strong) UIImage *headerImage;
+@property(nonatomic, copy) void (^updateItemInGorup)(NSString *content);
 @end
