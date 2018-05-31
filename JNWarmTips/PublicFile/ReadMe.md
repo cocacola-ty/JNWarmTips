@@ -110,6 +110,8 @@ currentDateLabel :
 
 14. dismiss转场的时候添加title
 
+15. list中添加优先级显示, 默认没有，最高三星✨
+
 
 ### list
 
