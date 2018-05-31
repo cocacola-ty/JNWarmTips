@@ -11,4 +11,3 @@ target 'JNWarmTips' do
   pod 'FMDB'
 
 end
-
