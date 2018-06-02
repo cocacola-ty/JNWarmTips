@@ -45,7 +45,7 @@
 }
 
 - (void)setContent:(NSInteger)year AndDay:(NSInteger)day AndMonth:(NSInteger)month {
-    NSArray *monthTextArray = @[@"", @"一月", @"二月", @"三月", @"四月", @"五月", @"六月", @"七月", @"八月", @"九月", @"十月", @"十一月", @"十二月"];
+//    NSArray *monthTextArray = @[@"", @"一月", @"二月", @"三月", @"四月", @"五月", @"六月", @"七月", @"八月", @"九月", @"十月", @"十一月", @"十二月"];
     NSArray *monthEnglishTextArray = @[@"", @"JAN", @"FEB", @"MAR", @"APR", @"MAY", @"JUNE", @"JULY", @"AUG", @"SEPT", @"OCT", @"NOV", @"DEC"];
 
     if (month <= 12 && month >= 1) {

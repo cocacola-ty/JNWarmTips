@@ -15,8 +15,8 @@
 - (NSArray *) getAllDateSectionInGroup:(NSString *)groupId ;
 
 - (void) addItem:(JNItemModel *)itemModel ;
-- (void) updateFinishStatus:(BOOL) finished withItemId:(NSInteger)itemId ;
+- (void) updateFinishStatus:(BOOL) finished withItemId:(long long)itemId ;
 
 /*删除一条item*/
-- (void) deleteItem:(NSInteger)itemId ;
+- (void) deleteItem:(long long)itemId ;
 @end

@@ -65,10 +65,10 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSString *dateString = [formatter stringFromDate:date];
-    NSString *show_date = (itemModel.startTime == nil || itemModel.startTime == 0) ? @"''" : dateString;
-    NSString *startTime = (itemModel.startTime == nil || itemModel.startTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.startTime];
-    NSString *endTime = (itemModel.endTime == nil || itemModel.endTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.endTime];
-    NSString *groupId = [NSString stringWithFormat:@"%d", itemModel.groupId];
+    NSString *show_date = (itemModel.startTime == 0) ? @"''" : dateString;
+    NSString *startTime = (itemModel.startTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.startTime];
+    NSString *endTime = (itemModel.endTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.endTime];
+    NSString *groupId = [NSString stringWithFormat:@"%lld", itemModel.groupId];
     NSString *notification = [NSString stringWithFormat:@"%d", itemModel.notification];
     NSString *finish = [NSString stringWithFormat:@"%d", itemModel.finished];
 
@@ -81,15 +81,15 @@
     }];
 }
 
-- (void) updateFinishStatus:(BOOL) finished withItemId:(NSInteger)itemId {
-    NSString *sql = [NSString stringWithFormat:@"update %@ set finished = %d where item_id = %d", kJNDBListTable, finished, itemId];
+- (void) updateFinishStatus:(BOOL) finished withItemId:(long long)itemId {
+    NSString *sql = [NSString stringWithFormat:@"update %@ set finished = %d where item_id = %lld", kJNDBListTable, finished, itemId];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];
     }];
 }
 
-- (void) deleteItem:(NSInteger)itemId {
-    NSString *sql = [NSString stringWithFormat:@"delete from %@ where item_id = %d", kJNDBListTable, itemId];
+- (void) deleteItem:(long long)itemId {
+    NSString *sql = [NSString stringWithFormat:@"delete from %@ where item_id = %lld", kJNDBListTable, itemId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];

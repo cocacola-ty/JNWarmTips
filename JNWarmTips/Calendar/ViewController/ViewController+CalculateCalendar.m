@@ -16,7 +16,7 @@
     /*
      * 检查缓存中是否有，如果没有日算对应月份所有日期
      */
-    NSString *key = [JNWarmTipsPublicFile dateStringFormat:year month:month day:nil];
+    NSString *key = [JNWarmTipsPublicFile dateStringFormat:year month:month day:0];
     id value = [self.cacheList objectForKey:key];
     if (value) {
         return nil;
@@ -106,7 +106,7 @@
         lastYear = currentYear - 1;
     }
 
-    return [JNWarmTipsPublicFile dateStringFormat:lastYear month:lastMonth day:nil];
+    return [JNWarmTipsPublicFile dateStringFormat:lastYear month:lastMonth day:0];
 }
 
 - (NSString *) getNextMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
@@ -118,7 +118,7 @@
         nextMonth = 1;
         nextYear = currentYear + 1;
     }
-    return [JNWarmTipsPublicFile dateStringFormat:nextYear month:nextMonth day:nil];
+    return [JNWarmTipsPublicFile dateStringFormat:nextYear month:nextMonth day:0];
 
 }
 @end

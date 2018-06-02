@@ -131,7 +131,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
-    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%d年 %02d月 %02d日", self.currentYear, self.currentMonth, self.currentDay];
+    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%ld年 %02ld月 %02ld日", self.currentYear, self.currentMonth, self.currentDay];
     [self reloadEventList];
 
 
@@ -183,7 +183,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self.dataArray addObject:lastMonthKey];
 
     NSArray *currentMonthArray = [self getAllDaysOfMonth:self.currentMonth InYear:self.currentYear];
-    NSString *currentMonthKey = [JNWarmTipsPublicFile dateStringFormat:self.currentYear month:self.currentMonth day:nil];
+    NSString *currentMonthKey = [JNWarmTipsPublicFile dateStringFormat:self.currentYear month:self.currentMonth day:0];
     [self.cacheList setObject:currentMonthArray forKey:currentMonthKey];
     [self.dataArray addObject:currentMonthKey];
 
@@ -260,9 +260,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         if ([[dictionary allKeys] containsObject:number]) {
             NSInteger value = [[dictionary objectForKey:number] integerValue];
             value += 1;
-            [dictionary setValue:@(value) forKey:number];
+            [dictionary setObject:@(value) forKey:number];
         } else {
-            [dictionary setValue:@(1) forKey:number];
+            [dictionary setObject:@(1) forKey:number];
         }
     }
 
@@ -324,7 +324,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     // 隐藏➕号
     self.currentSelectDay = @"";
     [self reloadEventList];
-    self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:willShowYear month:willShowMonth day:nil];
+    self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:willShowYear month:willShowMonth day:0];
 }
 
 #pragma mark - Event Response

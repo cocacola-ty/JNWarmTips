@@ -151,7 +151,7 @@ static const int kTopAndBottomMargin = 70;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
 
-    [JNWarmTipsPublicFile showTabbar:[UIApplication sharedApplication].delegate.window.rootViewController];
+    [JNWarmTipsPublicFile showTabbar:(UITabBarController *)[UIApplication sharedApplication].delegate.window.rootViewController];
     [self viewDismissAnimation];
 }
 

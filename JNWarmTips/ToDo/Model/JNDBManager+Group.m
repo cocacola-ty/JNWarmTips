@@ -36,7 +36,7 @@
         result = [db executeUpdate:sql];
 
         if (!result) {
-            rollback = YES;
+            *rollback = YES;
         }
     }];
     return result;
