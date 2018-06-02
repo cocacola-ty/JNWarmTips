@@ -10,11 +10,11 @@
 @implementation JNWarmTipsPublicFile {
 }
 
-+ (NSString *)dateStringFormat:(NSInteger)year month:(NSInteger)month day:(NSInteger)day {
++ (NSString *)dateStringFormat:(int)year month:(int)month day:(int)day {
     if (day == 0) {
-        return [NSString stringWithFormat:@"%ld-%02ld", year, month];
+        return [NSString stringWithFormat:@"%d-%02d", year, month];
     }
-    return [NSString stringWithFormat:@"%ld-%02ld-%02d", year, month, day];
+    return [NSString stringWithFormat:@"%d-%02d-%02d", year, month, day];
 }
 
 + (void) downFont:(NSString *)fontName {

@@ -10,7 +10,7 @@
 + (void) downFont:(NSString *)fontName ;
 
 /*格式化日期字符串*/
-+ (NSString *)dateStringFormat:(NSInteger)year month:(NSInteger)month day:(NSInteger)day ;
++ (NSString *)dateStringFormat:(int)year month:(int)month day:(int)day ;
 
 /*隐藏tabbar*/
 + (void) hiddenTabbar:(UITabBarController *)vc ;

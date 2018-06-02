@@ -7,7 +7,7 @@
 #import "ViewController.h"
 
 @interface ViewController (CalculateCalendar)
-- (NSMutableArray *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year;
-- (NSString *) getLastMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear;
-- (NSString *) getNextMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear;
+- (NSMutableArray *) getAllDaysOfMonth:(int)month InYear:(int)year;
+- (NSString *) getLastMonth:(int)currentMonth currentYear:(int)currentYear;
+- (NSString *) getNextMonth:(int)currentMonth currentYear:(int)currentYear;
 @end

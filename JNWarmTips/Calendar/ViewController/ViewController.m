@@ -466,6 +466,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return _eventsListPath;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignore "-Wundeclared-selector"
 - (UIImageView *)addEventImageView {
     if (!_addEventImageView) {
         _addEventImageView = [UIImageView new];
@@ -476,4 +478,5 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     }
     return _addEventImageView;
 }
+#pragma clang diagnostic pop
 @end

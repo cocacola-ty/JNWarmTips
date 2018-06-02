@@ -12,7 +12,7 @@
 
 @implementation ViewController (CalculateCalendar)
 
-- (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(NSInteger)month InYear:(NSInteger)year{
+- (NSMutableArray<JNDayModel *> *) getAllDaysOfMonth:(int)month InYear:(int)year{
     /*
      * 检查缓存中是否有，如果没有日算对应月份所有日期
      */
@@ -32,14 +32,14 @@
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
     NSDate *firstDay = [dateFormatter dateFromString:firstDayStr];
     NSDateComponents *weekComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstDay];
-    NSInteger firstDayInWeek = weekComponents.weekday;
+    int firstDayInWeek = (int)weekComponents.weekday;
 
     // 获取当前月有多少天
     NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:firstDay];
 
     // 获取上一个月有多少天
-    NSInteger lastMonthInt = month - 1;
-    NSInteger lastMonthInYear = year;
+    int lastMonthInt = month - 1;
+    int lastMonthInYear = year;
     if (month == 1) {
         lastMonthInYear = year - 1;
         lastMonthInt = 12;
@@ -47,7 +47,7 @@
     NSString *lastMonthStr = [JNWarmTipsPublicFile dateStringFormat:lastMonthInYear month:lastMonthInt day:1];
     NSDate *lastMonth = [dateFormatter dateFromString:lastMonthStr];
     NSRange lastMonthRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:lastMonth];
-    NSInteger daysOflastMonth = lastMonthRange.length;
+    int daysOflastMonth = (int)lastMonthRange.length;
 
     // 排列本月所有日期
     NSMutableArray *days = [NSMutableArray array];
@@ -75,8 +75,8 @@
         [days addObject:dayModel];
     }
     // 下个月的天数
-    NSInteger nextMonthInt = month + 1;
-    NSInteger nextMonthInYear = year;
+    int nextMonthInt = month + 1;
+    int nextMonthInYear = year;
     if (month == 12) {
         nextMonthInt = 1;
         nextMonthInYear = year + 1;
@@ -97,10 +97,10 @@
     return days;
 }
 
-- (NSString *) getLastMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
+- (NSString *) getLastMonth:(int)currentMonth currentYear:(int)currentYear{
 
-    NSInteger lastMonth = currentMonth - 1;
-    NSInteger lastYear = currentYear;
+    int lastMonth = currentMonth - 1;
+    int lastYear = currentYear;
     if (currentMonth == 1) {
         lastMonth = 12;
         lastYear = currentYear - 1;
@@ -109,10 +109,10 @@
     return [JNWarmTipsPublicFile dateStringFormat:lastYear month:lastMonth day:0];
 }
 
-- (NSString *) getNextMonth:(NSInteger)currentMonth currentYear:(NSInteger)currentYear{
+- (NSString *) getNextMonth:(int)currentMonth currentYear:(int)currentYear{
 
-    NSInteger nextMonth = currentMonth + 1;
-    NSInteger nextYear = currentYear;
+    int nextMonth = currentMonth + 1;
+    int nextYear = currentYear;
 
     if (currentMonth == 12) {
         nextMonth = 1;
