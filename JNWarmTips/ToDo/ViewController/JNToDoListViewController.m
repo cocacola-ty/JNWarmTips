@@ -24,6 +24,8 @@ static const int kLeftAndRightMargin = 8;
 
 static const int kTopAndBottomMargin = 70;
 
+static const double kViewShowAnimationDuration = 0.35;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource, CAAnimationDelegate>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
@@ -89,7 +91,7 @@ static const int kTopAndBottomMargin = 70;
 - (void) viewShowanimation {
 
     // 添加按钮动画
-    [UIView animateWithDuration:0.35 animations:^{
+    [UIView animateWithDuration:kViewShowAnimationDuration animations:^{
         self.addItemBtn.transform = CGAffineTransformIdentity;
     }];
 
@@ -119,7 +121,7 @@ static const int kTopAndBottomMargin = 70;
 - (void) viewDismissAnimation {
 
     // 添加按钮动画
-    [UIView animateWithDuration:0.35 animations:^{
+    [UIView animateWithDuration:kViewShowAnimationDuration animations:^{
         self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
     }];
 

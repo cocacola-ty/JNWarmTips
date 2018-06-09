@@ -11,7 +11,7 @@
 #import "JNGroupModel.h"
 
 
-static const double kAnimationDuration = 0.4;
+static const double kAnimationDuration = 0.3;
 
 static const int kTopImageViewExpansionHeight = 100;
 
