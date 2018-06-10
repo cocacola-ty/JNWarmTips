@@ -10,12 +10,16 @@
 
 }
 @synthesize currentMonth = _currentMonth;
+@synthesize currentDay = _currentDay;
+@synthesize currentYear = _currentYear;
 
 - (instancetype) init {
     self = [super init];
     if (self) {
         NSDateComponents *dateComponents = [self getCurrentDay];
         _currentMonth = dateComponents.month;
+        _currentDay = dateComponents.day;
+        _currentYear = dateComponents.year;
     }
     return self;
 }
@@ -50,6 +54,14 @@
 
 - (int)currentMonth {
     return _currentMonth;
+}
+
+- (int)currentDay {
+    return _currentDay;
+}
+
+- (int)currentYear {
+    return _currentYear;
 }
 
 @end
