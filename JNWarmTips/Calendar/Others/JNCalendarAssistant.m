@@ -9,6 +9,16 @@
 @implementation JNCalendarAssistant {
 
 }
+@synthesize currentMonth = _currentMonth;
+
+- (instancetype) init {
+    self = [super init];
+    if (self) {
+        NSDateComponents *dateComponents = [self getCurrentDay];
+        _currentMonth = dateComponents.month;
+    }
+    return self;
+}
 
 + (instancetype) shareInstance {
     static JNCalendarAssistant *instance;
@@ -25,11 +35,21 @@
     return dateComponents;
 }
 
+- (NSInteger) getFirstDayInWeek {
+
+}
+
+#pragma mark - Getter & Setter
+
 - (NSCalendar *)calendar {
     if (!_calendar) {
         _calendar = [NSCalendar currentCalendar];
     }
     return _calendar;
+}
+
+- (int)currentMonth {
+    return _currentMonth;
 }
 
 @end

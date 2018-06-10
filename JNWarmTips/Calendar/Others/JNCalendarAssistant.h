@@ -8,6 +8,7 @@
 
 @interface JNCalendarAssistant : NSObject
 @property (nonatomic, strong) NSCalendar *calendar;
+@property(nonatomic, assign, readonly) int currentMonth;
 
 + (instancetype) shareInstance;
 - (NSDateComponents *) getCurrentDay;
