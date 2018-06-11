@@ -4,7 +4,11 @@
 //
 
 #import "JNCalendarAssistant.h"
+#import "JNWarmTipsPublicFile.h"
 
+@interface JNCalendarAssistant()
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@end
 
 @implementation JNCalendarAssistant {
 
@@ -39,8 +43,14 @@
     return dateComponents;
 }
 
-- (NSInteger) getFirstDayInWeek {
+- (NSInteger) getMonthFirstDayInWeek:(int)month InYear:(int)year {
 
+    NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
+    NSDate *firstDay = [self.dateFormatter dateFromString:firstDayStr];
+    NSDateComponents *weekComponents = [self.calendar components:NSCalendarUnitWeekday fromDate:firstDay];
+    int firstDayInWeek = (int)weekComponents.weekday;
+
+    return firstDayInWeek;
 }
 
 #pragma mark - Getter & Setter
@@ -50,6 +60,14 @@
         _calendar = [NSCalendar currentCalendar];
     }
     return _calendar;
+}
+
+- (NSDateFormatter *)dateFormatter {
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    }
+    return _dateFormatter;
 }
 
 - (int)currentMonth {
