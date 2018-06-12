@@ -7,7 +7,6 @@
 #import "JNWarmTipsPublicFile.h"
 
 @interface JNCalendarAssistant()
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *cacheFirstDayInWeek;
 /*缓存每个月的天数*/
 @property (nonatomic, strong) NSMutableDictionary *cacheCountOfDays;
@@ -19,6 +18,7 @@
 @synthesize currentMonth = _currentMonth;
 @synthesize currentDay = _currentDay;
 @synthesize currentYear = _currentYear;
+@synthesize currentDateStr = _currentDateStr;
 @synthesize currentDate = _currentDate;
 
 - (instancetype) init {
@@ -28,7 +28,8 @@
         _currentMonth = dateComponents.month;
         _currentDay = dateComponents.day;
         _currentYear = dateComponents.year;
-        _currentDate = [JNWarmTipsPublicFile dateStringFormat:_currentYear month:_currentMonth day:_currentDay];
+        _currentDateStr = [JNWarmTipsPublicFile dateStringFormat:_currentYear month:_currentMonth day:_currentDay];
+        [self getDateAwayCurrentDate:-10];
     }
     return self;
 }
@@ -78,6 +79,17 @@
         [self.cacheCountOfDays setValue:@(range.length) forKey:firstDayStr];
         return range.length;
     }
+}
+
+- (NSDate *) getDateAwayCurrentDate:(int)awayLength {
+
+    NSDateComponents *adComponents = [[NSDateComponents alloc] init];
+    [adComponents setYear:0];
+    [adComponents setMonth:awayLength];
+    [adComponents setDay:0];
+
+    NSDate *dateResult = [self.calendar dateByAddingComponents:adComponents toDate:[NSDate date] options:0];
+    return dateResult;
 }
 
 #pragma mark - Getter & Setter

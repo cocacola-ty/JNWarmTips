@@ -7,10 +7,14 @@
 
 
 @interface JNCalendarAssistant : NSObject
+
 @property (nonatomic, strong) NSCalendar *calendar;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
 @property(nonatomic, assign, readonly) int currentMonth;
 @property(nonatomic, assign, readonly) int currentDay;
 @property(nonatomic, assign, readonly) int currentYear;
+@property (nonatomic, strong, readonly) NSString *currentDateStr;
 @property (nonatomic, strong, readonly) NSString *currentDate;
 
 + (instancetype) shareInstance;
@@ -21,4 +25,7 @@
 
 /*获取每月的天数*/
 - (int) getCountOfDayInMonth:(int)month InYear:(int)year;
+
+/*获取距离当前日期几个月的日期*/
+- (NSDate *) getDateAwayCurrentDate:(int)awayLength;
 @end
