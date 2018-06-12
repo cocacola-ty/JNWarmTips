@@ -15,6 +15,10 @@
 
 + (instancetype) shareInstance;
 - (NSDateComponents *) getCurrentDay;
+
 /*获取每月1号在一周的第几天 周日是第一天*/
 - (NSInteger) getMonthFirstDayInWeek:(int)month InYear:(int)year;
+
+/*获取每月的天数*/
+- (int) getCountOfDayInMonth:(int)month InYear:(int)year;
 @end

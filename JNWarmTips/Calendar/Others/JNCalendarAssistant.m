@@ -9,6 +9,8 @@
 @interface JNCalendarAssistant()
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *cacheFirstDayInWeek;
+/*缓存每个月的天数*/
+@property (nonatomic, strong) NSMutableDictionary *cacheCountOfDays;
 @end
 
 @implementation JNCalendarAssistant {
@@ -49,7 +51,7 @@
 - (NSInteger) getMonthFirstDayInWeek:(int)month InYear:(int)year {
 
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
-    id cacheResult = [self.cacheFirstDayInWeek objectForKey:firstDayStr];
+    id cacheResult = [self.cacheFirstDayInWeek valueForKey:firstDayStr];
 
     if (!cacheResult) {
         // 如果没有缓存 计算并缓存
@@ -62,6 +64,19 @@
     } else {
         // 直接返回缓存
         return [cacheResult intValue];
+    }
+}
+
+- (int) getCountOfDayInMonth:(int)month InYear:(int)year {
+    NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
+    id cacheResult = [self.cacheCountOfDays valueForKey:firstDayStr];
+    if (cacheResult) {
+        return [cacheResult intValue];
+    } else {
+        NSDate *date = [self.dateFormatter dateFromString:firstDayStr];
+        NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
+        [self.cacheCountOfDays setValue:@(range.length) forKey:firstDayStr];
+        return range.length;
     }
 }
 
@@ -87,6 +102,13 @@
         _cacheFirstDayInWeek = [NSMutableDictionary dictionary];
     }
     return _cacheFirstDayInWeek;
+}
+
+- (NSMutableDictionary *)cacheCountOfDays {
+    if (!_cacheCountOfDays) {
+        _cacheCountOfDays = [NSMutableDictionary dictionary];
+    }
+    return _cacheCountOfDays;
 }
 
 - (int)currentMonth {

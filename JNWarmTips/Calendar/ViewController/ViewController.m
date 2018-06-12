@@ -233,15 +233,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
-
-//    nsstring *key = self.dataarray[indexpath.section];
-//    nsarray *montharray = [self.cachelist objectforkey:key];
-//    jndaymodel *daymodel = montharray[indexpath.row];
-//
-//    [cell setupcontent:[nsstring stringwithformat:@"%d",daymodel.day] andhighlight:daymodel.iscurrentmonth andistoday:daymodel.istoday andshowflag:daymodel.needshowflag];
-
-    NSString *content = @"1";
+    NSString *content = @"";
 
     // 获取当前section对应的月份
     // 根据indexpath.row决定当前的day
@@ -254,9 +248,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         // 更改row的起始索引为从1开始
         int rowIndex = indexPath.row + 1;
 
-        int totalDaysOfMonth = 30; // 这个月的天数
+        int totalDaysOfMonth = [[JNCalendarAssistant shareInstance] getCountOfDayInMonth:[JNCalendarAssistant shareInstance].currentMonth InYear:[JNCalendarAssistant shareInstance].currentYear]; // 这个月的天数
 
-        if (rowIndex < firstDayIndex || rowIndex > totalDaysOfMonth + firstDayIndex) {
+        if (rowIndex < firstDayIndex || rowIndex >= totalDaysOfMonth + firstDayIndex) {
             content = @"";
         } else {
              // rowIndex==firstDayIndex时开始显示显示日期 从1号开始显示
