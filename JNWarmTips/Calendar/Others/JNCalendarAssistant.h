@@ -26,6 +26,6 @@
 /*获取每月的天数*/
 - (int) getCountOfDayInMonth:(int)month InYear:(int)year;
 
-/*获取距离当前日期几个月的日期*/
-- (NSDate *) getDateAwayCurrentDate:(int)awayLength;
+/*获取距离当前日期n个月的日期*/
+- (NSArray *) getDateAwayCurrentDate:(int)awayLength;
 @end

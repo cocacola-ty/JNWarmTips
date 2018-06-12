@@ -248,10 +248,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         year = [JNCalendarAssistant shareInstance].currentYear;
     } else {
         int awayLength = indexPath.section - kCurrentMonthSection;
-        NSDate *awayDate = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
-        NSDateComponents *dateComponents = [[JNCalendarAssistant shareInstance].calendar components:NSCalendarUnitMonth | NSCalendarUnitYear fromDate:awayDate];
-        month = dateComponents.month;
-        year = dateComponents.year;
+
+        NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
+        month = [resultArray.lastObject intValue];
+        year = [resultArray.firstObject intValue];
     }
 
     // 获取每月1号是一周的第几天 1为起始
@@ -283,11 +283,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     int awayLength = indexPath.section - kCurrentMonthSection;
-    NSDate *awayDate = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
-    NSDateComponents *dateComponents = [[JNCalendarAssistant shareInstance].calendar components:NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitDay fromDate:awayDate];
-    int month = dateComponents.month;
-    int year = dateComponents.year;
-    int day = dateComponents.day;
+    NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
+    int month = [resultArray.lastObject intValue];
+    int year = [resultArray.firstObject intValue];
+
+    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
+    int rowIndex = indexPath.row + 1; // 更改row的起始索引为1
+    int day = rowIndex - firstDayIndex + 1;
 
     self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
     [self reloadEventList];
