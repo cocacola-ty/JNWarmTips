@@ -34,10 +34,13 @@
 #import "JNDayEventTableViewCell.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
+#import "JNCalendarAssistant.h"
 #import "Masonry.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 static const int kCalendarViewMargin = 10;
+static const int kAllSections = 100;
+static const int kCurrentMonthSection = 50;
 static CGFloat kTopContainerViewHeight = 64;
 static CGFloat kWeekViewHeight = 30;
 
@@ -70,6 +73,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //test
+    [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:6 InYear:2018];
+    // test end
 
     // 初始化设置
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
@@ -149,7 +155,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (!onceToken) {
-        [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
+//        [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:kAllSections/2] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+
         onceToken = YES;
     }
 }
@@ -215,14 +223,52 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     
 }
 
+/* cell 显示之前 */
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+
+}
+
+/*cell 已经完全显示*/
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+}
+
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
+    NSString *content = @"";
 
-    NSString *key = self.dataArray[indexPath.section];
-    NSArray *monthArray = [self.cacheList objectForKey:key];
-    JNDayModel *dayModel = monthArray[indexPath.row];
+    // 获取当前section对应的月份
+    // 根据indexpath.row决定当前的day
 
-    [cell setupContent:[NSString stringWithFormat:@"%d",dayModel.day] andHighLight:dayModel.isCurrentMonth andIsToday:dayModel.isToday andShowFlag:dayModel.needShowFlag];
+    int month;
+    int year;
+
+    if (indexPath.section == kCurrentMonthSection) {
+        month = [JNCalendarAssistant shareInstance].currentMonth;
+        year = [JNCalendarAssistant shareInstance].currentYear;
+    } else {
+        int awayLength = indexPath.section - kCurrentMonthSection;
+
+        NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
+        month = [resultArray.lastObject intValue];
+        year = [resultArray.firstObject intValue];
+    }
+
+    // 获取每月1号是一周的第几天 1为起始
+    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
+    // 更改row的起始索引为从1开始
+    int rowIndex = indexPath.row + 1;
+
+    // 获取该月份的天数
+    int totalDaysOfMonth = [[JNCalendarAssistant shareInstance] getCountOfDayInMonth:month InYear:year]; // 这个月的天数
+
+    if (rowIndex < firstDayIndex || rowIndex >= totalDaysOfMonth + firstDayIndex) {
+        content = @"";
+    } else {
+        // rowIndex==firstDayIndex时开始显示显示日期 从1号开始显示
+        content = [NSString stringWithFormat:@"%d", rowIndex - firstDayIndex + 1];
+    }
+    [cell setupContent:content andHighLight:YES andIsToday:NO andShowFlag:NO];
     return cell;
 }
 
@@ -231,21 +277,27 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.dataArray.count;
+    return kAllSections;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSString *key = self.dataArray[indexPath.section];
-    NSArray *monthArray = [self.cacheList objectForKey:key];
-    JNDayModel *dayModel = monthArray[indexPath.row];
+    int awayLength = indexPath.section - kCurrentMonthSection;
+    NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
+    int month = [resultArray.lastObject intValue];
+    int year = [resultArray.firstObject intValue];
 
-    self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:dayModel.year month:dayModel.month day:dayModel.day];
+    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
+    int rowIndex = indexPath.row + 1; // 更改row的起始索引为1
+    int day = rowIndex - firstDayIndex + 1;
+
+    self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
     [self reloadEventList];
 
-    self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:dayModel.year month:dayModel.month day:dayModel.day];
+    self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
 }
 
+/*
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
     if (scrollView == self.tableView) {
@@ -326,6 +378,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [self reloadEventList];
     self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:willShowYear month:willShowMonth day:0];
 }
+ */
 
 #pragma mark - Event Response
 
