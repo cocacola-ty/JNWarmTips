@@ -73,6 +73,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //test
+    [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:6 InYear:2018];
+    // test end
 
     // 初始化设置
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
@@ -238,13 +241,29 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 //
 //    [cell setupcontent:[nsstring stringwithformat:@"%d",daymodel.day] andhighlight:daymodel.iscurrentmonth andistoday:daymodel.istoday andshowflag:daymodel.needshowflag];
 
+    NSString *content = @"1";
+
     // 获取当前section对应的月份
     // 根据indexpath.row决定当前的day
-    if (indexPath.section == kCurrentMonthSection) {
-        // 获取当前月
 
+    if (indexPath.section == kCurrentMonthSection) {
+        // 获取当前日期
+        NSString *currentDate = [JNCalendarAssistant shareInstance].currentDate;
+        // 获取每月1号是一周的第几天 1为起始
+        int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:[JNCalendarAssistant shareInstance].currentMonth InYear:[JNCalendarAssistant shareInstance].currentYear];
+        // 更改row的起始索引为从1开始
+        int rowIndex = indexPath.row + 1;
+
+        int totalDaysOfMonth = 30; // 这个月的天数
+
+        if (rowIndex < firstDayIndex || rowIndex > totalDaysOfMonth + firstDayIndex) {
+            content = @"";
+        } else {
+             // rowIndex==firstDayIndex时开始显示显示日期 从1号开始显示
+            content = [NSString stringWithFormat:@"%d", rowIndex - firstDayIndex + 1];
+        }
     }
-    [cell setupContent:@"1" andHighLight:NO andIsToday:NO andShowFlag:NO];
+    [cell setupContent:content andHighLight:NO andIsToday:NO andShowFlag:NO];
     return cell;
 }
 

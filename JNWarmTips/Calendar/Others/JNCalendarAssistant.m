@@ -8,6 +8,7 @@
 
 @interface JNCalendarAssistant()
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSMutableDictionary *cacheFirstDayInWeek;
 @end
 
 @implementation JNCalendarAssistant {
@@ -16,6 +17,7 @@
 @synthesize currentMonth = _currentMonth;
 @synthesize currentDay = _currentDay;
 @synthesize currentYear = _currentYear;
+@synthesize currentDate = _currentDate;
 
 - (instancetype) init {
     self = [super init];
@@ -24,6 +26,7 @@
         _currentMonth = dateComponents.month;
         _currentDay = dateComponents.day;
         _currentYear = dateComponents.year;
+        _currentDate = [JNWarmTipsPublicFile dateStringFormat:_currentYear month:_currentMonth day:_currentDay];
     }
     return self;
 }
@@ -46,11 +49,20 @@
 - (NSInteger) getMonthFirstDayInWeek:(int)month InYear:(int)year {
 
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
-    NSDate *firstDay = [self.dateFormatter dateFromString:firstDayStr];
-    NSDateComponents *weekComponents = [self.calendar components:NSCalendarUnitWeekday fromDate:firstDay];
-    int firstDayInWeek = (int)weekComponents.weekday;
+    id cacheResult = [self.cacheFirstDayInWeek objectForKey:firstDayStr];
 
-    return firstDayInWeek;
+    if (!cacheResult) {
+        // 如果没有缓存 计算并缓存
+        NSDate *firstDay = [self.dateFormatter dateFromString:firstDayStr];
+        // 获取该日期是一周的第几天 周日为第一天
+        NSDateComponents *weekComponents = [self.calendar components:NSCalendarUnitWeekday fromDate:firstDay];
+        int result = (int)weekComponents.weekday;
+        [self.cacheFirstDayInWeek setValue:@(result) forKey:firstDayStr];
+        return result;
+    } else {
+        // 直接返回缓存
+        return [cacheResult intValue];
+    }
 }
 
 #pragma mark - Getter & Setter
@@ -68,6 +80,13 @@
         [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
     }
     return _dateFormatter;
+}
+
+- (NSMutableDictionary *)cacheFirstDayInWeek {
+    if (!_cacheFirstDayInWeek) {
+        _cacheFirstDayInWeek = [NSMutableDictionary dictionary];
+    }
+    return _cacheFirstDayInWeek;
 }
 
 - (int)currentMonth {
