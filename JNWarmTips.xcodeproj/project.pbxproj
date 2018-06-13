@@ -412,7 +412,7 @@
 				TargetAttributes = {
 					6108F13C207B119700590F4D = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					61433849208DBFD400DFB91F = {
 						CreatedOnToolsVersion = 9.2;
@@ -701,13 +701,16 @@
 			baseConfigurationReference = FDC5847B328F1F4829E065CD /* Pods-JNWarmTips.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8TCLU34FZ7;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TLWP697Z5D;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ty.JNWarmTips;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8ecf44f7-2e91-4334-a264-d12688900350";
+				PROVISIONING_PROFILE_SPECIFIER = 6ceng.Common.DeveloperCer;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
@@ -718,13 +721,16 @@
 			baseConfigurationReference = 987F68616B95B3F1A1C53504 /* Pods-JNWarmTips.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8TCLU34FZ7;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TLWP697Z5D;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ty.JNWarmTips;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8ecf44f7-2e91-4334-a264-d12688900350";
+				PROVISIONING_PROFILE_SPECIFIER = 6ceng.Common.DeveloperCer;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};

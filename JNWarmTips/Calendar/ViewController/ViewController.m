@@ -389,12 +389,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [[NSNotificationCenter defaultCenter] postNotificationName:MOTIONEVENTNOTIFICATION object:nil];
 }
 
+- (void)backToToday {
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:kAllSections/2] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+}
+
 #pragma mark - Getter & Setter
 
 - (JNTopContainerView *)topContainerView {
     if (!_topContainerView) {
         _topContainerView = [JNTopContainerView new];
         _topContainerView.backgroundColor = [UIColor whiteColor];
+
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToToday)];
+        [_topContainerView addGestureRecognizer:tapGestureRecognizer];
     }
     return _topContainerView;
 }
