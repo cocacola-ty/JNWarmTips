@@ -208,7 +208,29 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return CGSizeMake(width, height);
 }
 
+/*获取当前位置的日期*/
+- (NSArray *)getDateWithIndexPath:(NSIndexPath *)indexPath {
 
+    int awayLength = indexPath.section - kCurrentMonthSection;
+    NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
+    int month = [resultArray.lastObject intValue];
+    int year = [resultArray.firstObject intValue];
+
+    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
+    int rowIndex = indexPath.row + 1; // 更改row的起始索引为1
+
+    // 获取该月份的天数
+    int totalDaysOfMonth = [[JNCalendarAssistant shareInstance] getCountOfDayInMonth:month InYear:year]; // 这个月的天数
+
+    int day;
+    if (rowIndex < firstDayIndex || rowIndex >= firstDayIndex + totalDaysOfMonth) {
+        day = 0;
+    } else {
+        day = rowIndex - firstDayIndex + 1;
+    }
+
+    return @[@(year), @(month), @(day)];
+}
 
 #pragma mark - Delegate & DataSources
 
@@ -235,39 +257,14 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
-    NSString *content = @"";
 
-    // 获取当前section对应的月份
-    // 根据indexpath.row决定当前的day
+    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
 
-    int month;
-    int year;
+    int month = [dateArray[1] intValue];
+    int year = [dateArray.firstObject intValue];
+    int day = [dateArray.lastObject intValue];
 
-    if (indexPath.section == kCurrentMonthSection) {
-        month = [JNCalendarAssistant shareInstance].currentMonth;
-        year = [JNCalendarAssistant shareInstance].currentYear;
-    } else {
-        int awayLength = indexPath.section - kCurrentMonthSection;
-
-        NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
-        month = [resultArray.lastObject intValue];
-        year = [resultArray.firstObject intValue];
-    }
-
-    // 获取每月1号是一周的第几天 1为起始
-    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
-    // 更改row的起始索引为从1开始
-    int rowIndex = indexPath.row + 1;
-
-    // 获取该月份的天数
-    int totalDaysOfMonth = [[JNCalendarAssistant shareInstance] getCountOfDayInMonth:month InYear:year]; // 这个月的天数
-
-    if (rowIndex < firstDayIndex || rowIndex >= totalDaysOfMonth + firstDayIndex) {
-        content = @"";
-    } else {
-        // rowIndex==firstDayIndex时开始显示显示日期 从1号开始显示
-        content = [NSString stringWithFormat:@"%d", rowIndex - firstDayIndex + 1];
-    }
+    NSString *content = day == 0 ? @"" : [NSString stringWithFormat:@"%d", day];
     [cell setupContent:content andHighLight:YES andIsToday:NO andShowFlag:NO];
     return cell;
 }
@@ -280,16 +277,18 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     return kAllSections;
 }
 
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
+    int day = [dateArray.lastObject intValue];
+    return day != 0;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    int awayLength = indexPath.section - kCurrentMonthSection;
-    NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
-    int month = [resultArray.lastObject intValue];
-    int year = [resultArray.firstObject intValue];
-
-    int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
-    int rowIndex = indexPath.row + 1; // 更改row的起始索引为1
-    int day = rowIndex - firstDayIndex + 1;
+    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
+    int year = [dateArray.firstObject intValue];
+    int month = [dateArray[1] intValue];
+    int day = [dateArray.lastObject intValue];
 
     self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
     [self reloadEventList];
