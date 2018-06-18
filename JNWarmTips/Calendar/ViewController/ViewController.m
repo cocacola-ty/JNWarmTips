@@ -75,6 +75,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [super viewDidLoad];
     //test
     [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:6 InYear:2018];
+
     // test end
 
     // 初始化设置
@@ -250,18 +251,27 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 }
 
-/*cell 已经完全显示*/
+/*cell 已经完全显示
+ *
+ * todo 检查当快速滑动的时候这个方法是不是会调用, 如果这个方法是完全显示之后再调用，在这里去检查每个日期是否有事件
+ * */
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
+    int year = dateArray.firstObject;
+    int month = dateArray[1];
+    int day = dateArray.lastObject;
+    NSString *dateString = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
 }
 
+/*
+ * 如果在这个方法里检查每个日期是否有事件，想办法简化查询条件，因为这个方法滑动时候会频繁调用
+ * */
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     JNDayCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalCollectionViewCellReuseId forIndexPath:indexPath];
 
     NSArray *dateArray = [self getDateWithIndexPath:indexPath];
 
-    int month = [dateArray[1] intValue];
-    int year = [dateArray.firstObject intValue];
     int day = [dateArray.lastObject intValue];
 
     NSString *content = day == 0 ? @"" : [NSString stringWithFormat:@"%d", day];
@@ -412,7 +422,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         layout.minimumInteritemSpacing = 0.0;
         layout.minimumLineSpacing = 0.0;
         layout.itemSize = [self caculatorItemSize];
-//        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
 
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
