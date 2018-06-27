@@ -261,6 +261,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     int month = dateArray[1];
     int day = dateArray.lastObject;
     NSString *dateString = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
+//    NSLog(@"dateString = %@", dateString);
 }
 
 /*
@@ -274,8 +275,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     int day = [dateArray.lastObject intValue];
 
+    BOOL isToday = (indexPath.section == kCurrentMonthSection && day == [JNCalendarAssistant shareInstance].currentDay);
+
     NSString *content = day == 0 ? @"" : [NSString stringWithFormat:@"%d", day];
-    [cell setupContent:content andHighLight:YES andIsToday:NO andShowFlag:NO];
+    [cell setupContent:content andHighLight:YES andIsToday:isToday andShowFlag:NO];
     return cell;
 }
 
