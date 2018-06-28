@@ -251,18 +251,24 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 }
 
-/*cell 已经完全显示
- *
- * todo 检查当快速滑动的时候这个方法是不是会调用, 如果这个方法是完全显示之后再调用，在这里去检查每个日期是否有事件
- * */
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
-    int year = dateArray.firstObject;
-    int month = dateArray[1];
-    int day = dateArray.lastObject;
-    NSString *dateString = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
-//    NSLog(@"dateString = %@", dateString);
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSArray *indexpaths = [self.collectionView indexPathsForVisibleItems];
+    NSIndexPath *firstIndexPath = indexpaths.firstObject;
+    NSArray *dateArray = [self getDateWithIndexPath:firstIndexPath];
+    int year = [dateArray.firstObject intValue];
+    int month = [dateArray[1] intValue];
+    NSString *dateStrign = [JNWarmTipsPublicFile dateStringFormat:year month:month day:nil];
+    NSLog(@"dateStrign = %@", dateStrign);
+
+
 }
+
+//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+//    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
+//    int year = [dateArray.firstObject intValue];
+//    int month = [dateArray[1] intValue];
+//    NSLog(@"section = %i, year = %i , month = %i ",indexPath.section, year, month);
+//}
 
 /*
  * 如果在这个方法里检查每个日期是否有事件，想办法简化查询条件，因为这个方法滑动时候会频繁调用
