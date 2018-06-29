@@ -258,7 +258,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     int year = [dateArray.firstObject intValue];
     int month = [dateArray[1] intValue];
     NSString *dateStrign = [JNWarmTipsPublicFile dateStringFormat:year month:month day:nil];
-    NSLog(@"dateStrign = %@", dateStrign);
+    self.currentDateShowLabel.text = dateStrign;
 
 
 }

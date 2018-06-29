@@ -10,6 +10,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
 #import "JNDayModel.h"
+#import "JNAddEventViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -51,6 +52,12 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
 - (void) addEvent {
     NSLog(@"添加事件");
+
+    JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
+    [self presentViewController:addEventViewController animated:YES completion:nil];
+
+    return;
+
     JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
     editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorVc.placeHoladerStr = @"记录一下这天小事件...";

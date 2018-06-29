@@ -46,6 +46,8 @@
     return self;
 }
 
+#pragma mark - Delegate
+
 - (CGRect)caretRectForPosition:(UITextPosition *)position {
     CGRect originalRect = [super caretRectForPosition:position];
     originalRect.size.height = self.font.lineHeight + 2;
@@ -68,6 +70,13 @@
     } else {
         textView.scrollEnabled = YES;
     }
+}
+
+#pragma mark - Event Response
+
+- (void) changeTagKeyBoard {
+    self.inputView;
+
 }
 
 #pragma mark - Getter & Setter
@@ -112,6 +121,7 @@
         [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
         tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
         tagBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [tagBtn addTarget:self action:@selector(changeTagKeyBoard) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView addSubview:tagBtn];
         [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(timeBtn.mas_right);
