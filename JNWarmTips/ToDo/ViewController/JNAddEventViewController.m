@@ -5,12 +5,19 @@
 
 #import <Masonry/View+MASAdditions.h>
 #import "JNAddEventViewController.h"
+#import "JNButtonTagView.h"
 #import "JNWarmTipsPublicFile.h"
 
+
+/*标签按钮的上边间距*/
+static const int kTagViewTopMargin = 30;
+/*标签按钮的左边默认间距*/
+static const int kTagViewDefaultLeftMargin = 40;
 
 @interface JNAddEventViewController()
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) JNButtonTagView *tagView;
 @end
 
 @implementation JNAddEventViewController {
@@ -37,6 +44,13 @@
         make.height.mas_equalTo(60);
     }];
 
+    [self.view addSubview:self.tagView];
+    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
+        make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin);
+        make.width.mas_equalTo(70);
+        make.height.mas_equalTo(40);
+    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
@@ -62,5 +76,12 @@
         _eventInputField.font = [UIFont systemFontOfSize:15.0];
     }
     return _eventInputField;
+}
+
+- (JNButtonTagView *)tagView {
+    if (!_tagView) {
+        _tagView = [JNButtonTagView new];
+    }
+    return _tagView;
 }
 @end
