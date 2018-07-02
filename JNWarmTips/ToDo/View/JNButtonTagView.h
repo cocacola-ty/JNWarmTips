@@ -5,5 +5,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JNButtonTagView : UIButton
+@interface JNButtonTagView : UIView
 @end

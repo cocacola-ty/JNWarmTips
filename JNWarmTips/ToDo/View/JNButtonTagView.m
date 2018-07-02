@@ -10,9 +10,17 @@
 
 static const int kCircleViewWH = 4;
 
+static const int kButtonLeftMargin = 12;
+
+static const int kDefaultLeftMargin = 5;
+
+static const int kDefaultInsets = 2;
+
 @interface JNButtonTagView()
 @property (nonatomic, strong) UIView *circleView;
-@property (nonatomic, strong) UIButton *button;
+//@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *borderView;
 @end
 
 @implementation JNButtonTagView {
@@ -21,34 +29,54 @@ static const int kCircleViewWH = 4;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+
         [self addSubview:self.circleView];
-        [self.circleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(kCircleViewWH);
-            make.centerY.equalTo(self.mas_centerY);
-            make.left.equalTo(self.mas_left);
-        }];
         self.circleView.layer.cornerRadius = kCircleViewWH / 2;
 
-        [self addSubview:self.button];
-        [self.button mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.circleView.mas_right).offset(5);
-            make.centerY.equalTo(self.circleView.mas_centerY);
-        }];
+        [self addSubview:self.borderView];
+        [self.borderView addSubview:self.titleLabel];
 
         // test
-        [self setupTagName:@"  个人" AndColor:[UIColor redColor]];
+        [self setupTagName:@"个人" AndColor:[UIColor redColor]];
     }
     return self;
 }
 
 - (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor {
 
-    [self.button setTitle:tagName forState:UIControlStateNormal];
     self.circleView.backgroundColor = tagColor;
+    self.titleLabel.text = tagName;
+    [self.titleLabel sizeToFit];
 
-    // 设置button样式
-    self.button.layer.borderWidth = 1;
-    self.button.layer.borderColor = [[UIColor redColor] CGColor];
+    CGFloat titleLabelW = self.titleLabel.frame.size.width;
+    CGFloat titleLabelH = self.titleLabel.frame.size.height;
+    CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
+
+    CGFloat borderViewH = titleLabelH + kDefaultInsets * 2;
+    CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2;
+
+    CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
+
+    self.bounds = CGRectMake(0, 0, width, borderViewH);
+    self.titleLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
+    self.borderView.frame = CGRectMake(kDefaultLeftMargin + kCircleViewWH, 0, borderViewW, borderViewH);
+    self.circleView.frame = CGRectMake(0, borderViewH / 2 - kCircleViewWH / 2, kCircleViewWH, kCircleViewWH);
+
+    UIBezierPath *borderPath = [UIBezierPath bezierPath];
+    [borderPath moveToPoint:CGPointMake(0, borderViewH / 2)];
+    [borderPath addLineToPoint:CGPointMake(kDefaultLeftMargin, 0)];
+    [borderPath addLineToPoint:CGPointMake(borderViewW, 0)];
+    [borderPath addLineToPoint:CGPointMake(borderViewW, borderViewH)];
+    [borderPath addLineToPoint:CGPointMake(kDefaultLeftMargin, borderViewH)];
+    [borderPath closePath];
+
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = borderPath.CGPath;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.strokeColor = GRAY_TEXT_COLOR.CGColor;
+    shapeLayer.lineWidth = 1;
+    shapeLayer.borderColor = [UIColor redColor].CGColor;
+    [self.borderView.layer addSublayer:shapeLayer];
 
 }
 
@@ -59,15 +87,20 @@ static const int kCircleViewWH = 4;
     return _circleView;
 }
 
-- (UIButton *)button {
-    if (!_button) {
-        _button = [UIButton new];
-        _button.titleLabel.textColor = [UIColor blackColor];
-        [_button setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-        [_button setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
-        _button.titleLabel.font = [UIFont systemFontOfSize:10.0];
+- (UILabel *)titleLabel {
+    if (!_titleLabel) {
+        _titleLabel = [UILabel new];
+        _titleLabel.font = [UIFont systemFontOfSize:11.0];
+        _titleLabel.textColor = GRAY_TEXT_COLOR;
     }
-    return _button;
+    return _titleLabel;
+}
+
+- (UIView *)borderView {
+    if (!_borderView) {
+        _borderView = [UIView new];
+    }
+    return _borderView;
 }
 
 @end

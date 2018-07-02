@@ -48,8 +48,6 @@ static const int kTagViewDefaultLeftMargin = 40;
     [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
         make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin);
-        make.width.mas_equalTo(70);
-        make.height.mas_equalTo(40);
     }];
 }
 
