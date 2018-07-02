@@ -36,7 +36,7 @@ static const int kDefaultInsets = 2;
         [self.borderView addSubview:self.textLabel];
 
         // test
-        [self setupTagName:@"个人" AndColor:[UIColor redColor]];
+//        [self setupTagName:@"个人" AndColor:[UIColor redColor]];
     }
     return self;
 }

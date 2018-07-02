@@ -7,7 +7,9 @@
 #import "JNAddEventViewController.h"
 #import "JNButtonTagView.h"
 #import "JNWarmTipsPublicFile.h"
-
+#import "JNDBManager+Events.h"
+#import "JNEventTypeModel.h"
+#import "UIColor+Extension.h"
 
 /*标签按钮的上边间距*/
 static const int kTagViewTopMargin = 30;
@@ -17,7 +19,7 @@ static const int kTagViewDefaultLeftMargin = 40;
 @interface JNAddEventViewController()
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
-@property (nonatomic, strong) JNButtonTagView *tagView;
+@property (nonatomic, strong) JNButtonTagView *selectedTagView;
 @end
 
 @implementation JNAddEventViewController {
@@ -44,17 +46,35 @@ static const int kTagViewDefaultLeftMargin = 40;
         make.height.mas_equalTo(60);
     }];
 
-    [self.view addSubview:self.tagView];
-    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
-        make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin);
-    }];
-    [self.tagView addTarget:self action:@selector(selectTag) forControlEvents:UIControlEventTouchUpInside];
-
+    [self displayAllTags];
 }
 
-- (void)selectTag {
-    self.tagView.selected = !self.tagView.selected;
+- (void) displayAllTags {
+    NSArray *eventTypes = [[JNDBManager shareInstance] getAllEventTypes];
+
+    for (int i = 0; i < eventTypes.count; ++i) {
+        JNEventTypeModel *typeModel = eventTypes[i];
+        JNButtonTagView *tagview = [JNButtonTagView new];
+        [tagview addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
+
+        UIColor *color = [UIColor colorWithHexString:typeModel.typeColor];
+        [tagview setupTagName:typeModel.typeName AndColor:color];
+        [self.view addSubview:tagview];
+        [tagview mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin + i * 80);
+            make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
+        }];
+    }
+}
+
+- (void)selectTag:(JNButtonTagView *)tagView {
+    if (tagView == self.selectedTagView) {
+        tagView.selected = !tagView.selected;
+    }else {
+        self.selectedTagView.selected = !self.selectedTagView.selected;
+        tagView.selected = !tagView.selected;
+        self.selectedTagView = tagView;
+    }
 };
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
@@ -82,10 +102,4 @@ static const int kTagViewDefaultLeftMargin = 40;
     return _eventInputField;
 }
 
-- (JNButtonTagView *)tagView {
-    if (!_tagView) {
-        _tagView = [JNButtonTagView new];
-    }
-    return _tagView;
-}
 @end
