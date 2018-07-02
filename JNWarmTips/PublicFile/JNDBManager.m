@@ -37,6 +37,8 @@ NSString *const kJNDBGroupTable = @"group_table";
 
 NSString *const kJNDBCategoryTable = @"category_table";
 
+NSString *const kJNDBEventTypeTable = @"event_type_table";
+
 @implementation JNDBManager {
 
 }
@@ -97,6 +99,20 @@ NSString *const kJNDBCategoryTable = @"category_table";
             NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, CONTENT TEXT NOT NULL, SHOW_DATE DATE DEFAULT '', START_TIME INTEGER DEFAULT NULL, END_TIME INTEGER DEFAULT NULL, GROUP_ID INTEGER, CATEGORY_ID INTEGER , NOTIFICATION INTEGER DEFAULT 0, FINISHED INTEGER DEFAULT 0, FOREIGN KEY(GROUP_ID) REFERENCES %@(GROUP_ID), FOREIGN KEY(GROUP_ID) REFERENCES %@(CATEGORY_ID))", kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"清单表创建失败");
+        }];
+    }
+
+    // 事件类型表
+    if (![self tableExist:kJNDBEventTypeTable]) {
+        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            NSString *sql = [NSString stringWithFormat:@"create table if not exists %@ (event_type_id integer primary key autoincrement not null, event_type_name text not null, color text not null)", kJNDBEventTypeTable];
+            BOOL result = [db executeUpdate:sql];
+            NSAssert(result, @"事件类型表创建失败");
+
+            NSString *initSql1 = [NSString stringWithFormat:@"insert or ignore into %@ ('event_type_id','event_type_name', 'color') values (0, '个人', 'FF364F')", kJNDBEventTypeTable];
+            [db executeUpdate:initSql1];
+            NSString *initSql2 = [NSString stringWithFormat:@"insert or ignore into %@ ('event_type_id','event_type_name', 'color') values (1, '工作', '00BFFF')", kJNDBEventTypeTable];
+            [db executeUpdate:initSql2];
         }];
     }
 

@@ -24,4 +24,8 @@
 
 /*添加事件*/
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate ;
+
+/*获取所有事件类型*/
+- (NSArray *)getAllEventTypes ;
+
 @end

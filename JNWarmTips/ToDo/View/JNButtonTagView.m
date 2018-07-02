@@ -32,7 +32,6 @@ static const int kDefaultInsets = 2;
 
         [self addSubview:self.circleView];
         self.circleView.layer.cornerRadius = kCircleViewWH / 2;
-
         [self addSubview:self.borderView];
         [self.borderView addSubview:self.textLabel];
 
@@ -79,6 +78,14 @@ static const int kDefaultInsets = 2;
     shapeLayer.lineWidth = 1;
     shapeLayer.borderColor = [UIColor redColor].CGColor;
     [self.borderView.layer addSublayer:shapeLayer];
+
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    basicAnimation.fromValue = [NSNumber numberWithFloat:1.2];
+    basicAnimation.toValue = [NSNumber numberWithFloat:0.6];
+    basicAnimation.duration = 0.7;
+    basicAnimation.autoreverses = YES;
+    basicAnimation.repeatCount = MAXFLOAT;
+    [self.circleView.layer addAnimation:basicAnimation forKey:nil];
 
 }
 

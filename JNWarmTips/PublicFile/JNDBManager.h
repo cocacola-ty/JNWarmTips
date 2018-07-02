@@ -13,6 +13,8 @@ UIKIT_EXTERN NSString *const kJNDBGroupTable;
 
 UIKIT_EXTERN NSString *const kJNDBCategoryTable;
 
+UIKIT_EXTERN NSString *const kJNDBEventTypeTable;
+
 @class FMDatabaseQueue;
 
 @interface JNDBManager : NSObject

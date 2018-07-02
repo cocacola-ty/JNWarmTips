@@ -10,6 +10,7 @@
 #import "JNDBManager.h"
 #import "FMDB.h"
 #import "JNEventModel.h"
+#import "JNEventTypeModel.h"
 
 @implementation JNDBManager (Events)
 
@@ -70,6 +71,25 @@
         NSString *sql = [NSString stringWithFormat:@"delete from %@ where event_id = '%lld'", kJNDBEventsTable, eventId];
         [db executeUpdate:sql];
     }];
+}
+
+#pragma mark - 查询事件类型
+
+- (NSArray *)getAllEventTypes {
+    NSString *sql = [NSString stringWithFormat:@"select * from %@", kJNDBEventTypeTable];
+    NSMutableArray *result = [NSMutableArray array];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+        while ([resultSet next]) {
+            JNEventTypeModel *eventTypeModel = [JNEventTypeModel new];
+            eventTypeModel.typeName = [resultSet stringForColumn:@"event_type_name"];
+            eventTypeModel.typeId = [resultSet stringForColumn:@"event_type_id"];
+            eventTypeModel.typeColor = [resultSet stringForColumn:@"color"];
+            [result addObject:eventTypeModel];
+        }
+    }];
+    return result;
+
 }
 
 #pragma mark - 添加事件
