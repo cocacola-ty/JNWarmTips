@@ -10,17 +10,17 @@
 
 static const int kCircleViewWH = 4;
 
-static const int kButtonLeftMargin = 12;
-
 static const int kDefaultLeftMargin = 5;
 
 static const int kDefaultInsets = 2;
 
 @interface JNButtonTagView()
 @property (nonatomic, strong) UIView *circleView;
-//@property (nonatomic, strong) UIButton *button;
-@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UIView *borderView;
+
+@property (nonatomic, strong) UIColor *selectColor;
+@property (nonatomic, strong) CAShapeLayer *shapeLayer;
 @end
 
 @implementation JNButtonTagView {
@@ -34,7 +34,7 @@ static const int kDefaultInsets = 2;
         self.circleView.layer.cornerRadius = kCircleViewWH / 2;
 
         [self addSubview:self.borderView];
-        [self.borderView addSubview:self.titleLabel];
+        [self.borderView addSubview:self.textLabel];
 
         // test
         [self setupTagName:@"个人" AndColor:[UIColor redColor]];
@@ -43,13 +43,14 @@ static const int kDefaultInsets = 2;
 }
 
 - (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor {
+    self.selectColor = tagColor;
 
     self.circleView.backgroundColor = tagColor;
-    self.titleLabel.text = tagName;
-    [self.titleLabel sizeToFit];
+    self.textLabel.text = tagName;
+    [self.textLabel sizeToFit];
 
-    CGFloat titleLabelW = self.titleLabel.frame.size.width;
-    CGFloat titleLabelH = self.titleLabel.frame.size.height;
+    CGFloat titleLabelW = self.textLabel.frame.size.width;
+    CGFloat titleLabelH = self.textLabel.frame.size.height;
     CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
 
     CGFloat borderViewH = titleLabelH + kDefaultInsets * 2;
@@ -58,7 +59,7 @@ static const int kDefaultInsets = 2;
     CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
 
     self.bounds = CGRectMake(0, 0, width, borderViewH);
-    self.titleLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
+    self.textLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
     self.borderView.frame = CGRectMake(kDefaultLeftMargin + kCircleViewWH, 0, borderViewW, borderViewH);
     self.circleView.frame = CGRectMake(0, borderViewH / 2 - kCircleViewWH / 2, kCircleViewWH, kCircleViewWH);
 
@@ -71,6 +72,7 @@ static const int kDefaultInsets = 2;
     [borderPath closePath];
 
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    self.shapeLayer = shapeLayer;
     shapeLayer.path = borderPath.CGPath;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.strokeColor = GRAY_TEXT_COLOR.CGColor;
@@ -80,25 +82,40 @@ static const int kDefaultInsets = 2;
 
 }
 
+#pragma mark - Getter & Setter
+
+- (void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+    if (selected) {
+        self.textLabel.textColor = self.selectColor;
+        self.shapeLayer.strokeColor = self.selectColor.CGColor;
+    } else {
+        self.textLabel.textColor = GRAY_TEXT_COLOR;
+        self.shapeLayer.strokeColor = GRAY_TEXT_COLOR.CGColor;
+    }
+}
+
 - (UIView *)circleView {
     if (!_circleView) {
         _circleView = [UIView new];
+        _circleView.userInteractionEnabled = NO;
     }
     return _circleView;
 }
 
-- (UILabel *)titleLabel {
-    if (!_titleLabel) {
-        _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:11.0];
-        _titleLabel.textColor = GRAY_TEXT_COLOR;
+- (UILabel *)textLabel {
+    if (!_textLabel) {
+        _textLabel = [UILabel new];
+        _textLabel.font = [UIFont systemFontOfSize:11.0];
+        _textLabel.textColor = GRAY_TEXT_COLOR;
     }
-    return _titleLabel;
+    return _textLabel;
 }
 
 - (UIView *)borderView {
     if (!_borderView) {
         _borderView = [UIView new];
+        _borderView.userInteractionEnabled = NO;
     }
     return _borderView;
 }

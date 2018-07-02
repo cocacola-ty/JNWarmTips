@@ -49,7 +49,13 @@ static const int kTagViewDefaultLeftMargin = 40;
         make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
         make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin);
     }];
+    [self.tagView addTarget:self action:@selector(selectTag) forControlEvents:UIControlEventTouchUpInside];
+
 }
+
+- (void)selectTag {
+    self.tagView.selected = !self.tagView.selected;
+};
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [self dismissViewControllerAnimated:YES completion:nil];
