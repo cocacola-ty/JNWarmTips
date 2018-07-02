@@ -16,6 +16,8 @@ static const int kTagViewTopMargin = 30;
 /*标签按钮的左边默认间距*/
 static const int kTagViewDefaultLeftMargin = 40;
 
+static const int kTopViewHeight = 100;
+
 @interface JNAddEventViewController()
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
@@ -35,7 +37,7 @@ static const int kTagViewDefaultLeftMargin = 40;
         make.top.equalTo(self.view.mas_top);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.mas_equalTo(100);
+        make.height.mas_equalTo(kTopViewHeight);
     }];
 
     [self.topView addSubview:self.eventInputField];
@@ -58,12 +60,9 @@ static const int kTagViewDefaultLeftMargin = 40;
         [tagview addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
 
         UIColor *color = [UIColor colorWithHexString:typeModel.typeColor];
+        tagview.frame = CGRectMake(kTagViewDefaultLeftMargin + i * 80, kTagViewTopMargin + kTopViewHeight, 0, 0);
         [tagview setupTagName:typeModel.typeName AndColor:color];
         [self.view addSubview:tagview];
-        [tagview mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.view.mas_left).offset(kTagViewDefaultLeftMargin + i * 80);
-            make.top.equalTo(self.topView.mas_bottom).offset(kTagViewTopMargin);
-        }];
     }
 }
 
