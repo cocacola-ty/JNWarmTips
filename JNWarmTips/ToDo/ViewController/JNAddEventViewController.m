@@ -22,6 +22,9 @@ static const int kTopViewHeight = 100;
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) JNButtonTagView *selectedTagView;
+@property (nonatomic, strong) JNEventTypeModel *selectedTypeModel;
+@property (nonatomic, strong) NSMutableArray *allTagViews;
+@property (nonatomic, strong) NSArray *allTagModels;
 @end
 
 @implementation JNAddEventViewController {
@@ -52,10 +55,11 @@ static const int kTopViewHeight = 100;
 }
 
 - (void) displayAllTags {
-    NSArray *eventTypes = [[JNDBManager shareInstance] getAllEventTypes];
+    self.allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
+    self.allTagViews = [NSMutableArray array];
 
-    for (int i = 0; i < eventTypes.count; ++i) {
-        JNEventTypeModel *typeModel = eventTypes[i];
+    for (int i = 0; i < self.allTagModels.count; ++i) {
+        JNEventTypeModel *typeModel = self.allTagModels[i];
         JNButtonTagView *tagview = [JNButtonTagView new];
         [tagview addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -63,6 +67,8 @@ static const int kTopViewHeight = 100;
         tagview.frame = CGRectMake(kTagViewDefaultLeftMargin + i * 80, kTagViewTopMargin + kTopViewHeight, 0, 0);
         [tagview setupTagName:typeModel.typeName AndColor:color];
         [self.view addSubview:tagview];
+
+        [self.allTagViews addObject:tagview];
     }
 }
 
@@ -73,7 +79,13 @@ static const int kTopViewHeight = 100;
         self.selectedTagView.selected = !self.selectedTagView.selected;
         tagView.selected = !tagView.selected;
         self.selectedTagView = tagView;
+
+        // 获取点击tag的索引
+        NSUInteger index = [self.allTagViews indexOfObject:tagView];
+        // 根据索引获去模型
+        self.selectedTypeModel = [self.allTagModels objectAtIndex:index];
     }
+
 };
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
