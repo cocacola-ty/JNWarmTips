@@ -156,6 +156,8 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "event_id integer primary key autoincrement not null, "
                                                        "content text not null, "
                                                        "show_date date not null, "
+                                                       "event_type_id integer not null, "
+                                                       "event_type_color varchar(10), "
                                                        "start_time integer default null, "
                                                        "end_time integer default null, "
                                                        "group_id integer, "
