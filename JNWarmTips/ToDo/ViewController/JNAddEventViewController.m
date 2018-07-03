@@ -18,9 +18,13 @@ static const int kTagViewDefaultLeftMargin = 40;
 
 static const int kTopViewHeight = 100;
 
+static const int kDoneBtnWH = 30;
+
 @interface JNAddEventViewController()
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIButton *doneBtn;
+
 @property (nonatomic, strong) JNButtonTagView *selectedTagView;
 @property (nonatomic, strong) JNEventTypeModel *selectedTypeModel;
 @property (nonatomic, strong) NSMutableArray *allTagViews;
@@ -43,10 +47,17 @@ static const int kTopViewHeight = 100;
         make.height.mas_equalTo(kTopViewHeight);
     }];
 
+    [self.topView addSubview:self.doneBtn];
+    [_doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kDoneBtnWH);
+        make.right.equalTo(self->_topView.mas_right).offset(-20);
+        make.top.equalTo(self->_topView.mas_top).offset(55);
+    }];
+
     [self.topView addSubview:self.eventInputField];
     [self.eventInputField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topView.mas_left).offset(20);
-        make.right.equalTo(self.topView.mas_right).offset(-20);
+        make.right.equalTo(self.self.doneBtn.mas_left).offset(-10);
         make.top.equalTo(self.topView.mas_top).offset(40);
         make.height.mas_equalTo(60);
     }];
@@ -70,6 +81,10 @@ static const int kTopViewHeight = 100;
 
         [self.allTagViews addObject:tagview];
     }
+}
+
+- (void) done {
+
 }
 
 - (void)selectTag:(JNButtonTagView *)tagView {
@@ -101,8 +116,33 @@ static const int kTopViewHeight = 100;
         _topView.layer.shadowOffset = CGSizeMake(0, 5);
         _topView.layer.shadowColor = GRAY_TEXT_COLOR.CGColor;
         _topView.layer.shadowOpacity = 0.8;
+
     }
     return _topView;
+}
+
+- (UIButton *)doneBtn {
+    if (!_doneBtn) {
+        _doneBtn = [UIButton new];
+        _doneBtn.backgroundColor = MAIN_COLOR;
+        _doneBtn.layer.cornerRadius = kDoneBtnWH / 2;
+        [_doneBtn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
+
+        CGPoint startPoint = CGPointMake(8, 15);
+        CGPoint endPoint = CGPointMake(23, 8);
+        CGPoint controlPoint = CGPointMake(12, 30);
+        UIBezierPath *donePath = [UIBezierPath bezierPath];
+        [donePath moveToPoint:startPoint];
+        [donePath addQuadCurveToPoint:endPoint controlPoint:controlPoint];
+
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.path = donePath.CGPath;
+        layer.strokeColor = [UIColor whiteColor].CGColor;
+        layer.fillColor = [UIColor clearColor].CGColor;
+        layer.lineWidth = 2;
+        [_doneBtn.layer addSublayer:layer];
+    }
+    return _doneBtn;
 }
 - (UITextField *)eventInputField {
     if (!_eventInputField) {
