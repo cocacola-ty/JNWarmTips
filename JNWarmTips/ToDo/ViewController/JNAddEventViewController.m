@@ -86,13 +86,29 @@ static const int kDoneBtnWH = 30;
 
 - (void) done {
 
-    // 检查是否为空
-    if (self.eventInputField.text) {
-        if (self.finishBlock) {
-            self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
-        }
-    } else {
+    // 检查是否选择类型
+    if (self.selectedTypeModel == nil) {
+        for (UIView *tagView in self.allTagViews) {
+            CALayer *layer = tagView.layer;
+            CGPoint position = layer.position;
+            CGPoint startPoint = CGPointMake(position.x - 10, position.y);
+            CGPoint endPoint = CGPointMake(position.x + 10, position.y);
 
+            CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+            basicAnimation.fromValue = [NSValue valueWithCGPoint:startPoint];
+            basicAnimation.toValue = [NSValue valueWithCGPoint:endPoint];
+            basicAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            basicAnimation.autoreverses = YES;
+            basicAnimation.repeatCount = 2;
+            basicAnimation.duration = 0.15;
+            [layer addAnimation:basicAnimation forKey:nil];
+        }
+
+        return;
+    }
+
+    if (self.finishBlock) {
+        self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
     }
 
 }

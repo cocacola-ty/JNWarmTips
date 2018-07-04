@@ -58,8 +58,6 @@ static const int kDefaultInsets = 2;
     CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
 
     self.bounds = CGRectMake(0, 0, width, borderViewH);
-    NSLog(@"width = %f", width);
-    NSLog(@"borderViewH = %f", borderViewH);
     self.textLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
     self.borderView.frame = CGRectMake(kDefaultLeftMargin + kCircleViewWH, 0, borderViewW, borderViewH);
     self.circleView.frame = CGRectMake(0, borderViewH / 2 - kCircleViewWH / 2, kCircleViewWH, kCircleViewWH);
