@@ -27,6 +27,22 @@
     }];
     return result;
 }
+
+- (NSDictionary *) getAllDateAndEventColor {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSString *sql = [NSString stringWithFormat:@"select show_date, event_type_color from %@", kJNDBEventsTable];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+        while ([resultSet next]) {
+            NSString *date = [resultSet stringForColumn:@"show_date"];
+            NSString *color = [resultSet stringForColumn:@"event_type_color"];
+
+            [result setValue:color forKey:date];
+        }
+    }];
+    return result;
+}
+
 - (NSArray<JNEventModel *> *)getAllSortEvents {
 
     NSString *sql = [NSString stringWithFormat:@"select * from %@ order by show_date", kJNDBEventsTable];
@@ -41,6 +57,8 @@
             eventModel.startTime = [queryResult longLongIntForColumn:@"START_TIME"];
             eventModel.endTime = [queryResult longLongIntForColumn:@"END_TIME"];
             eventModel.showDate = [queryResult stringForColumn:@"SHOW_DATE"];
+            eventModel.color = [queryResult stringForColumn:@"event_type_color"];
+            eventModel.eventTypeId = [queryResult stringForColumn:@"event_type_id"];
         }
     }];
     return result;
@@ -94,8 +112,8 @@
 
 #pragma mark - 添加事件
 
-- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate {
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@('CONTENT', 'SHOW_DATE') VALUES('%@', '%@')", kJNDBEventsTable, content, showDate];
+- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndEventTypeId:(NSString *)eventTypeId AndEventColor:(NSString *)color {
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@('CONTENT', 'SHOW_DATE', 'event_type_id', 'event_type_color') VALUES('%@', '%@', '%@', '%@')", kJNDBEventsTable, content, showDate, eventTypeId, color];
     [self addEvent:sql];
 }
 

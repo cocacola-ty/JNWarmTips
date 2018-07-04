@@ -6,6 +6,7 @@
 #import "JNDayCollectionViewCell.h"
 #import "JNWarmTipsPublicFile.h"
 #import "View+MASAdditions.h"
+#import "UIColor+Extension.h"
 
 
 @interface JNDayCollectionViewCell()
@@ -35,21 +36,21 @@
     return self;
 }
 
-- (void) setupContent:(NSString *)content andHighLight:(BOOL)highLight andIsToday:(BOOL)isToday andShowFlag:(BOOL)showFlag{
+- (void) setupContent:(NSString *)content andIsToday:(BOOL)isToday andShowFlag:(BOOL)showFlag AndColor:(NSString *)color{
     self.textLabel.text = content;
 
     self.markView.hidden = !showFlag;
+    self.markView.backgroundColor = [UIColor colorWithHexString:color];
+
     if (isToday) {
         self.textLabel.backgroundColor = RGB(0, 191, 255);
         self.textLabel.textColor = [UIColor whiteColor];
-    }else if(highLight) {
+    }else {
         self.textLabel.textColor = RGB(79, 79, 79);
         self.textLabel.backgroundColor = [UIColor whiteColor];
-        self.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:16.0];
-    } else {
-        self.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:16.0];
-        self.textLabel.textColor = RGB(211, 211, 211);
     }
+
+    self.textLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:16.0];
 }
 
 - (UILabel *)textLabel {

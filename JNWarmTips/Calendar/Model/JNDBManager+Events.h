@@ -13,8 +13,11 @@
 
 - (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
 
-/*获取所有有事件的日期*/
+/*获取所有含有事件的日期*/
 - (NSArray<NSString *> *)getAllEventsDate ;
+
+/*获取所有含有事件的日期及该事件的颜色*/
+- (NSDictionary *)getAllDateAndEventColor;
 
 /*获取按照时间排序后的所有事件*/
 - (NSArray<JNEventModel *> *)getAllSortEvents;
@@ -23,7 +26,7 @@
 - (void)deleteEvent:(long long)eventId;
 
 /*添加事件*/
-- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate ;
+- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndEventTypeId:(NSString *)eventTypeId AndEventColor:(NSString *)color;
 
 /*获取所有事件类型*/
 - (NSArray *)getAllEventTypes ;

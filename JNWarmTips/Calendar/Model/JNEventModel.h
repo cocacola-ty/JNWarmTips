@@ -15,6 +15,8 @@
 @property (nonatomic,strong) NSString *content;
 @property (nonatomic,assign) long long startTime;
 @property (nonatomic,assign) long long endTime;
+@property (nonatomic, strong) NSString *eventTypeId;
+@property (nonatomic, strong) NSString *color;
 
 
 @end

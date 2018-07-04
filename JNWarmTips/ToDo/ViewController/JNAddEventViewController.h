@@ -7,4 +7,5 @@
 
 
 @interface JNAddEventViewController : UIViewController
+@property(nonatomic, copy) void (^finishBlock)(NSString *text, NSString *eventTypeId, NSString *eventTypeColor);
 @end

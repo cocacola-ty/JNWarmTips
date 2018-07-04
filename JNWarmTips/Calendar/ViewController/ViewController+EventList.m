@@ -53,7 +53,21 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 - (void) addEvent {
     NSLog(@"添加事件");
 
+    __weak typeof(self) weakSelf = self;
     JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
+    addEventViewController.finishBlock = ^(NSString *text, NSString *eventTypeId, NSString *eventTypeColor) {
+
+        // 插入数据库
+//        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
+        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay AndEventTypeId:eventTypeId AndEventColor:eventTypeColor];
+        [weakSelf reloadEventList];
+
+        // 刷新日历
+        weakSelf.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor]; // 重新拉取数据
+        NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];
+        [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
+
+    };
     [self presentViewController:addEventViewController animated:YES completion:nil];
 
     return;
@@ -61,11 +75,11 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
     editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorVc.placeHoladerStr = @"记录一下这天小事件...";
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     
     editorVc.editFinishBlock = ^(NSString *text){
         // 插入数据库
-        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
+//        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
         [weakSelf reloadEventList];
         // 刷新日历
         NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];

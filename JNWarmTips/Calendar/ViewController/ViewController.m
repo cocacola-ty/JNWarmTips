@@ -7,21 +7,8 @@
 //
 
 /*
- * 初始化获取当前日前及前后两个月的日期
- * 随着向上/下翻 加载上/下一个月的日期
- * 最多缓存一年的日期 缓存当前查看日期的前后各六个月日期  获取过不再重复获取
- * 点击回到今天 清空缓存
- *
- * dataArray : 数据源 [@"2018-4", @"2018-5"] 通过key去cacheList中去取对应月份的数组
- * dataArrayInit : 最初始化的数据源 点击回到今天后重置的
- * cacheList : 加载过后缓存下来的日期 @"2018-04" : @[...]
- *
- * 事件格式：
- *   @{
- *      @"2018-4-23" ： @[@"15:04-今天没有什么事", @"今天真的没有什么事"]
- *   }
- *   以'-'分割，如果有时间，显示2018-4-23 15：04 如果没有只显示日期
- *
+ * 获取所有的事件
+ * 显示日历时检查该日期是否在事件列表中
  */
 
 #import "ViewController.h"
@@ -51,12 +38,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource> {
     BOOL onceToken;
 }
+
 @property (nonatomic, strong) JNTopContainerView *topContainerView;
 @property (nonatomic, strong) UIView *weekView;
 
 @property (nonatomic, strong) NSMutableArray *dataArrayInit;
 @property(nonatomic, assign) NSInteger currentShowMonth;
-
 
 @property (nonatomic, strong) UIImageView *addEventImageView;
 @end
@@ -86,6 +73,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     self.currentShowMonth = self.currentMonth;
     self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:self.currentYear month:self.currentMonth day:self.currentDay];
+
+    // 获取所有事件
+    self.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor];
 
     // 布局
     self.navigationController.navigationBar.hidden = YES;
@@ -117,7 +107,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right).offset(-kCalendarViewMargin);
         make.height.mas_equalTo(kCollectionViewHeight);
     }];
-//    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 
     UIView *blankView = [UIView new];
     blankView.backgroundColor = [UIColor whiteColor];
@@ -156,9 +145,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (!onceToken) {
-//        [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:kAllSections/2] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
-
         onceToken = YES;
     }
 }
@@ -279,12 +266,19 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     NSArray *dateArray = [self getDateWithIndexPath:indexPath];
 
+    int year = [dateArray.firstObject integerValue];
+    int month = [dateArray[1] integerValue];
     int day = [dateArray.lastObject intValue];
 
     BOOL isToday = (indexPath.section == kCurrentMonthSection && day == [JNCalendarAssistant shareInstance].currentDay);
 
+    NSString *dateString = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
+    BOOL showFlat = [self.allEventsDate.allKeys containsObject:dateString];
+    NSString *color = [self.allEventsDate valueForKey:dateString];
+
     NSString *content = day == 0 ? @"" : [NSString stringWithFormat:@"%d", day];
-    [cell setupContent:content andHighLight:YES andIsToday:isToday andShowFlag:NO];
+
+    [cell setupContent:content andIsToday:isToday andShowFlag:showFlat AndColor:color];
     return cell;
 }
 

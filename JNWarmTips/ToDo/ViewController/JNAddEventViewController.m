@@ -63,6 +63,7 @@ static const int kDoneBtnWH = 30;
     }];
 
     [self displayAllTags];
+    [self.eventInputField becomeFirstResponder];
 }
 
 - (void) displayAllTags {
@@ -84,7 +85,9 @@ static const int kDoneBtnWH = 30;
 }
 
 - (void) done {
-
+    if (self.finishBlock) {
+        self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
+    }
 }
 
 - (void)selectTag:(JNButtonTagView *)tagView {
