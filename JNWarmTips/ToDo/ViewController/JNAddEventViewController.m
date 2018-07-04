@@ -79,10 +79,18 @@ static const int kDoneBtnWH = 30;
 #pragma mark - Event Response
 
 - (void) showAlertView {
-
+    self.waringAlertView.hidden = NO;
     [UIView animateWithDuration:0.75 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.waringAlertView.frame = CGRectMake(30, 250, SCREEN_WIDTH - 60, 90);
     } completion:^(BOOL finished) {
+    }];
+}
+
+- (void) dismissAlertView {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.waringAlertView.frame = CGRectMake(30, -90, SCREEN_WIDTH - 60, 90);
+    } completion:^(BOOL finished){
+        self.waringAlertView.hidden = YES;
     }];
 }
 
@@ -154,16 +162,6 @@ static const int kDoneBtnWH = 30;
     [self.view endEditing:YES];
 
     if (self.eventInputField.text.length > 0) {
-//        JNWaringAlertView *alertView = [JNWaringAlertView new];
-//        alertView.alertText = @"确定不要啦?";
-//        [self.view addSubview:alertView];
-//        [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.equalTo(self.view.mas_left).offset(30);
-//            make.right.equalTo(self.view.mas_right).offset(-30);
-//            make.height.mas_equalTo(90);
-//            make.centerY.equalTo(self.view.mas_centerY);
-//        }];
-
         [self showAlertView];
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -232,10 +230,11 @@ static const int kDoneBtnWH = 30;
 
     if (!_waringAlertView) {
         _waringAlertView = [JNWaringAlertView new];
+        _waringAlertView.hidden = YES;
         _waringAlertView.alertText = @"确定不要啦?";
         __weak typeof(self) ws = self;
         _waringAlertView.cancleBlock = ^() {
-
+            [ws dismissAlertView];
         };
 
         _waringAlertView.confirmBlock = ^() {
