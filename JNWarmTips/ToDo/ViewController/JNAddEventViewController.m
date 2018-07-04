@@ -10,6 +10,7 @@
 #import "JNDBManager+Events.h"
 #import "JNEventTypeModel.h"
 #import "UIColor+Extension.h"
+#import "JNWaringAlertView.h"
 
 /*标签按钮的上边间距*/
 static const int kTagViewTopMargin = 30;
@@ -29,6 +30,11 @@ static const int kDoneBtnWH = 30;
 @property (nonatomic, strong) JNEventTypeModel *selectedTypeModel;
 @property (nonatomic, strong) NSMutableArray *allTagViews;
 @property (nonatomic, strong) NSArray *allTagModels;
+
+@property (nonatomic, strong) JNWaringAlertView *waringAlertView;
+
+@property (nonatomic, strong) UIDynamicAnimator *animator;
+
 @end
 
 @implementation JNAddEventViewController {
@@ -50,20 +56,34 @@ static const int kDoneBtnWH = 30;
     [self.topView addSubview:self.doneBtn];
     [_doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kDoneBtnWH);
-        make.right.equalTo(self->_topView.mas_right).offset(-20);
-        make.top.equalTo(self->_topView.mas_top).offset(55);
+        make.right.equalTo(self.topView.mas_right).offset(-20);
+        make.top.equalTo(self.topView.mas_top).offset(55);
     }];
 
     [self.topView addSubview:self.eventInputField];
     [self.eventInputField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topView.mas_left).offset(20);
-        make.right.equalTo(self.self.doneBtn.mas_left).offset(-10);
+        make.right.equalTo(self.doneBtn.mas_left).offset(-10);
         make.top.equalTo(self.topView.mas_top).offset(40);
         make.height.mas_equalTo(60);
     }];
 
     [self displayAllTags];
     [self.eventInputField becomeFirstResponder];
+
+    [self.view addSubview:self.waringAlertView];
+    self.waringAlertView.frame = CGRectMake(30, -90, SCREEN_WIDTH - 60, 90);
+
+}
+
+#pragma mark - Event Response
+
+- (void) showAlertView {
+
+    [UIView animateWithDuration:0.75 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.waringAlertView.frame = CGRectMake(30, 250, SCREEN_WIDTH - 60, 90);
+    } completion:^(BOOL finished) {
+    }];
 }
 
 - (void) displayAllTags {
@@ -130,7 +150,24 @@ static const int kDoneBtnWH = 30;
 };
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [self.view endEditing:YES];
+
+    if (self.eventInputField.text.length > 0) {
+//        JNWaringAlertView *alertView = [JNWaringAlertView new];
+//        alertView.alertText = @"确定不要啦?";
+//        [self.view addSubview:alertView];
+//        [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(self.view.mas_left).offset(30);
+//            make.right.equalTo(self.view.mas_right).offset(-30);
+//            make.height.mas_equalTo(90);
+//            make.centerY.equalTo(self.view.mas_centerY);
+//        }];
+
+        [self showAlertView];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - Delegate
@@ -189,6 +226,23 @@ static const int kDoneBtnWH = 30;
         _eventInputField.delegate = self;
     }
     return _eventInputField;
+}
+
+- (JNWaringAlertView *)waringAlertView {
+
+    if (!_waringAlertView) {
+        _waringAlertView = [JNWaringAlertView new];
+        _waringAlertView.alertText = @"确定不要啦?";
+        __weak typeof(self) ws = self;
+        _waringAlertView.cancleBlock = ^() {
+
+        };
+
+        _waringAlertView.confirmBlock = ^() {
+            [ws dismissViewControllerAnimated:YES completion:nil];
+        };
+    }
+    return _waringAlertView;
 }
 
 @end
