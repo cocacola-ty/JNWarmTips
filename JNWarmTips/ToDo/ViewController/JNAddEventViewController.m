@@ -121,7 +121,9 @@ static const int kDoneBtnWH = 30;
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    self.doneBtn.hidden = inputString.length <= 0;
+    [UIView animateWithDuration:0.35 animations:^{
+        self.doneBtn.alpha = inputString.length;
+    }];
     return YES;
 }
 
@@ -142,7 +144,7 @@ static const int kDoneBtnWH = 30;
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
-        _doneBtn.hidden = YES;
+        _doneBtn.alpha = 0;
         _doneBtn.backgroundColor = MAIN_COLOR;
         _doneBtn.layer.cornerRadius = kDoneBtnWH / 2;
         [_doneBtn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
