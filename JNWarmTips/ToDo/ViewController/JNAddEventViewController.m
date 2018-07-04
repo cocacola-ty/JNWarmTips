@@ -20,7 +20,7 @@ static const int kTopViewHeight = 100;
 
 static const int kDoneBtnWH = 30;
 
-@interface JNAddEventViewController()
+@interface JNAddEventViewController() <UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *eventInputField;
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIButton *doneBtn;
@@ -85,9 +85,16 @@ static const int kDoneBtnWH = 30;
 }
 
 - (void) done {
-    if (self.finishBlock) {
-        self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
+
+    // 检查是否为空
+    if (self.eventInputField.text) {
+        if (self.finishBlock) {
+            self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
+        }
+    } else {
+
     }
+
 }
 
 - (void)selectTag:(JNButtonTagView *)tagView {
@@ -110,6 +117,14 @@ static const int kDoneBtnWH = 30;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Delegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    self.doneBtn.hidden = inputString.length <= 0;
+    return YES;
+}
+
 #pragma mark - Getter & Setter
 
 - (UIView *)topView {
@@ -127,6 +142,7 @@ static const int kDoneBtnWH = 30;
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
+        _doneBtn.hidden = YES;
         _doneBtn.backgroundColor = MAIN_COLOR;
         _doneBtn.layer.cornerRadius = kDoneBtnWH / 2;
         [_doneBtn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
@@ -152,6 +168,7 @@ static const int kDoneBtnWH = 30;
         _eventInputField = [[UITextField alloc] init];
         _eventInputField.placeholder = @"记录这一天的小事件...";
         _eventInputField.font = [UIFont systemFontOfSize:15.0];
+        _eventInputField.delegate = self;
     }
     return _eventInputField;
 }
