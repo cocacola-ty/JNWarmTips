@@ -32,8 +32,7 @@ static const int kDoneBtnWH = 30;
 @property (nonatomic, strong) NSArray *allTagModels;
 
 @property (nonatomic, strong) JNWaringAlertView *waringAlertView;
-
-@property (nonatomic, strong) UIDynamicAnimator *animator;
+@property (nonatomic, strong) UIButton *closeBtn;
 
 @end
 
@@ -66,6 +65,13 @@ static const int kDoneBtnWH = 30;
         make.right.equalTo(self.doneBtn.mas_left).offset(-10);
         make.top.equalTo(self.topView.mas_top).offset(40);
         make.height.mas_equalTo(60);
+    }];
+
+    [self.view addSubview:self.closeBtn];
+    [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.and.height.mas_equalTo(60);
+        make.right.equalTo(self.view.mas_right).offset(-20);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-60);
     }];
 
     [self displayAllTags];
@@ -167,9 +173,11 @@ static const int kDoneBtnWH = 30;
 
     if (self.eventInputField.text.length > 0) {
         [self showAlertView];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void) dismiss {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Delegate
@@ -246,6 +254,17 @@ static const int kDoneBtnWH = 30;
         };
     }
     return _waringAlertView;
+}
+
+- (UIButton *)closeBtn {
+    if (!_closeBtn) {
+        _closeBtn = [UIButton new];
+        _closeBtn.backgroundColor = [UIColor blueColor];
+        _closeBtn.layer.cornerRadius = 30;
+        [_closeBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+
+    }
+    return _closeBtn;
 }
 
 @end

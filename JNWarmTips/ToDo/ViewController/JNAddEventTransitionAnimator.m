@@ -76,10 +76,12 @@
     UIViewController *fromVc = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVc = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
-    UIView *toView = [transitionContext viewForKey:UITransitionContextFromViewKey];
+    UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     UIView *containerView = [transitionContext containerView];
 
+    [containerView addSubview:fromView];
     [containerView addSubview:toView];
+    UIView *animateView = fromView;
 
     // 起始位置 和 发布按钮位置一致
 
@@ -93,7 +95,7 @@
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     maskLayer.fillColor = [UIColor redColor].CGColor;
     maskLayer.path = startPath.CGPath;
-    toView.layer.mask = maskLayer;
+    animateView.layer.mask = maskLayer;
 
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
     basicAnimation.fromValue = (__bridge id __nullable )(startPath.CGPath);
