@@ -73,38 +73,19 @@
 - (void) dismissTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     self.transitionContext = transitionContext;
 
-    UIViewController *fromVc = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVc = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
     UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
+    toView = toVc.view;
     UIView *containerView = [transitionContext containerView];
 
-    [containerView addSubview:fromView];
     [containerView addSubview:toView];
-    UIView *animateView = fromView;
+    toView.layer.opacity = 0;
 
-    // 起始位置 和 发布按钮位置一致
-
-    CGFloat startX = SCREEN_WIDTH - 20 - 30; // 20右侧边距 30发布按钮宽度一半
-    CGFloat startY = SCREEN_HEIGHT - 60 - 30;
-    CGRect endRect = CGRectMake(startX, startY, 1, 1);
-    CGFloat radius = sqrt(SCREEN_WIDTH * SCREEN_WIDTH + SCREEN_HEIGHT * SCREEN_HEIGHT);
-    CGRect startRect = CGRectInset(startRect, -radius, -radius);
-    UIBezierPath *startPath = [UIBezierPath bezierPathWithOvalInRect:startRect];
-    UIBezierPath *endPath = [UIBezierPath bezierPathWithOvalInRect:endRect];
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.fillColor = [UIColor redColor].CGColor;
-    maskLayer.path = startPath.CGPath;
-    animateView.layer.mask = maskLayer;
-
-    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    basicAnimation.fromValue = (__bridge id __nullable )(startPath.CGPath);
-    basicAnimation.toValue = (__bridge id __nullable) (endPath.CGPath);
-    basicAnimation.fillMode = kCAFillModeForwards;
-    basicAnimation.duration = 0.5;
-    basicAnimation.removedOnCompletion = NO;
-    basicAnimation.delegate = self;
-    [maskLayer addAnimation:basicAnimation forKey:nil];
+    [UIView animateWithDuration:0.5 animations:^{
+        toView.layer.opacity = 1;
+    } completion:^(BOOL finished) {
+        [transitionContext completeTransition:YES];
+    }];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {

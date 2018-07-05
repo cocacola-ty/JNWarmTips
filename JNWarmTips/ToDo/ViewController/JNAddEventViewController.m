@@ -177,7 +177,12 @@ static const int kDoneBtnWH = 30;
 }
 
 - (void) dismiss {
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [UIView animateWithDuration:0.25 animations:^{
+        self.topView.transform = CGAffineTransformMakeTranslation(0, -100);
+    } completion:^(BOOL finished) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 #pragma mark - Delegate
