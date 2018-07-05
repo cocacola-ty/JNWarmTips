@@ -69,11 +69,15 @@ static const int kDoneBtnWH = 30;
     }];
 
     [self displayAllTags];
-    [self.eventInputField becomeFirstResponder];
 
     [self.view addSubview:self.waringAlertView];
     self.waringAlertView.frame = CGRectMake(30, -90, SCREEN_WIDTH - 60, 90);
 
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.eventInputField becomeFirstResponder];
 }
 
 #pragma mark - Event Response

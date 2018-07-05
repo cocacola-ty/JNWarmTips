@@ -11,6 +11,7 @@
 #import "JNDBManager+Events.h"
 #import "JNDayModel.h"
 #import "JNAddEventViewController.h"
+#import "JNAddEventTransitionAnimator.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -48,6 +49,14 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     return self.oneDayEventsArray.count;
 }
 
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return [[JNAddEventTransitionAnimator alloc] initWithType:JNTransitionTypePresent];
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return [[JNAddEventTransitionAnimator alloc] initWithType:JNTransitionTypeDismiss];
+}
+
 #pragma mark - Event Response
 
 - (void) addEvent {
@@ -55,10 +64,10 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
     __weak typeof(self) weakSelf = self;
     JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
+    addEventViewController.transitioningDelegate = self;
     addEventViewController.finishBlock = ^(NSString *text, NSString *eventTypeId, NSString *eventTypeColor) {
 
         // 插入数据库
-//        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
         [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay AndEventTypeId:eventTypeId AndEventColor:eventTypeColor];
         [weakSelf reloadEventList];
 
@@ -69,28 +78,6 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
     };
     [self presentViewController:addEventViewController animated:YES completion:nil];
-
-    return;
-
-    JNEventEditorViewController *editorVc = [[JNEventEditorViewController alloc] init];
-    editorVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    editorVc.placeHoladerStr = @"记录一下这天小事件...";
-//    __weak typeof(self) weakSelf = self;
-    
-    editorVc.editFinishBlock = ^(NSString *text){
-        // 插入数据库
-//        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay];
-        [weakSelf reloadEventList];
-        // 刷新日历
-        NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];
-        NSIndexPath *indexPath = selectItems.firstObject;
-        NSString *key = self.dataArray[indexPath.section];
-        NSArray *monthArray = [self.cacheList objectForKey:key];
-        JNDayModel *dayModel = monthArray[indexPath.row];
-        dayModel.needShowFlag = YES;
-        [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
-    };
-    [self presentViewController:editorVc animated:YES completion:nil];
 }
 
 - (void) reloadEventList {

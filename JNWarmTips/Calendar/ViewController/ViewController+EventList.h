@@ -6,6 +6,6 @@
 #import <Foundation/Foundation.h>
 #import "ViewController.h"
 
-@interface ViewController (EventList) <UITableViewDelegate, UITableViewDataSource>
+@interface ViewController (EventList) <UITableViewDelegate, UITableViewDataSource, UIViewControllerTransitioningDelegate>
 - (void) reloadEventList;
 @end
