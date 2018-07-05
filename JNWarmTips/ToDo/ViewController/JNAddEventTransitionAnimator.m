@@ -81,7 +81,7 @@
     [containerView addSubview:toView];
     toView.layer.opacity = 0;
 
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.35 animations:^{
         toView.layer.opacity = 1;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:YES];

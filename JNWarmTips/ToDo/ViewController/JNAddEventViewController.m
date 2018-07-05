@@ -147,6 +147,7 @@ static const int kDoneBtnWH = 30;
 
     if (self.finishBlock) {
         self.finishBlock(self.eventInputField.text, self.selectedTypeModel.typeId, self.selectedTypeModel.typeColor);
+        [self dismiss];
     }
 
 }
@@ -264,10 +265,27 @@ static const int kDoneBtnWH = 30;
 - (UIButton *)closeBtn {
     if (!_closeBtn) {
         _closeBtn = [UIButton new];
-        _closeBtn.backgroundColor = [UIColor blueColor];
+        _closeBtn.backgroundColor = MAIN_COLOR;
         _closeBtn.layer.cornerRadius = 30;
+        _closeBtn.alpha = 0.8;
         [_closeBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        path.lineCapStyle = kCALineCapRound;
+        [path moveToPoint:CGPointMake(17, 17)];
+        [path addLineToPoint:CGPointMake(43, 43)];
+        [path moveToPoint:CGPointMake(17, 43)];
+        [path addLineToPoint:CGPointMake(43, 17)];
+
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.path = path.CGPath;
+        layer.fillColor = [UIColor clearColor].CGColor;
+        layer.lineWidth = 3;
+        layer.strokeColor = [UIColor whiteColor].CGColor;
+        [_closeBtn.layer addSublayer:layer];
+
+        _closeBtn.layer.shadowColor = [UIColor blackColor].CGColor;
+        _closeBtn.layer.shadowOffset = CGSizeMake(2, 2);
     }
     return _closeBtn;
 }
