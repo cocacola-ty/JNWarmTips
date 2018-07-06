@@ -13,6 +13,8 @@
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *dayLabel;
 @property (nonatomic, strong) UILabel *yearLabel;
+
+@property (nonatomic, strong) UIButton *rightBtn;
 @end
 
 @implementation JNTopContainerView {
@@ -40,6 +42,13 @@
             make.left.equalTo(self.dayLabel.mas_right).offset(5);
             make.centerY.equalTo(self.dateLabel.mas_centerY);
         }];
+
+        [self addSubview:self.rightBtn];
+        [self.rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.mas_right).offset(-15);
+            make.centerY.equalTo(self.mas_centerY);
+            make.width.height.mas_equalTo(30);
+        }];
     }
     return self;
 }
@@ -55,6 +64,12 @@
     }
     self.dayLabel.text = [NSString stringWithFormat:@"%li",day];
     self.yearLabel.text = [NSString stringWithFormat:@"%li \ntoday", year];
+}
+
+- (void)btnAction {
+    if (self.rightBtnActionBlock) {
+        self.rightBtnActionBlock();
+    }
 }
 
 
@@ -93,5 +108,14 @@
         _yearLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _yearLabel;
+}
+
+- (UIButton *)rightBtn {
+    if (!_rightBtn) {
+        _rightBtn = [UIButton new];
+        _rightBtn.backgroundColor = [UIColor redColor];
+        [_rightBtn addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rightBtn;
 }
 @end

@@ -7,4 +7,6 @@
 
 @interface JNTopContainerView : UIView
 - (void)setContent:(NSInteger)year AndDay:(NSInteger)day AndMonth:(NSInteger)month;
+
+@property(nonatomic, copy) void (^rightBtnActionBlock)(void);
 @end

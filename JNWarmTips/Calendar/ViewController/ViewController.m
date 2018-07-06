@@ -22,6 +22,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
 #import "JNCalendarAssistant.h"
+#import "JNEventTimeLineViewController.h"
 #import "Masonry.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
@@ -412,6 +413,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     if (!_topContainerView) {
         _topContainerView = [JNTopContainerView new];
         _topContainerView.backgroundColor = [UIColor whiteColor];
+
+        __weak typeof(self) ws = self;
+        JNEventTimeLineViewController *eventTimeLineViewController = [JNEventTimeLineViewController new];
+        eventTimeLineViewController.hidesBottomBarWhenPushed = YES;
+        _topContainerView.rightBtnActionBlock = ^() {
+            [ws.navigationController pushViewController:eventTimeLineViewController animated:YES];
+        };
 
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToToday)];
         [_topContainerView addGestureRecognizer:tapGestureRecognizer];

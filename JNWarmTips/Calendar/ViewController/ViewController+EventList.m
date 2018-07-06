@@ -60,7 +60,6 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 #pragma mark - Event Response
 
 - (void) addEvent {
-    NSLog(@"添加事件");
 
     __weak typeof(self) weakSelf = self;
     JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
