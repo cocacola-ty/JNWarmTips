@@ -63,7 +63,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [super viewDidLoad];
     //test
     [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:6 InYear:2018];
-
     // test end
 
     // 初始化设置
@@ -251,13 +250,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 }
 
-//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-//    NSArray *dateArray = [self getDateWithIndexPath:indexPath];
-//    int year = [dateArray.firstObject intValue];
-//    int month = [dateArray[1] intValue];
-//    NSLog(@"section = %i, year = %i , month = %i ",indexPath.section, year, month);
-//}
-
 /*
  * 如果在这个方法里检查每个日期是否有事件，想办法简化查询条件，因为这个方法滑动时候会频繁调用
  * */
@@ -309,89 +301,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
 }
-
-/*
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-
-    if (scrollView == self.tableView) {
-        return;
-    }
-    NSArray *indexPathArray = [self.collectionView indexPathsForVisibleItems];
-
-    // 找到最多的section
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    for (NSIndexPath *indexpath in indexPathArray) {
-        NSNumber *number = [NSNumber numberWithUnsignedInteger:indexpath.section];
-        if ([[dictionary allKeys] containsObject:number]) {
-            NSInteger value = [[dictionary objectForKey:number] integerValue];
-            value += 1;
-            [dictionary setObject:@(value) forKey:number];
-        } else {
-            [dictionary setObject:@(1) forKey:number];
-        }
-    }
-
-    // 对字典排序
-    NSArray *sortKeys = [dictionary keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2){
-        NSComparisonResult result = [obj1 compare:obj2];
-        return (NSComparisonResult) (result == NSOrderedAscending);
-    }];
-    NSInteger section = [sortKeys.firstObject integerValue];
-
-    NSString *key = self.dataArray[section];
-    NSRange range = [key rangeOfString:@"-"];
-    NSString *month = [key substringFromIndex:range.location+1];
-    NSString *year = [key substringWithRange:NSMakeRange(0, 4)];
-    NSInteger willShowMonth = [month integerValue];
-    NSInteger willShowYear = [year integerValue];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@月",month];
-
-    // 加载下一个要显示月份到数据源 检查要加载的是否在数据源中已经存在，如果存在则不加载, 否则添加到数据源中
-    NSInteger currentIndex = [self.dataArray indexOfObject:key];
-    if ((willShowMonth < self.currentShowMonth && willShowMonth != 1) || (willShowMonth == 12 && self.currentShowMonth == 1)) {
-        NSString *loadMonthKey = [self getLastMonth:willShowMonth currentYear:willShowYear];
-        //向上翻
-        if (![self.dataArray containsObject:loadMonthKey]) {
-            NSRange range = [loadMonthKey rangeOfString:@"-"];
-            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location+1] integerValue];
-            NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
-
-            NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData.count == kItemCount * kItemLines) {
-                [self.cacheList setObject:loadData forKey:loadMonthKey];
-                [self.dataArray insertObject:loadMonthKey atIndex:currentIndex];
-                [self.collectionView reloadData];
-                [self.collectionView setContentOffset:CGPointMake(0, kCollectionViewHeight)];
-            }
-        }
-    } else if (willShowMonth > self.currentShowMonth || (willShowMonth == 1 && self.currentShowMonth == 12)) {
-       // 向下翻
-        NSString *loadMonthKey = [self getNextMonth:willShowMonth currentYear:willShowYear];
-        if (![self.dataArray containsObject:loadMonthKey]) {
-            NSRange range = [loadMonthKey rangeOfString:@"-"];
-            NSInteger loadMonth = [[loadMonthKey substringFromIndex:range.location+1] integerValue];
-            NSInteger loadYear = [[loadMonthKey substringWithRange:NSMakeRange(0, 4)] integerValue];
-
-            NSArray *loadData = [self getAllDaysOfMonth:loadMonth InYear:loadYear];
-            if (loadData.count == kItemCount * kItemLines) {
-                [self.cacheList setObject:loadData forKey:loadMonthKey];
-                [self.dataArray insertObject:loadMonthKey atIndex:currentIndex+1];
-                [self.collectionView reloadData];
-            }
-        }
-    }
-
-    self.currentShowMonth = willShowMonth;
-
-
-    // 滑动之后 清空事件列表
-    // 取消CollectionView的选中
-    // 隐藏➕号
-    self.currentSelectDay = @"";
-    [self reloadEventList];
-    self.currentDateShowLabel.text = [JNWarmTipsPublicFile dateStringFormat:willShowYear month:willShowMonth day:0];
-}
- */
 
 #pragma mark - Event Response
 
