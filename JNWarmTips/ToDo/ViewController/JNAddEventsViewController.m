@@ -10,9 +10,14 @@
 
 static const int kBarButtonWH = 30;
 
+static NSString *const kBtnNormalColor = @"F2F2F4";
+
 @interface JNAddEventsViewController()
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIView *inputFieldLine;
+
+@property (nonatomic, strong) UIButton *typeBtn;
+@property (nonatomic, strong) UIButton *timeBtn;
 
 @property (nonatomic, strong) UIButton *closeBtn;
 @property (nonatomic, strong) UIButton *doneBtn;
@@ -62,6 +67,20 @@ static const int kBarButtonWH = 30;
         make.left.equalTo(self.inputField.mas_left);
         make.right.equalTo(self.inputField.mas_right);
         make.height.mas_equalTo(1);
+    }];
+
+    [self.view addSubview:self.typeBtn];
+    [self.typeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(40);
+        make.centerX.equalTo(self.view.mas_centerX).offset(-60);
+        make.top.equalTo(self.inputFieldLine.mas_bottom).offset(30);
+    }];
+
+    [self.view addSubview:self.timeBtn];
+    [self.timeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(40);
+        make.centerX.equalTo(self.view.mas_centerX).offset(60);
+        make.centerY.equalTo(self.typeBtn.mas_centerY);
     }];
 }
 
@@ -132,5 +151,33 @@ static const int kBarButtonWH = 30;
         [_doneBtn.layer addSublayer:shapeLayer];
     }
     return _doneBtn;
+}
+
+- (UIButton *)typeBtn {
+    if (!_typeBtn) {
+        _typeBtn = [UIButton new];
+        UIImage *iamge = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [_typeBtn setImage:iamge forState:UIControlStateNormal];
+        _typeBtn.imageView.tintColor = [UIColor colorWithHexString:kBtnNormalColor];
+
+        _typeBtn.layer.cornerRadius = 20;
+        _typeBtn.layer.borderWidth = 1;
+        _typeBtn.layer.borderColor = [UIColor colorWithHexString:kBtnNormalColor].CGColor;
+    }
+    return _typeBtn;
+}
+
+- (UIButton *)timeBtn {
+    if (!_timeBtn) {
+        _timeBtn = [UIButton new];
+        UIImage *image = [UIImage imageNamed:@"timer_normal"];
+        [_timeBtn setImage:image forState:UIControlStateNormal];
+        [_timeBtn setImage:[UIImage imageNamed:@"timer_highlight"] forState:UIControlStateSelected];
+
+        _timeBtn.layer.cornerRadius = 20;
+        _timeBtn.layer.borderColor = [UIColor colorWithHexString:kBtnNormalColor].CGColor;
+        _timeBtn.layer.borderWidth = 1;
+    }
+    return _timeBtn;
 }
 @end
