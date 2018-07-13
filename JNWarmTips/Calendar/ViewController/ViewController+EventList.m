@@ -12,6 +12,7 @@
 #import "JNDayModel.h"
 #import "JNAddEventViewController.h"
 #import "JNAddEventTransitionAnimator.h"
+#import "JNAddEventsViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -76,7 +77,10 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
         [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
 
     };
-    [self presentViewController:addEventViewController animated:YES completion:nil];
+
+    JNAddEventsViewController *addEventsViewController = [[JNAddEventsViewController alloc] init];
+    addEventsViewController.transitioningDelegate = self;
+    [self presentViewController:addEventsViewController animated:YES completion:nil];
 }
 
 - (void) reloadEventList {

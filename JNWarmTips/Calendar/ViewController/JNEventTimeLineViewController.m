@@ -24,6 +24,10 @@
     return nil;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
+}
+
 #pragma mark - Getter & Setter
 
 - (UITableView *)tableView {
@@ -31,6 +35,8 @@
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.estimatedRowHeight = 50;
+        _tableView.estimatedRowHeight = UITableViewAutomaticDimension;
     }
     return _tableView;
 }

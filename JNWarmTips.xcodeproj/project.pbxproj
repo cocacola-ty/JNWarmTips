@@ -34,6 +34,7 @@
 		8B8D86D32D7E51E3AA147856 /* JNToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8EB4D6432615CCFF0F86 /* JNToDoListViewController.m */; };
 		8B8D8727352533082FF59CB9 /* JNTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E4ED5067973DAE46442 /* JNTextView.m */; };
 		8B8D877E8AD5D34AF0FA9CC0 /* JNWaringAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D831EB5111E9B5E39E84D /* JNWaringAlertView.m */; };
+		8B8D87F0B6F800AB773D238F /* JNAddEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8F8A73FFF141AFC08878 /* JNAddEventsViewController.m */; };
 		8B8D88133F6F1A66CCD3D5E3 /* JNDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D87E6ADAEE37DC7A9FD7D /* JNDBManager.m */; };
 		8B8D882F451CBDCEB541FDB1 /* JNEventTimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D85044124B5F44C647CA4 /* JNEventTimeLineViewController.m */; };
 		8B8D8885AE45BFE5A9EC8D51 /* JNAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D87D654675529B820B499 /* JNAddEventViewController.m */; };
@@ -105,6 +106,7 @@
 		8B8D85BB835C11CB6620EFAD /* JNGroupListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNGroupListCell.h; sourceTree = "<group>"; };
 		8B8D8610D0F451F8B40CEC0F /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
 		8B8D863217D9B0BFC1D6834C /* JNDayEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayEventTableViewCell.h; sourceTree = "<group>"; };
+		8B8D8640A302074E270DF722 /* JNAddEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddEventsViewController.h; sourceTree = "<group>"; };
 		8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNButtonTagView.m; sourceTree = "<group>"; };
 		8B8D8681D8A0C06D1D1C4851 /* JNPresentTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNPresentTransitionAnimator.m; sourceTree = "<group>"; };
 		8B8D86BF03EAF6A40F13A3F3 /* JNCalendarAssistant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNCalendarAssistant.m; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNTopContainerView.m; sourceTree = "<group>"; };
 		8B8D8EB4D6432615CCFF0F86 /* JNToDoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoListViewController.m; sourceTree = "<group>"; };
 		8B8D8F01672CA9AF33AA94A3 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8B8D8F8A73FFF141AFC08878 /* JNAddEventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddEventsViewController.m; sourceTree = "<group>"; };
 		8B8D8FE18FBDC03BCBEB2823 /* JNWaringAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWaringAlertView.h; sourceTree = "<group>"; };
 		987F68616B95B3F1A1C53504 /* Pods-JNWarmTips.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JNWarmTips.release.xcconfig"; path = "Pods/Target Support Files/Pods-JNWarmTips/Pods-JNWarmTips.release.xcconfig"; sourceTree = "<group>"; };
 		F79A2389DE1188F102ABAA05 /* libPods-JNWarmTips.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JNWarmTips.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +283,8 @@
 				8B8D8CE9738E84E17A7CFB29 /* JNAddEventViewController.h */,
 				8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */,
 				8B8D8A9E45A2D8E84BF63EEA /* JNAddEventTransitionAnimator.h */,
+				8B8D8F8A73FFF141AFC08878 /* JNAddEventsViewController.m */,
+				8B8D8640A302074E270DF722 /* JNAddEventsViewController.h */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -590,6 +595,7 @@
 				8B8D877E8AD5D34AF0FA9CC0 /* JNWaringAlertView.m in Sources */,
 				8B8D8DB882312F8A45628321 /* JNAddEventTransitionAnimator.m in Sources */,
 				8B8D882F451CBDCEB541FDB1 /* JNEventTimeLineViewController.m in Sources */,
+				8B8D87F0B6F800AB773D238F /* JNAddEventsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
