@@ -8,7 +8,7 @@
 #import "JNWarmTipsPublicFile.h"
 
 
-static const int kCircleViewWH = 4;
+static const int kCircleViewWH = 6;
 
 static const int kDefaultLeftMargin = 5;
 
@@ -42,32 +42,50 @@ static const int kDefaultInsets = 2;
 }
 
 - (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor {
+
+    self.textLabel.text = tagName;
+    [self.textLabel sizeToFit];
+
+    // todo : 使用boundingRect计算
+//    CGRect rect = [tagName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:nil context:nil];
+    CGFloat titleLabelW = self.textLabel.frame.size.width;
+    CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
+
+    CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2;
+
+    CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
+
+    [self setupTagName:tagName AndColor:tagColor WithWidth:width];
+
+}
+
+- (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width {
     self.selectColor = tagColor;
 
     self.circleView.backgroundColor = tagColor;
     self.textLabel.text = tagName;
     [self.textLabel sizeToFit];
 
-    CGFloat titleLabelW = self.textLabel.frame.size.width;
-    CGFloat titleLabelH = self.textLabel.frame.size.height;
+    CGFloat titleLabelW = width - kDefaultLeftMargin - kDefaultInsets;
+    CGFloat titleLabelH = self.textLabel.frame.size.height + 2;
     CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
 
     CGFloat borderViewH = titleLabelH + kDefaultInsets * 2;
     CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2;
 
-    CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
-
     self.bounds = CGRectMake(0, 0, width, borderViewH);
     self.textLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
     self.borderView.frame = CGRectMake(kDefaultLeftMargin + kCircleViewWH, 0, borderViewW, borderViewH);
     self.circleView.frame = CGRectMake(0, borderViewH / 2 - kCircleViewWH / 2, kCircleViewWH, kCircleViewWH);
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
 
+    CGFloat arrowWidth = titleLabelH / 2;
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, borderViewH / 2)];
-    [borderPath addLineToPoint:CGPointMake(kDefaultLeftMargin, 0)];
+    [borderPath addLineToPoint:CGPointMake(arrowWidth, 0)];
     [borderPath addLineToPoint:CGPointMake(borderViewW, 0)];
     [borderPath addLineToPoint:CGPointMake(borderViewW, borderViewH)];
-    [borderPath addLineToPoint:CGPointMake(kDefaultLeftMargin, borderViewH)];
+    [borderPath addLineToPoint:CGPointMake(arrowWidth, borderViewH)];
     [borderPath closePath];
 
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
@@ -78,7 +96,12 @@ static const int kDefaultInsets = 2;
     shapeLayer.lineWidth = 1;
     shapeLayer.borderColor = [UIColor redColor].CGColor;
     [self.borderView.layer addSublayer:shapeLayer];
+    [self addScaleAnimation];
 
+    self.backgroundColor = [UIColor blackColor];
+}
+
+- (void) addScaleAnimation {
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
     basicAnimation.fromValue = [NSNumber numberWithFloat:1.2];
     basicAnimation.toValue = [NSNumber numberWithFloat:0.6];
@@ -86,7 +109,6 @@ static const int kDefaultInsets = 2;
     basicAnimation.autoreverses = YES;
     basicAnimation.repeatCount = MAXFLOAT;
     [self.circleView.layer addAnimation:basicAnimation forKey:nil];
-
 }
 
 #pragma mark - Getter & Setter
@@ -113,7 +135,7 @@ static const int kDefaultInsets = 2;
 - (UILabel *)textLabel {
     if (!_textLabel) {
         _textLabel = [UILabel new];
-        _textLabel.font = [UIFont systemFontOfSize:12.0];
+        _textLabel.font = [UIFont systemFontOfSize:14.0];
         _textLabel.textColor = GRAY_TEXT_COLOR;
     }
     return _textLabel;

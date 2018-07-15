@@ -7,6 +7,7 @@
 #import "JNAddEventsViewController.h"
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNButtonTagView.h"
 
 static const int kBarButtonWH = 30;
 
@@ -15,6 +16,8 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 @interface JNAddEventsViewController()
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIView *inputFieldLine;
+
+@property (nonatomic, strong) UIView *timeView;
 
 @property (nonatomic, strong) UIButton *typeBtn;
 @property (nonatomic, strong) UIButton *timeBtn;
@@ -84,14 +87,53 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
     }];
 }
 
+- (void) showTimeSelector {
+
+}
+
+- (void) showTypeSelector {
+
+    JNButtonTagView *tagView = [JNButtonTagView new];
+//    [tagView setupTagName:@"个人" AndColor:[UIColor redColor]];
+    [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
+
+    [self.view addSubview:tagView];
+    [tagView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
+        make.left.equalTo(self.typeBtn.mas_left);
+    }];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - Event Response
 
-- (void) close {
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+- (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)selectEventType {
+    if (self.inputField.isFirstResponder) {
+        [self.view endEditing:YES];
+        dispatch_after(0.25, dispatch_get_main_queue(), ^{
+            // 执行动画
+        });
+    }else {
+        // 飞入动画
+        [self showTypeSelector];
+    }
+}
+
+- (void) addEventTime {
+    if (self.inputField.isFirstResponder) {
+        [self.view endEditing:YES];
+    }
 }
 
 #pragma mark - Getter & Setter
@@ -159,6 +201,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         UIImage *iamge = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_typeBtn setImage:iamge forState:UIControlStateNormal];
         _typeBtn.imageView.tintColor = [UIColor colorWithHexString:kBtnNormalColor];
+        [_typeBtn addTarget:self action:@selector(selectEventType) forControlEvents:UIControlEventTouchUpInside];
 
         _typeBtn.layer.cornerRadius = 20;
         _typeBtn.layer.borderWidth = 1;
@@ -173,6 +216,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         UIImage *image = [UIImage imageNamed:@"timer_normal"];
         [_timeBtn setImage:image forState:UIControlStateNormal];
         [_timeBtn setImage:[UIImage imageNamed:@"timer_highlight"] forState:UIControlStateSelected];
+        [_timeBtn addTarget:self action:@selector(addEventTime) forControlEvents:UIControlEventTouchUpInside];
 
         _timeBtn.layer.cornerRadius = 20;
         _timeBtn.layer.borderColor = [UIColor colorWithHexString:kBtnNormalColor].CGColor;
