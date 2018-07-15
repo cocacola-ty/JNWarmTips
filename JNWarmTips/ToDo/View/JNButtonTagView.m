@@ -59,7 +59,7 @@ static const int kDefaultInsets = 2;
 
 }
 
-- (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width {
+- (CGSize) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width {
     self.selectColor = tagColor;
 
     self.circleView.backgroundColor = tagColor;
@@ -99,6 +99,8 @@ static const int kDefaultInsets = 2;
     [self addScaleAnimation];
 
     self.backgroundColor = [UIColor blackColor];
+
+    return CGSizeMake(width, borderViewH);
 }
 
 - (void) addScaleAnimation {

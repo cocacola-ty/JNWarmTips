@@ -8,5 +8,5 @@
 @interface JNButtonTagView : UIButton
 - (void)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor;
 
-- (void)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width;
+- (CGSize)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width;
 @end

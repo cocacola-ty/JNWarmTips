@@ -95,13 +95,16 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
     JNButtonTagView *tagView = [JNButtonTagView new];
 //    [tagView setupTagName:@"个人" AndColor:[UIColor redColor]];
-    [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
+    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
 
     [self.view addSubview:tagView];
     [tagView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
         make.left.equalTo(self.typeBtn.mas_left);
+        make.width.mas_equalTo(tagViewSize.width);
+        make.height.mas_equalTo(tagViewSize.height);
     }];
+    tagView.backgroundColor = [UIColor greenColor];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
