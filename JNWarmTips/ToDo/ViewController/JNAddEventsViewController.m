@@ -94,8 +94,8 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 - (void) showTypeSelector {
 
     JNButtonTagView *tagView = [JNButtonTagView new];
-//    [tagView setupTagName:@"个人" AndColor:[UIColor redColor]];
-    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
+    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor]];
+//    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
 
     [self.view addSubview:tagView];
     [tagView mas_makeConstraints:^(MASConstraintMaker *make) {

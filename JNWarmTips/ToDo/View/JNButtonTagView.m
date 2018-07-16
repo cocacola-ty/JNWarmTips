@@ -35,27 +35,24 @@ static const int kDefaultInsets = 2;
         [self addSubview:self.borderView];
         [self.borderView addSubview:self.textLabel];
 
-        // test
-//        [self setupTagName:@"个人" AndColor:[UIColor redColor]];
     }
     return self;
 }
 
-- (void) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor {
+- (CGSize) setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor {
 
-    self.textLabel.text = tagName;
-    [self.textLabel sizeToFit];
+    CGRect rect = [tagName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:14.0]} context:nil];
 
-    // todo : 使用boundingRect计算
-//    CGRect rect = [tagName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:nil context:nil];
-    CGFloat titleLabelW = self.textLabel.frame.size.width;
-    CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
+    CGFloat titleLabelW = ceilf(rect.size.width);
+    CGFloat titleLabelH = ceilf([UIFont systemFontOfSize:14.0].lineHeight) + kDefaultInsets * 2;
 
-    CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2;
+    CGFloat titleLabelX =  titleLabelH / 2 + kDefaultInsets;  // label的x为箭头的宽度加一个边距
+
+    CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2; // border的宽度 = label的宽加左右留白
 
     CGFloat width = borderViewW + kCircleViewWH + kDefaultLeftMargin;
 
-    [self setupTagName:tagName AndColor:tagColor WithWidth:width];
+    return  [self setupTagName:tagName AndColor:tagColor WithWidth:width];
 
 }
 
@@ -64,22 +61,23 @@ static const int kDefaultInsets = 2;
 
     self.circleView.backgroundColor = tagColor;
     self.textLabel.text = tagName;
-    [self.textLabel sizeToFit];
 
-    CGFloat titleLabelW = width - kDefaultLeftMargin - kDefaultInsets;
-    CGFloat titleLabelH = self.textLabel.frame.size.height + 2;
-    CGFloat titleLabelX = kDefaultLeftMargin + kDefaultInsets;
+    CGFloat fontHeight = ceilf([UIFont systemFontOfSize:14.0].lineHeight);
+    CGFloat borderViewH = fontHeight + kDefaultInsets * 2;
+    CGFloat borderViewW = width - kCircleViewWH - kDefaultLeftMargin;
+    CGFloat arrowWidth = borderViewH / 2;  // 箭头的宽度
 
-    CGFloat borderViewH = titleLabelH + kDefaultInsets * 2;
-    CGFloat borderViewW = titleLabelX + titleLabelW + kDefaultInsets * 2;
+    CGFloat titleLabelH = borderViewH;
+    CGFloat titleLabelX = arrowWidth + kDefaultInsets;
+    CGFloat titleLabelW = borderViewW - titleLabelX - kDefaultInsets - kDefaultInsets;  // 左边间距为 margin + inset 右边间距为 inset + inset
 
     self.bounds = CGRectMake(0, 0, width, borderViewH);
-    self.textLabel.frame = CGRectMake(titleLabelX, kDefaultInsets, titleLabelW, titleLabelH);
+    self.textLabel.frame = CGRectMake(titleLabelX, 0, titleLabelW, titleLabelH);
     self.borderView.frame = CGRectMake(kDefaultLeftMargin + kCircleViewWH, 0, borderViewW, borderViewH);
     self.circleView.frame = CGRectMake(0, borderViewH / 2 - kCircleViewWH / 2, kCircleViewWH, kCircleViewWH);
+
     self.textLabel.textAlignment = NSTextAlignmentCenter;
 
-    CGFloat arrowWidth = titleLabelH / 2;
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, borderViewH / 2)];
     [borderPath addLineToPoint:CGPointMake(arrowWidth, 0)];

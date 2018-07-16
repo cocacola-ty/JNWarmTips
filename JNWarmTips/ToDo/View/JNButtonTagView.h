@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 
 @interface JNButtonTagView : UIButton
-- (void)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor;
+- (CGSize)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor;
 
 - (CGSize)setupTagName:(NSString *)tagName AndColor:(UIColor *)tagColor WithWidth:(CGFloat)width;
 @end
