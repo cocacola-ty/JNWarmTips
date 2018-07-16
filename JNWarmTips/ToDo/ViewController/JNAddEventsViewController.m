@@ -30,6 +30,9 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
 @property (nonatomic, strong) NSArray *allTagModels;
 @property (nonatomic, strong) NSMutableArray *allTagViews;
+@property(nonatomic, assign) BOOL tagSelecting;
+@property (nonatomic, strong) JNEventTypeModel *selectedTypeModel;
+@property (nonatomic, strong) JNButtonTagView *selectedTagView;
 @end
 
 @implementation JNAddEventsViewController
@@ -37,11 +40,11 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = GRAY_BACKGROUND_COLOR;
     self.view.backgroundColor = [UIColor whiteColor];
 
     [self displaySubView];
 
+    [self.inputField becomeFirstResponder];
 }
 
 #pragma mark - Private Method
@@ -97,7 +100,11 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
 }
 
-- (void) showTypeSelector {
+- (void)showTagSelector {
+    if (self.tagSelecting) {
+        return;
+    }
+    self.tagSelecting = YES;
 
     /*
     UIView *containerView = [UIView new];
@@ -116,7 +123,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
      */
 
     // 一行显示两个 位置随机 大小随机
-    self.allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
+
     self.allTagViews = [NSMutableArray array];
 
     CGFloat baseTagViewY = 240;
@@ -146,7 +153,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
         [self.allTagViews addObject:tagview];
 
-        [UIView animateWithDuration:0.35 delay:0.2 usingSpringWithDamping:0.7 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:0.35 delay:0.3 usingSpringWithDamping:0.7 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseIn animations:^{
             tagview.frame = CGRectMake(tagViewX, baseTagViewY, size.width, size.height);
         } completion:^(BOOL finished) {
 
@@ -174,11 +181,11 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         [self.view endEditing:YES];
         dispatch_after(0.25, dispatch_get_main_queue(), ^{
             // 执行动画
-            [self showTypeSelector];
+            [self showTagSelector];
         });
     }else {
         // 飞入动画
-        [self showTypeSelector];
+        [self showTagSelector];
     }
 }
 
@@ -189,7 +196,31 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 }
 
 - (void) selectTag:(JNButtonTagView *)tagView {
+    if (tagView != self.selectedTagView) {
+        self.selectedTagView.selected = !self.selectedTagView.selected;
+        tagView.selected = !tagView.selected;
+        self.selectedTagView = tagView;
 
+        // 获取点击tag的索引
+        NSUInteger index = [self.allTagViews indexOfObject:tagView];
+        // 根据索引获去模型
+        self.selectedTypeModel = [self.allTagModels objectAtIndex:index];
+
+        self.typeBtn.imageView.tintColor = [UIColor colorWithHexString:self.selectedTypeModel.typeColor];
+        self.typeBtn.layer.borderColor = [UIColor colorWithHexString:self.selectedTypeModel.typeColor].CGColor;
+
+        self.tagSelecting = NO;
+        // 隐藏标签
+        for (UIView *view in self.allTagViews) {
+            [UIView animateWithDuration:0.35 animations:^{
+                view.alpha = 0;
+            } completion:^(BOOL finished) {
+                [view removeFromSuperview];
+            }];
+        }
+
+        [self.allTagViews removeAllObjects];
+    }
 }
 #pragma mark - Getter & Setter
 
@@ -278,5 +309,12 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         _timeBtn.layer.borderWidth = 1;
     }
     return _timeBtn;
+}
+
+- (NSArray *)allTagModels {
+    if (!_allTagModels) {
+        _allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
+    }
+    return _allTagModels;
 }
 @end
