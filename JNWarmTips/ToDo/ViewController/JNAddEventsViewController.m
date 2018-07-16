@@ -93,18 +93,33 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
 - (void) showTypeSelector {
 
+    /*
     JNButtonTagView *tagView = [JNButtonTagView new];
-    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor]];
-//    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:80];
+    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:90];
 
     [self.view addSubview:tagView];
     [tagView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
-        make.left.equalTo(self.typeBtn.mas_left);
+        make.centerX.equalTo(self.view.mas_centerX);
         make.width.mas_equalTo(tagViewSize.width);
         make.height.mas_equalTo(tagViewSize.height);
     }];
-    tagView.backgroundColor = [UIColor greenColor];
+     */
+
+    UIView *containerView = [UIView new];
+    containerView.backgroundColor = [UIColor colorWithHexString:@"FFFFFF"];
+    containerView.layer.shadowColor = [UIColor blackColor].CGColor;
+    containerView.layer.shadowOffset = CGSizeMake(0, 0);
+    containerView.layer.shadowOpacity = 0.3;
+    [self.view addSubview:containerView];
+    [containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.height.mas_equalTo(150);
+        make.left.equalTo(self.view.mas_left).offset(50);
+        make.right.equalTo(self.view.mas_right).offset(-50);
+    }];
+
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -126,6 +141,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         [self.view endEditing:YES];
         dispatch_after(0.25, dispatch_get_main_queue(), ^{
             // 执行动画
+            [self showTypeSelector];
         });
     }else {
         // 飞入动画

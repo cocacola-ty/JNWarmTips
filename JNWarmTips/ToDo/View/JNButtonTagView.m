@@ -96,8 +96,6 @@ static const int kDefaultInsets = 2;
     [self.borderView.layer addSublayer:shapeLayer];
     [self addScaleAnimation];
 
-    self.backgroundColor = [UIColor blackColor];
-
     return CGSizeMake(width, borderViewH);
 }
 
