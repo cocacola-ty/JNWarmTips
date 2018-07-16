@@ -8,6 +8,9 @@
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
 #import "JNButtonTagView.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Events.h"
+#import "JNEventTypeModel.h"
 
 static const int kBarButtonWH = 30;
 
@@ -24,6 +27,9 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 
 @property (nonatomic, strong) UIButton *closeBtn;
 @property (nonatomic, strong) UIButton *doneBtn;
+
+@property (nonatomic, strong) NSArray *allTagModels;
+@property (nonatomic, strong) NSMutableArray *allTagViews;
 @end
 
 @implementation JNAddEventsViewController
@@ -94,20 +100,8 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
 - (void) showTypeSelector {
 
     /*
-    JNButtonTagView *tagView = [JNButtonTagView new];
-    CGSize tagViewSize = [tagView setupTagName:@"个人" AndColor:[UIColor redColor] WithWidth:90];
-
-    [self.view addSubview:tagView];
-    [tagView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.width.mas_equalTo(tagViewSize.width);
-        make.height.mas_equalTo(tagViewSize.height);
-    }];
-     */
-
     UIView *containerView = [UIView new];
-    containerView.backgroundColor = [UIColor colorWithHexString:@"FFFFFF"];
+    containerView.backgroundColor = [UIColor whiteColor];
     containerView.layer.shadowColor = [UIColor blackColor].CGColor;
     containerView.layer.shadowOffset = CGSizeMake(0, 0);
     containerView.layer.shadowOpacity = 0.3;
@@ -119,6 +113,45 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         make.left.equalTo(self.view.mas_left).offset(50);
         make.right.equalTo(self.view.mas_right).offset(-50);
     }];
+     */
+
+    // 一行显示两个 位置随机 大小随机
+    self.allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
+    self.allTagViews = [NSMutableArray array];
+
+    CGFloat baseTagViewY = 240;
+    for (int i = 0; i < self.allTagModels.count; ++i) {
+        JNEventTypeModel *typeModel = self.allTagModels[i];
+        JNButtonTagView *tagview = [JNButtonTagView new];
+        UIColor *color = [UIColor colorWithHexString:typeModel.typeColor];
+        CGFloat tagViewWidth = 60 + (arc4random() % 30);
+        CGSize size = [tagview setupTagName:typeModel.typeName AndColor:color WithWidth:tagViewWidth];
+        [tagview addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
+
+        CGFloat tagViewX = (arc4random() % 230) + 30;
+        // 检查这个视图是否会超出屏幕 , 超过屏幕则更为位置为距离屏幕20
+        if ((tagViewX + size.width) > SCREEN_WIDTH) {
+            tagViewX = SCREEN_WIDTH - size.width - 20;
+        }
+        // 检查是否会和上一个视图重合, 如果重合 则下移一行
+        JNButtonTagView *lastTagView = self.allTagViews.lastObject;
+        CGFloat lastX = lastTagView.frame.origin.x;
+        CGFloat lastW = lastTagView.frame.size.width;
+        if ((lastX + lastW + 15) > tagViewX) {
+            baseTagViewY += 50;
+        }
+
+        tagview.frame = CGRectMake(SCREEN_WIDTH, baseTagViewY, size.width, size.height);
+        [self.view addSubview:tagview];
+
+        [self.allTagViews addObject:tagview];
+
+        [UIView animateWithDuration:0.35 delay:0.2 usingSpringWithDamping:0.7 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            tagview.frame = CGRectMake(tagViewX, baseTagViewY, size.width, size.height);
+        } completion:^(BOOL finished) {
+
+        }];
+    }
 
 }
 
@@ -155,6 +188,9 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
     }
 }
 
+- (void) selectTag:(JNButtonTagView *)tagView {
+
+}
 #pragma mark - Getter & Setter
 
 - (UITextField *)inputField {
