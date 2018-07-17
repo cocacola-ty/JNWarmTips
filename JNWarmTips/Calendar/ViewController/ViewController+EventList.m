@@ -13,6 +13,7 @@
 #import "JNAddEventViewController.h"
 #import "JNAddEventTransitionAnimator.h"
 #import "JNAddEventsViewController.h"
+#import "JNAddEventStyleOneViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 
@@ -62,25 +63,41 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
 - (void) addEvent {
 
-    __weak typeof(self) weakSelf = self;
-    JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
-    addEventViewController.transitioningDelegate = self;
-    addEventViewController.finishBlock = ^(NSString *text, NSString *eventTypeId, NSString *eventTypeColor) {
+    NSInteger selectStyle = 1;
 
-        // 插入数据库
-        [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay AndEventTypeId:eventTypeId AndEventColor:eventTypeColor];
-        [weakSelf reloadEventList];
+    switch (selectStyle) {
+        case 1: {
+            JNAddEventStyleOneViewController *addEventStyleOneViewController = [JNAddEventStyleOneViewController new];
+            [self presentViewController:addEventStyleOneViewController animated:YES completion:nil];
+        }
+            break;
+        case 2: {
+            JNAddEventsViewController *addEventsViewController = [[JNAddEventsViewController alloc] init];
+            addEventsViewController.transitioningDelegate = self;
+            [self presentViewController:addEventsViewController animated:YES completion:nil];
+        }
+            break;
+        default: {
+            __weak typeof(self) weakSelf = self;
+            JNAddEventViewController *addEventViewController = [[JNAddEventViewController alloc] init];
+            addEventViewController.transitioningDelegate = self;
+            addEventViewController.finishBlock = ^(NSString *text, NSString *eventTypeId, NSString *eventTypeColor) {
 
-        // 刷新日历
-        weakSelf.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor]; // 重新拉取数据
-        NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];
-        [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
+                // 插入数据库
+                [[JNDBManager shareInstance] addEventContent:text AndShowDate:self.currentSelectDay AndEventTypeId:eventTypeId AndEventColor:eventTypeColor];
+                [weakSelf reloadEventList];
 
-    };
+                // 刷新日历
+                weakSelf.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor]; // 重新拉取数据
+                NSArray *selectItems = [weakSelf.collectionView indexPathsForSelectedItems];
+                [weakSelf.collectionView reloadItemsAtIndexPaths:selectItems];
 
-    JNAddEventsViewController *addEventsViewController = [[JNAddEventsViewController alloc] init];
-    addEventsViewController.transitioningDelegate = self;
-    [self presentViewController:addEventsViewController animated:YES completion:nil];
+            };
+        }
+    }
+
+    return;
+
 }
 
 - (void) reloadEventList {

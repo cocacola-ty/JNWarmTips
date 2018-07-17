@@ -113,7 +113,7 @@
 - (UIButton *)rightBtn {
     if (!_rightBtn) {
         _rightBtn = [UIButton new];
-        _rightBtn.backgroundColor = [UIColor redColor];
+        [_rightBtn setImage:[UIImage imageNamed:@"event_list"] forState:UIControlStateNormal];
         [_rightBtn addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _rightBtn;

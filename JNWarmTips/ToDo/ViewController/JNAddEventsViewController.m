@@ -117,7 +117,7 @@ static NSString *const kBtnNormalColor = @"F2F2F4";
         make.top.equalTo(self.typeBtn.mas_bottom).offset(40);
         make.centerX.equalTo(self.view.mas_centerX);
         make.height.mas_equalTo(150);
-        make.left.equalTo(self.view.mas_left).offset(50);
+        make.left.equalTo(self.view.mas_left).offset(50)
         make.right.equalTo(self.view.mas_right).offset(-50);
     }];
      */
