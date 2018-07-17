@@ -20,6 +20,7 @@ static const int kStarImageViewWH = 40;
 @property (nonatomic, strong) UIImageView *starImageView;
 
 @property (nonatomic, strong) UIView *eventView;
+@property (nonatomic, strong) UIView *timeView;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -54,6 +55,18 @@ static const int kStarImageViewWH = 40;
         make.right.equalTo(self.view.mas_right).offset(-30);
         make.height.mas_equalTo(60);
     }];
+
+    [self.view addSubview:self.timeView];
+    [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.eventView.mas_bottom).offset(40);
+        make.left.equalTo(self.view.mas_left).offset(40);
+        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.height.mas_equalTo(60);
+    }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Getter & Setter
@@ -107,12 +120,30 @@ static const int kStarImageViewWH = 40;
     return _eventView;
 }
 
+- (UIView *)timeView {
+    if (!_timeView) {
+        _timeView = [UIView new];
+        [self configCommonView:_timeView AndTitle:@"TIME"];
+
+        UIImageView *iconImageView = [UIImageView new];
+        iconImageView.image = [UIImage imageNamed:@"timer_highlight"];
+        [_timeView addSubview:iconImageView];
+        [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_timeView.mas_left);
+            make.width.height.mas_equalTo(20);
+            make.centerY.equalTo(_timeView.mas_centerY);
+        }];
+    }
+    return _timeView;
+}
+
 - (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title{
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = title;
     titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
     titleLabel.textColor = [UIColor colorWithHexString:@"c8c8c8"];
-    [_eventView addSubview:titleLabel];
+    titleLabel.textColor = MAIN_COLOR;
+    [superView addSubview:titleLabel];
     [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(superView.mas_top);
         make.left.equalTo(superView.mas_left).offset(35);
@@ -120,7 +151,8 @@ static const int kStarImageViewWH = 40;
 
     UIView *line = [UIView new];
     line.backgroundColor = GRAY_BACKGROUND_COLOR;
-    [_eventView addSubview:line];
+    line.backgroundColor = MAIN_COLOR;
+    [superView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(1);
         make.left.equalTo(superView.mas_left).offset(35);
