@@ -62,7 +62,9 @@ static const int kStarImageViewWH = 40;
     if (!_topImageView) {
         _topImageView = [UIImageView new];
 //        _topImageView.backgroundColor = MAIN_COLOR;
+        _topImageView.image = [UIImage imageNamed:@"group_bg2.jpg"];
 
+        /*
         CAGradientLayer *gradientLayer = [CAGradientLayer layer];
         gradientLayer.colors = @[(__bridge id) MAIN_COLOR.CGColor, (__bridge id)[UIColor colorWithHexString:@"F08080"].CGColor, (__bridge id) [UIColor colorWithHexString:@"FF4500"].CGColor];
         gradientLayer.locations = @[@0.3, @0.6, @1.0];
@@ -70,6 +72,7 @@ static const int kStarImageViewWH = 40;
         gradientLayer.endPoint = CGPointMake(1.0, 1.0);
         gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, kTopImageViewHeight);
         [_topImageView.layer addSublayer:gradientLayer];
+         */
     }
     return _topImageView;
 }
@@ -77,10 +80,12 @@ static const int kStarImageViewWH = 40;
 - (UIImageView *)starImageView {
     if (!_starImageView) {
         _starImageView = [UIImageView new];
-        _starImageView.image = [UIImage imageNamed:@"type"];
+        _starImageView.image = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _starImageView.tintColor = GRAY_BACKGROUND_COLOR;
+
         _starImageView.layer.cornerRadius = kStarImageViewWH / 2;
         _starImageView.layer.borderWidth = 1;
-        _starImageView.layer.borderColor = MAIN_COLOR.CGColor;
+        _starImageView.layer.borderColor = GRAY_BACKGROUND_COLOR.CGColor;
     }
     return _starImageView;
 }
@@ -91,9 +96,12 @@ static const int kStarImageViewWH = 40;
 //        _eventView.backgroundColor = GRAY_BACKGROUND_COLOR;
         [self configCommonView:_eventView AndTitle:@"EVENT"];
         UITextField *inputField = [[UITextField alloc] init];
+        inputField.placeholder = @"请输入内容";
         [_eventView addSubview:inputField];
         [inputField mas_makeConstraints:^(MASConstraintMaker *make) {
-
+            make.left.equalTo(self->_eventView.mas_left).offset(35);
+            make.height.mas_equalTo(44);
+            make.bottom.equalTo(self->_eventView.mas_bottom).offset(-1);
         }];
     }
     return _eventView;
