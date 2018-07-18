@@ -21,6 +21,7 @@ static const int kStarImageViewWH = 40;
 
 @property (nonatomic, strong) UIView *eventView;
 @property (nonatomic, strong) UIView *timeView;
+@property (nonatomic, strong) UIView *tagView;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -59,8 +60,16 @@ static const int kStarImageViewWH = 40;
     [self.view addSubview:self.timeView];
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.eventView.mas_bottom).offset(40);
-        make.left.equalTo(self.view.mas_left).offset(40);
-        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.width.equalTo(self.eventView.mas_width);
+        make.left.equalTo(self.eventView.mas_left);
+        make.height.mas_equalTo(50);
+    }];
+
+    [self.view addSubview:self.tagView];
+    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.timeView.mas_bottom).offset(40);
+        make.left.equalTo(self.eventView.mas_left);
+        make.width.equalTo(self.eventView.mas_width);
         make.height.mas_equalTo(60);
     }];
 }
@@ -107,7 +116,7 @@ static const int kStarImageViewWH = 40;
     if (!_eventView) {
         _eventView = [UIView new];
 //        _eventView.backgroundColor = GRAY_BACKGROUND_COLOR;
-        [self configCommonView:_eventView AndTitle:@"EVENT"];
+        [self configCommonView:_eventView AndTitle:@"EVENT" WithImageName:@"event_list_full"];
         UITextField *inputField = [[UITextField alloc] init];
         inputField.placeholder = @"请输入内容";
         [_eventView addSubview:inputField];
@@ -123,21 +132,31 @@ static const int kStarImageViewWH = 40;
 - (UIView *)timeView {
     if (!_timeView) {
         _timeView = [UIView new];
-        [self configCommonView:_timeView AndTitle:@"TIME"];
+        [self configCommonView:_timeView AndTitle:@"TIME" WithImageName:@"timer_highlight"];
 
-        UIImageView *iconImageView = [UIImageView new];
-        iconImageView.image = [UIImage imageNamed:@"timer_highlight"];
-        [_timeView addSubview:iconImageView];
-        [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(_timeView.mas_left);
-            make.width.height.mas_equalTo(20);
-            make.centerY.equalTo(_timeView.mas_centerY);
+        UILabel *timeLabel = [UILabel new];
+        timeLabel.text = @"12:00";
+        timeLabel.textColor = GRAY_TEXT_COLOR;
+        [_timeView addSubview:timeLabel];
+        [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self->_timeView.mas_centerY).offset(3);
+            make.centerX.equalTo(self->_timeView.mas_centerX);
         }];
+
+        // todo: 添加自定义开关视图
     }
     return _timeView;
 }
 
-- (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title{
+- (UIView *)tagView {
+    if (!_tagView) {
+        _tagView = [UIView new];
+        [self configCommonView:_tagView AndTitle:@"TAG" WithImageName:@"tag_full"];
+    }
+    return _tagView;
+}
+
+- (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title WithImageName:(NSString *)imageName{
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = title;
     titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
@@ -158,6 +177,15 @@ static const int kStarImageViewWH = 40;
         make.left.equalTo(superView.mas_left).offset(35);
         make.right.equalTo(superView.mas_right);
         make.bottom.equalTo(superView.mas_bottom);
+    }];
+
+    UIImageView *iconImageView = [UIImageView new];
+    iconImageView.image = [UIImage imageNamed:imageName];
+    [superView addSubview:iconImageView];
+    [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(superView.mas_left);
+        make.width.height.mas_equalTo(20);
+        make.centerY.equalTo(superView.mas_centerY);
     }];
 }
 
