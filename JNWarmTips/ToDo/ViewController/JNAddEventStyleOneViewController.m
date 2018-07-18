@@ -72,6 +72,19 @@ static const int kStarImageViewWH = 40;
         make.width.equalTo(self.eventView.mas_width);
         make.height.mas_equalTo(60);
     }];
+
+    UIButton *doneBtn = [UIButton new];
+    [doneBtn setTitle:@"ADD" forState:UIControlStateNormal];
+    doneBtn.backgroundColor = MAIN_COLOR;
+    doneBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
+    doneBtn.layer.cornerRadius = 4;
+    [self.view addSubview:doneBtn];
+    [doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(40);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-30);
+    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
@@ -115,7 +128,6 @@ static const int kStarImageViewWH = 40;
 - (UIView *)eventView {
     if (!_eventView) {
         _eventView = [UIView new];
-//        _eventView.backgroundColor = GRAY_BACKGROUND_COLOR;
         [self configCommonView:_eventView AndTitle:@"EVENT" WithImageName:@"event_list_full"];
         UITextField *inputField = [[UITextField alloc] init];
         inputField.placeholder = @"请输入内容";
@@ -157,6 +169,7 @@ static const int kStarImageViewWH = 40;
 }
 
 - (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title WithImageName:(NSString *)imageName{
+
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = title;
     titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
