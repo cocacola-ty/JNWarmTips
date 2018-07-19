@@ -28,7 +28,7 @@ static const int kTagViewHeight = 80;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
 
-@property (nonatomic, strong) NSArray *allTagModels;
+@property (nonatomic, strong) NSArray<JNEventTypeModel *> *allTagModels;
 @property (nonatomic, strong) UIButton *selectedTagBtn;
 @property (nonatomic, strong) JNEventTypeModel *selectedTagModel;
 @property (nonatomic, strong) NSMutableArray *allTagBtns;
@@ -54,7 +54,8 @@ static const int kTagViewHeight = 80;
 
     [self.view addSubview:self.starImageView];
     [self.starImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.view.mas_right).offset(-30);
+//        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.centerX.equalTo(self.topImageView.mas_centerX);
         make.centerY.equalTo(self.topImageView.mas_bottom);
         make.width.height.mas_equalTo(kStarImageViewWH);
     }];
@@ -118,7 +119,7 @@ static const int kTagViewHeight = 80;
     btn.selected = YES;
 
     NSInteger index = [self.allTagBtns indexOfObject:btn];
-    JNEventTypeModel *typeModel = [self.allTagModels objectAtIndex:index];
+    JNEventTypeModel *typeModel = (JNEventTypeModel *)[self.allTagModels objectAtIndex:index];
     self.selectedTagModel = typeModel;
     btn.layer.borderColor = [UIColor colorWithHexString:typeModel.typeColor].CGColor;
     [self.starImageView setTintColor:[UIColor colorWithHexString:typeModel.typeColor]];
@@ -132,6 +133,18 @@ static const int kTagViewHeight = 80;
     if (!_topImageView) {
         _topImageView = [UIImageView new];
         _topImageView.image = [UIImage imageNamed:@"group_bg2.jpg"];
+        UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+        [bezierPath moveToPoint:CGPointMake(0, 0)];
+        [bezierPath addLineToPoint:CGPointMake(0, kTopImageViewHeight - 40)];
+        [bezierPath addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, kTopImageViewHeight - 40) controlPoint:CGPointMake(SCREEN_WIDTH / 2, kTopImageViewHeight+30)];
+        [bezierPath addLineToPoint:CGPointMake(SCREEN_WIDTH, 0)];
+        [bezierPath closePath];
+
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = bezierPath.CGPath;
+        shapeLayer.fillColor = [UIColor redColor].CGColor;
+
+        _topImageView.layer.mask = shapeLayer;
     }
     return _topImageView;
 }
@@ -141,6 +154,7 @@ static const int kTagViewHeight = 80;
         _starImageView = [UIImageView new];
         _starImageView.image = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _starImageView.tintColor = GRAY_BACKGROUND_COLOR;
+        _starImageView.alpha = 0.6;
 
         _starImageView.layer.cornerRadius = kStarImageViewWH / 2;
         _starImageView.layer.borderWidth = 1;
