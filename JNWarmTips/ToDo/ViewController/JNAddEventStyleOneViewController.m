@@ -29,6 +29,9 @@ static const int kTagViewHeight = 80;
 @property (nonatomic, strong) UIView *tagView;
 
 @property (nonatomic, strong) NSArray *allTagModels;
+@property (nonatomic, strong) UIButton *selectedTagBtn;
+@property (nonatomic, strong) JNEventTypeModel *selectedTagModel;
+@property (nonatomic, strong) NSMutableArray *allTagBtns;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -97,14 +100,30 @@ static const int kTagViewHeight = 80;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
 //    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.tagView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(50);
-    }];
-    [UIView animateWithDuration:0.35 animations:^{
-        self.timeView.alpha = 1;
-        [self.view layoutIfNeeded];
-        [self.view setNeedsUpdateConstraints];
-    }];
+//    [self.tagView mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.height.mas_equalTo(50);
+//    }];
+//    [UIView animateWithDuration:0.35 animations:^{
+//        self.timeView.alpha = 1;
+//        [self.view layoutIfNeeded];
+//        [self.view setNeedsUpdateConstraints];
+//    }];
+}
+
+- (void) selectTag:(UIButton *)btn {
+
+    self.selectedTagBtn.layer.borderColor = GRAY_BACKGROUND_COLOR.CGColor;
+    self.selectedTagBtn.selected = NO;
+    self.selectedTagBtn = btn;
+    btn.selected = YES;
+
+    NSInteger index = [self.allTagBtns indexOfObject:btn];
+    JNEventTypeModel *typeModel = [self.allTagModels objectAtIndex:index];
+    self.selectedTagModel = typeModel;
+    btn.layer.borderColor = [UIColor colorWithHexString:typeModel.typeColor].CGColor;
+    [self.starImageView setTintColor:[UIColor colorWithHexString:typeModel.typeColor]];
+    self.starImageView.layer.borderColor = [UIColor colorWithHexString:typeModel.typeColor].CGColor;
+
 }
 
 #pragma mark - Getter & Setter
@@ -171,16 +190,21 @@ static const int kTagViewHeight = 80;
         [self configCommonView:_tagView AndTitle:@"TAG" WithImageName:@"tag_full"];
 
         static CGFloat offset = 0;
+        self.allTagBtns = [NSMutableArray array];
         for (JNEventTypeModel *model in self.allTagModels) {
             UIButton *tagBtn = [UIButton  new];
             tagBtn.font = [UIFont systemFontOfSize:14.0];
             tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
             [tagBtn setTitle:[model.typeName substringToIndex:1] forState:UIControlStateNormal];
+            [tagBtn addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
 
             [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+            [tagBtn setTitleColor:[UIColor colorWithHexString:model.typeColor] forState:UIControlStateSelected];
+
             tagBtn.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
             tagBtn.layer.borderWidth = 1;
             [_tagView addSubview:tagBtn];
+            [self.allTagBtns addObject:tagBtn];
 
 
             UILabel *nameLabel = [UILabel new];
