@@ -23,7 +23,7 @@ static const int kTagViewHeight = 80;
 
 static const int kTimeSwitchViewHeight = 20;
 
-@interface JNAddEventStyleOneViewController ()
+@interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
 
@@ -32,6 +32,7 @@ static const int kTimeSwitchViewHeight = 20;
 @property (nonatomic, strong) UIView *tagView;
 @property (nonatomic, strong) UIView *timeSwitchView;
 @property (nonatomic, strong) JNSwitchView *switchView;
+@property (nonatomic, strong) UIButton *doneBtn;
 
 @property (nonatomic, strong) NSArray<JNEventTypeModel *> *allTagModels;
 @property (nonatomic, strong) UIButton *selectedTagBtn;
@@ -46,6 +47,7 @@ static const int kTimeSwitchViewHeight = 20;
 
     self.view.backgroundColor = [UIColor whiteColor];
     [self displaySubviews];
+    [self selectTag:self.allTagBtns.firstObject];
 }
 
 - (void) displaySubviews {
@@ -102,8 +104,8 @@ static const int kTimeSwitchViewHeight = 20;
     }];
 
     UIButton *doneBtn = [UIButton new];
+    self.doneBtn = doneBtn;
     [doneBtn setTitle:@"ADD" forState:UIControlStateNormal];
-    doneBtn.backgroundColor = MAIN_COLOR;
     doneBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
     doneBtn.layer.cornerRadius = 4;
     [self.view addSubview:doneBtn];
@@ -130,20 +132,6 @@ static const int kTimeSwitchViewHeight = 20;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//    [self.tagView mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.height.mas_equalTo(50);
-//    }];
-//    [UIView animateWithDuration:0.35 animations:^{
-//        self.timeView.alpha = 1;
-//        [self.view layoutIfNeeded];
-//        [self.view setNeedsUpdateConstraints];
-//    }];
-
-//    [self.timeSwitchView mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.width.mas_equalTo(100);
-//    }];
-
 }
 
 - (void) selectTag:(UIButton *)btn {
@@ -160,6 +148,23 @@ static const int kTimeSwitchViewHeight = 20;
     [self.starImageView setTintColor:[UIColor colorWithHexString:typeModel.typeColor]];
     self.starImageView.layer.borderColor = [UIColor colorWithHexString:typeModel.typeColor].CGColor;
 
+}
+
+#pragma mark - Delegate & DataSource
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (inputString.length) {
+        self.doneBtn.backgroundColor = MAIN_COLOR;
+    } else {
+        self.doneBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
+    }
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - Getter & Setter
@@ -215,6 +220,7 @@ static const int kTimeSwitchViewHeight = 20;
         [self configCommonView:_eventView AndTitle:@"EVENT" WithImageName:@"event_list_full"];
         UITextField *inputField = [[UITextField alloc] init];
         inputField.placeholder = @"请输入内容";
+        inputField.delegate = self;
         [_eventView addSubview:inputField];
         [inputField mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self->_eventView.mas_left).offset(35);
