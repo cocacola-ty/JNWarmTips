@@ -10,10 +10,15 @@
 #import "JNAddEventStyleOneViewController.h"
 #import "JNWarmTipsPublicFile.h"
 #import "UIColor+Extension.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Events.h"
+#import "JNEventTypeModel.h"
 
 static const int kTopImageViewHeight = 180;
 
 static const int kStarImageViewWH = 40;
+
+static const int kTagViewHeight = 80;
 
 @interface JNAddEventStyleOneViewController ()
 @property (nonatomic, strong) UIImageView *topImageView;
@@ -22,6 +27,8 @@ static const int kStarImageViewWH = 40;
 @property (nonatomic, strong) UIView *eventView;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
+
+@property (nonatomic, strong) NSArray *allTagModels;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -57,21 +64,22 @@ static const int kStarImageViewWH = 40;
         make.height.mas_equalTo(60);
     }];
 
+    [self.view addSubview:self.tagView];
+    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.eventView.mas_bottom).offset(25);
+        make.left.equalTo(self.eventView.mas_left);
+        make.width.equalTo(self.eventView.mas_width);
+        make.height.mas_equalTo(kTagViewHeight);
+    }];
+
     [self.view addSubview:self.timeView];
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.eventView.mas_bottom).offset(40);
+        make.top.equalTo(self.tagView.mas_bottom).offset(40);
         make.width.equalTo(self.eventView.mas_width);
         make.left.equalTo(self.eventView.mas_left);
         make.height.mas_equalTo(50);
     }];
-
-    [self.view addSubview:self.tagView];
-    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.timeView.mas_bottom).offset(40);
-        make.left.equalTo(self.eventView.mas_left);
-        make.width.equalTo(self.eventView.mas_width);
-        make.height.mas_equalTo(60);
-    }];
+//    self.timeView.alpha = 0;
 
     UIButton *doneBtn = [UIButton new];
     [doneBtn setTitle:@"ADD" forState:UIControlStateNormal];
@@ -88,7 +96,15 @@ static const int kStarImageViewWH = 40;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.tagView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(50);
+    }];
+    [UIView animateWithDuration:0.35 animations:^{
+        self.timeView.alpha = 1;
+        [self.view layoutIfNeeded];
+        [self.view setNeedsUpdateConstraints];
+    }];
 }
 
 #pragma mark - Getter & Setter
@@ -96,18 +112,7 @@ static const int kStarImageViewWH = 40;
 - (UIImageView *)topImageView {
     if (!_topImageView) {
         _topImageView = [UIImageView new];
-//        _topImageView.backgroundColor = MAIN_COLOR;
         _topImageView.image = [UIImage imageNamed:@"group_bg2.jpg"];
-
-        /*
-        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-        gradientLayer.colors = @[(__bridge id) MAIN_COLOR.CGColor, (__bridge id)[UIColor colorWithHexString:@"F08080"].CGColor, (__bridge id) [UIColor colorWithHexString:@"FF4500"].CGColor];
-        gradientLayer.locations = @[@0.3, @0.6, @1.0];
-        gradientLayer.startPoint = CGPointMake(0, 0);
-        gradientLayer.endPoint = CGPointMake(1.0, 1.0);
-        gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, kTopImageViewHeight);
-        [_topImageView.layer addSublayer:gradientLayer];
-         */
     }
     return _topImageView;
 }
@@ -151,7 +156,7 @@ static const int kStarImageViewWH = 40;
         timeLabel.textColor = GRAY_TEXT_COLOR;
         [_timeView addSubview:timeLabel];
         [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self->_timeView.mas_centerY).offset(3);
+            make.centerY.equalTo(self->_timeView.mas_centerY).offset(5);
             make.centerX.equalTo(self->_timeView.mas_centerX);
         }];
 
@@ -164,6 +169,40 @@ static const int kStarImageViewWH = 40;
     if (!_tagView) {
         _tagView = [UIView new];
         [self configCommonView:_tagView AndTitle:@"TAG" WithImageName:@"tag_full"];
+
+        static CGFloat offset = 0;
+        for (JNEventTypeModel *model in self.allTagModels) {
+            UIButton *tagBtn = [UIButton  new];
+            tagBtn.font = [UIFont systemFontOfSize:14.0];
+            tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+            [tagBtn setTitle:[model.typeName substringToIndex:1] forState:UIControlStateNormal];
+
+            [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+            tagBtn.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
+            tagBtn.layer.borderWidth = 1;
+            [_tagView addSubview:tagBtn];
+
+
+            UILabel *nameLabel = [UILabel new];
+            nameLabel.font = [UIFont systemFontOfSize:12.0];
+            nameLabel.text = model.typeName;
+            [_tagView addSubview:nameLabel];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.equalTo(_tagView.mas_bottom).offset(-6);
+                make.left.equalTo(self->_tagView.mas_left).offset(35 + offset);
+            }];
+
+            CGRect rect = [model.typeName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]} context:nil];
+            [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.equalTo(nameLabel.mas_top).offset(-4);
+                make.centerX.equalTo(nameLabel.mas_centerX);
+                make.width.height.mas_equalTo(30);
+            }];
+            tagBtn.layer.cornerRadius = (rect.size.height + 4) / 2;
+            tagBtn.layer.cornerRadius = 15;
+
+            offset += 50;
+        }
     }
     return _tagView;
 }
@@ -202,4 +241,10 @@ static const int kStarImageViewWH = 40;
     }];
 }
 
+- (NSArray *)allTagModels {
+    if (!_allTagModels) {
+        _allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
+    }
+    return _allTagModels;
+}
 @end
