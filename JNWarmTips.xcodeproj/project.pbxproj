@@ -21,6 +21,7 @@
 		61C9AF9120FDE41E002F4A69 /* JNAddEventStyleOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */; };
 		61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E4640220A002730045C737 /* HannotateSC-W5.ttf */; };
 		8B8D803497D44711656242FD /* JNDBManager+Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88EC2C8D6080D16B04B5 /* JNDBManager+Group.m */; };
+		8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */; };
 		8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */; };
 		8B8D81F39C44C415A95C970A /* JNItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88E67434D3790068CFA2 /* JNItemModel.m */; };
 		8B8D82B9B68F61F865807318 /* JNButtonTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */; };
@@ -86,6 +87,7 @@
 		61C9AF8F20FDE41E002F4A69 /* JNAddEventStyleOneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNAddEventStyleOneViewController.h; sourceTree = "<group>"; };
 		61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddEventStyleOneViewController.m; sourceTree = "<group>"; };
 		61E4640220A002730045C737 /* HannotateSC-W5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HannotateSC-W5.ttf"; sourceTree = "<group>"; };
+		8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSwitchView.h; sourceTree = "<group>"; };
 		8B8D806D8F1DF3DC4714B271 /* JNToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoListViewController.h; sourceTree = "<group>"; };
 		8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoGroupListViewController.m; sourceTree = "<group>"; };
 		8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoItemCell.m; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 		8B8D8BDFC346DA698F577D49 /* JNEventTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventTypeModel.h; sourceTree = "<group>"; };
 		8B8D8C02395800B33CEA4D9D /* JNDBManager+Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JNDBManager+Items.h"; sourceTree = "<group>"; };
 		8B8D8C11F809578247CF45DB /* ViewController+EventList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+EventList.m"; sourceTree = "<group>"; };
+		8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSwitchView.m; sourceTree = "<group>"; };
 		8B8D8C544E8CCA8E17938B80 /* JNGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNGroupModel.h; sourceTree = "<group>"; };
 		8B8D8C9B183B31163C81DA8E /* JNEventEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventEditorViewController.h; sourceTree = "<group>"; };
 		8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddEventTransitionAnimator.m; sourceTree = "<group>"; };
@@ -384,6 +387,8 @@
 				8B8D8E03E4770AF8F97A3CC6 /* JNButtonTagView.h */,
 				8B8D831EB5111E9B5E39E84D /* JNWaringAlertView.m */,
 				8B8D8FE18FBDC03BCBEB2823 /* JNWaringAlertView.h */,
+				8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */,
+				8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -602,6 +607,7 @@
 				8B8D8DB882312F8A45628321 /* JNAddEventTransitionAnimator.m in Sources */,
 				8B8D882F451CBDCEB541FDB1 /* JNEventTimeLineViewController.m in Sources */,
 				8B8D87F0B6F800AB773D238F /* JNAddEventsViewController.m in Sources */,
+				8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

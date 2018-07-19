@@ -13,12 +13,15 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
 #import "JNEventTypeModel.h"
+#import "JNSwitchView.h"
 
 static const int kTopImageViewHeight = 180;
 
 static const int kStarImageViewWH = 40;
 
 static const int kTagViewHeight = 80;
+
+static const int kTimeSwitchViewHeight = 20;
 
 @interface JNAddEventStyleOneViewController ()
 @property (nonatomic, strong) UIImageView *topImageView;
@@ -27,6 +30,8 @@ static const int kTagViewHeight = 80;
 @property (nonatomic, strong) UIView *eventView;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
+@property (nonatomic, strong) UIView *timeSwitchView;
+@property (nonatomic, strong) JNSwitchView *switchView;
 
 @property (nonatomic, strong) NSArray<JNEventTypeModel *> *allTagModels;
 @property (nonatomic, strong) UIButton *selectedTagBtn;
@@ -83,7 +88,18 @@ static const int kTagViewHeight = 80;
         make.left.equalTo(self.eventView.mas_left);
         make.height.mas_equalTo(50);
     }];
-//    self.timeView.alpha = 0;
+    self.timeView.alpha = 0;
+
+    JNSwitchView *switchView = [JNSwitchView new];
+    self.switchView = switchView;
+    [switchView addTarget:self action:@selector(showTime) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:switchView];
+    [switchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(kTimeSwitchViewHeight);
+        make.top.equalTo(self.tagView.mas_bottom).offset(32);
+        make.right.equalTo(self.view.mas_right).offset(-30);
+    }];
 
     UIButton *doneBtn = [UIButton new];
     [doneBtn setTitle:@"ADD" forState:UIControlStateNormal];
@@ -99,6 +115,20 @@ static const int kTagViewHeight = 80;
     }];
 }
 
+- (void) showTime {
+    self.switchView.on = !self.switchView.on;
+
+    if (self.switchView.on) {
+        [UIView animateWithDuration:0.35 animations:^{
+            self.timeView.alpha = 1;
+        }];
+    } else {
+        [UIView animateWithDuration:0.35 animations:^{
+            self.timeView.alpha = 0;
+        }];
+    }
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
 //    [self dismissViewControllerAnimated:YES completion:nil];
 //    [self.tagView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -109,6 +139,11 @@ static const int kTagViewHeight = 80;
 //        [self.view layoutIfNeeded];
 //        [self.view setNeedsUpdateConstraints];
 //    }];
+
+//    [self.timeSwitchView mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.width.mas_equalTo(100);
+//    }];
+
 }
 
 - (void) selectTag:(UIButton *)btn {
@@ -145,6 +180,17 @@ static const int kTagViewHeight = 80;
         shapeLayer.fillColor = [UIColor redColor].CGColor;
 
         _topImageView.layer.mask = shapeLayer;
+
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.text = @"ADD  EVENT";
+        titleLabel.alpha = 0.6;
+        titleLabel.font = [UIFont boldSystemFontOfSize:22.0];
+        titleLabel.textColor = MAIN_COLOR;
+        [_topImageView addSubview:titleLabel];
+        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self->_topImageView.mas_centerX);
+            make.top.equalTo(self->_topImageView.mas_top).offset(80);
+        }];
     }
     return _topImageView;
 }
@@ -259,6 +305,7 @@ static const int kTagViewHeight = 80;
     }];
 
     UIView *line = [UIView new];
+    line.alpha = 0.6;
     line.backgroundColor = GRAY_BACKGROUND_COLOR;
     line.backgroundColor = MAIN_COLOR;
     [superView addSubview:line];
@@ -277,6 +324,29 @@ static const int kTagViewHeight = 80;
         make.width.height.mas_equalTo(20);
         make.centerY.equalTo(superView.mas_centerY);
     }];
+}
+
+- (UIView *)timeSwitchView {
+    if (!_timeSwitchView) {
+        _timeSwitchView = [UIView new];
+        _timeSwitchView.backgroundColor = [UIColor clearColor];
+
+        _timeSwitchView.layer.cornerRadius = kTimeSwitchViewHeight / 2;
+        _timeSwitchView.layer.borderColor = MAIN_COLOR.CGColor;
+        _timeSwitchView.layer.borderWidth = 1;
+
+        UIView *circleView = [UIView new];
+        circleView.backgroundColor = MAIN_COLOR;
+        circleView.layer.cornerRadius = 7;
+        [_timeSwitchView addSubview:circleView];
+        [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(14);
+            make.centerY.equalTo(self->_timeSwitchView.mas_centerY);
+            make.left.equalTo(self->_timeSwitchView.mas_left).offset(5);
+        }];
+
+    }
+    return _timeSwitchView;
 }
 
 - (NSArray *)allTagModels {
