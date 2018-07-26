@@ -23,6 +23,8 @@ static const int kTagViewHeight = 80;
 
 static const int kTimeSwitchViewHeight = 20;
 
+static const int kCloseBtnWH = 30;
+
 @interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
@@ -33,6 +35,7 @@ static const int kTimeSwitchViewHeight = 20;
 @property (nonatomic, strong) UIView *timeSwitchView;
 @property (nonatomic, strong) JNSwitchView *switchView;
 @property (nonatomic, strong) UIButton *doneBtn;
+@property (nonatomic, strong) UIButton *closeBtn;
 
 @property (nonatomic, strong) NSArray<JNEventTypeModel *> *allTagModels;
 @property (nonatomic, strong) UIButton *selectedTagBtn;
@@ -115,6 +118,13 @@ static const int kTimeSwitchViewHeight = 20;
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(self.view.mas_bottom).offset(-30);
     }];
+
+    [self.view addSubview:self.closeBtn];
+    [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).offset(40);
+        make.left.equalTo(self.view.mas_left).offset(20);
+        make.width.and.height.mas_equalTo(kCloseBtnWH);
+    }];
 }
 
 - (void) showTime {
@@ -149,6 +159,10 @@ static const int kTimeSwitchViewHeight = 20;
     self.starImageView.layer.borderColor = [UIColor colorWithHexString:typeModel.typeColor].CGColor;
 
 }
+
+- (void)close {
+    [self dismissViewControllerAnimated:YES completion:nil];
+};
 
 #pragma mark - Delegate & DataSource
 
@@ -360,5 +374,39 @@ static const int kTimeSwitchViewHeight = 20;
         _allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
     }
     return _allTagModels;
+}
+
+- (UIButton *)closeBtn {
+    if (!_closeBtn) {
+        _closeBtn = [[UIButton alloc] init];
+        [_closeBtn addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+        _closeBtn.layer.cornerRadius = kCloseBtnWH / 2;
+        _closeBtn.layer.borderColor = [UIColor colorWithHexString:@"C4c4c4"].CGColor;
+        _closeBtn.layer.borderWidth = 1;
+        _closeBtn.alpha = 0.8;
+        _closeBtn.backgroundColor = [UIColor clearColor];
+
+        CGPoint centerPoint = CGPointMake(kCloseBtnWH / 2, kCloseBtnWH / 2);
+        CGFloat step = 5;
+        CGPoint point1 = CGPointMake(centerPoint.x - step, centerPoint.y - step);
+        CGPoint point2 = CGPointMake(centerPoint.x + step, centerPoint.y + step);
+        CGPoint point3 = CGPointMake(centerPoint.x - step, centerPoint.y + step);
+        CGPoint point4 = CGPointMake(centerPoint.x + step, centerPoint.y - step);
+
+        UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+        [bezierPath moveToPoint:point1];
+        [bezierPath addLineToPoint:point2];
+        [bezierPath moveToPoint:point3];
+        [bezierPath addLineToPoint:point4];
+
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = bezierPath.CGPath;
+        shapeLayer.fillColor = [UIColor clearColor].CGColor;
+        shapeLayer.strokeColor = [UIColor colorWithHexString:@"C4c4c4"].CGColor;
+        shapeLayer.lineWidth = 2;
+        [_closeBtn.layer addSublayer:shapeLayer];
+
+    }
+    return _closeBtn;
 }
 @end
