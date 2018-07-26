@@ -269,7 +269,7 @@ static const int kCloseBtnWH = 30;
         _tagView = [UIView new];
         [self configCommonView:_tagView AndTitle:@"TAG" WithImageName:@"tag_full"];
 
-        static CGFloat offset = 0;
+        CGFloat offset = 0;
         self.allTagBtns = [NSMutableArray array];
         for (JNEventTypeModel *model in self.allTagModels) {
             UIButton *tagBtn = [UIButton  new];
