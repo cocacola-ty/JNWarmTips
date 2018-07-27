@@ -146,7 +146,7 @@ static const int kCloseBtnWH = 30;
 }
 
 - (void) selectTimeDuration {
-
+    NSLog(@" = ");
 }
 
 - (void) selectTag:(UIButton *)btn {
@@ -264,17 +264,12 @@ static const int kCloseBtnWH = 30;
             make.centerX.equalTo(self->_timeView.mas_centerX);
         }];
 
-        UIView *circleView = [UIView new];
-        circleView.layer.borderWidth = 1;
-        circleView.layer.borderColor =[UIColor redColor].CGColor;
-        circleView.layer.cornerRadius = 6;
-        [_timeView addSubview:circleView];
-        [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(12);
+        [_timeView addSubview:self.timesDurationSelectedView];
+        [self.timesDurationSelectedView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self->_timeView.mas_centerX);
-            make.top.equalTo(self->_timeView.mas_bottom).offset(7);
+            make.top.equalTo(self->_timeView.mas_bottom);
+            make.width.height.mas_equalTo(30);
         }];
-        // todo: 添加自定义开关视图
     }
     return _timeView;
 }
@@ -285,7 +280,7 @@ static const int kCloseBtnWH = 30;
 
         UIView *circleView = [UIView new];
         circleView.layer.borderWidth = 1;
-        circleView.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
+        circleView.layer.borderColor = MAIN_COLOR.CGColor;
         circleView.layer.cornerRadius = 6;
         [_timesDurationSelectedView addSubview:circleView];
         [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -293,6 +288,12 @@ static const int kCloseBtnWH = 30;
             make.centerX.equalTo(self->_timesDurationSelectedView.mas_centerX);
             make.centerY.equalTo(self->_timesDurationSelectedView.mas_centerY);
         }];
+
+        CALayer *centerLayer = [CALayer layer];
+        centerLayer.backgroundColor = MAIN_COLOR.CGColor;
+        centerLayer.frame = CGRectMake(3, 3, 6, 6);
+        centerLayer.cornerRadius = 3;
+        [circleView.layer addSublayer:centerLayer];
 
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectTimeDuration)];
         [_timesDurationSelectedView addGestureRecognizer:tapGestureRecognizer];
