@@ -40,6 +40,7 @@ static const int kCloseBtnWH = 30;
 @property (nonatomic, strong) UIView *timesSwitchView;
 @property (nonatomic, strong) CALayer *selectedLayer;
 @property (nonatomic) BOOL isShowTimeView;
+@property (nonatomic, strong) UIView *coverView;
 
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *closeBtn;
@@ -62,7 +63,7 @@ static const int kCloseBtnWH = 30;
 }
 
 - (void) dataInit {
-    self.isShowTimeView = NO;
+    self.isShowTimeView = YES;
 }
 
 - (void) viewLayout {
@@ -104,7 +105,6 @@ static const int kCloseBtnWH = 30;
         make.left.equalTo(self.eventView.mas_left);
         make.height.mas_equalTo(55);
     }];
-    self.timeView.alpha = 0;
 
     UIButton *doneBtn = [UIButton new];
     self.doneBtn = doneBtn;
@@ -126,10 +126,21 @@ static const int kCloseBtnWH = 30;
         make.width.and.height.mas_equalTo(kCloseBtnWH);
     }];
 
+    UIView *coverView = [UIView new];
+    coverView.backgroundColor = [UIColor whiteColor];
+    self.coverView = coverView;
+    [self.view addSubview:coverView];
+    [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.timeView.mas_bottom).offset(15);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.mas_equalTo(0);
+    }];
+
     [self.view addSubview:self.timesSwitchView];
     [self.timesSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.top.equalTo(self.tagView.mas_bottom).offset(15);
+        make.top.equalTo(self.timeView.mas_bottom).offset(15);
         make.width.height.mas_equalTo(30);
     }];
 }
@@ -139,12 +150,31 @@ static const int kCloseBtnWH = 30;
     self.selectedLayer.hidden = !self.isShowTimeView;
 
     if (self.isShowTimeView) {
+        [self.timesSwitchView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.view.mas_centerX);
+            make.top.equalTo(self.timeView.mas_bottom).offset(15);
+            make.width.height.mas_equalTo(30);
+        }];
+        [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+
         [UIView animateWithDuration:0.35 animations:^{
-            self.timeView.alpha = 1;
+//            self.timeView.alpha = 1;
+            [self.view layoutIfNeeded];
         }];
     } else {
+        [self.timesSwitchView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.view.mas_centerX);
+            make.top.equalTo(self.tagView.mas_bottom).offset(15);
+            make.width.height.mas_equalTo(30);
+        }];
+        [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(95);
+        }];
         [UIView animateWithDuration:0.35 animations:^{
-            self.timeView.alpha = 0;
+//            self.timeView.alpha = 0;
+            [self.view layoutIfNeeded];
         }];
     }
 }
