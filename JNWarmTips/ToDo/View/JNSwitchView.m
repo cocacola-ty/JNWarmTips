@@ -23,7 +23,7 @@
     if (self) {
         _once = NO;
         self.circleView = [UIView new];
-        self.circleView.backgroundColor = [UIColor colorWithHexString:@"919191"];
+        self.circleView.backgroundColor = [UIColor colorWithHexString:@"63B8FF"];
         self.circleView.alpha = 0.8;
         [self addSubview:self.circleView];
     }
@@ -78,7 +78,7 @@
             make.left.equalTo(self.mas_left).offset(5);
         }];
         [UIView animateWithDuration:0.35 animations:^{
-            self.circleView.backgroundColor = [UIColor colorWithHexString:@"919191"];
+            self.circleView.backgroundColor = [UIColor colorWithHexString:@"63B8FF"];
             [self setNeedsDisplay];
             [self layoutIfNeeded];
         }];

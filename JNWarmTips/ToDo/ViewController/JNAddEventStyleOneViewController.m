@@ -21,7 +21,7 @@ static const int kStarImageViewWH = 40;
 
 static const int kTagViewHeight = 80;
 
-static const int kTimeSwitchViewWidth = 40;
+static const int kTimeSwitchViewWidth = 35;
 static const int kTimeSwitchViewHeight = 16;
 
 static const int kCloseBtnWH = 30;
@@ -160,7 +160,6 @@ static const int kCloseBtnWH = 30;
         }];
 
         [UIView animateWithDuration:0.35 animations:^{
-//            self.timeView.alpha = 1;
             [self.view layoutIfNeeded];
         }];
     } else {
@@ -173,7 +172,6 @@ static const int kCloseBtnWH = 30;
             make.height.mas_equalTo(95);
         }];
         [UIView animateWithDuration:0.35 animations:^{
-//            self.timeView.alpha = 0;
             [self.view layoutIfNeeded];
         }];
     }
