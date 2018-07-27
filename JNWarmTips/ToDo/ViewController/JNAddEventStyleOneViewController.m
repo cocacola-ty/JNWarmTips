@@ -21,9 +21,11 @@ static const int kStarImageViewWH = 40;
 
 static const int kTagViewHeight = 80;
 
-static const int kTimeSwitchViewHeight = 20;
+static const int kTimeSwitchViewWidth = 40;
+static const int kTimeSwitchViewHeight = 16;
 
 static const int kCloseBtnWH = 30;
+
 
 @interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIImageView *topImageView;
@@ -32,9 +34,13 @@ static const int kCloseBtnWH = 30;
 @property (nonatomic, strong) UIView *eventView;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
-@property (nonatomic, strong) UIView *timeSwitchView;
+
 @property (nonatomic, strong) JNSwitchView *switchView;
-@property (nonatomic, strong) UIView *timesDurationSelectedView;
+
+@property (nonatomic, strong) UIView *timesSwitchView;
+@property (nonatomic, strong) CALayer *selectedLayer;
+@property (nonatomic) BOOL isShowTimeView;
+
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *closeBtn;
 
@@ -50,11 +56,16 @@ static const int kCloseBtnWH = 30;
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    [self displaySubviews];
+    [self dataInit];
+    [self viewLayout];
     [self selectTag:self.allTagBtns.firstObject];
 }
 
-- (void) displaySubviews {
+- (void) dataInit {
+    self.isShowTimeView = NO;
+}
+
+- (void) viewLayout {
     [self.view addSubview:self.topImageView];
     [self.topImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top);
@@ -65,7 +76,6 @@ static const int kCloseBtnWH = 30;
 
     [self.view addSubview:self.starImageView];
     [self.starImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.view.mas_right).offset(-30);
         make.centerX.equalTo(self.topImageView.mas_centerX);
         make.centerY.equalTo(self.topImageView.mas_bottom);
         make.width.height.mas_equalTo(kStarImageViewWH);
@@ -92,20 +102,9 @@ static const int kCloseBtnWH = 30;
         make.top.equalTo(self.tagView.mas_bottom).offset(40);
         make.width.equalTo(self.eventView.mas_width);
         make.left.equalTo(self.eventView.mas_left);
-        make.height.mas_equalTo(60);
+        make.height.mas_equalTo(55);
     }];
     self.timeView.alpha = 0;
-
-    JNSwitchView *switchView = [JNSwitchView new];
-    self.switchView = switchView;
-    [switchView addTarget:self action:@selector(showTime) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:switchView];
-    [switchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(50);
-        make.height.mas_equalTo(kTimeSwitchViewHeight);
-        make.top.equalTo(self.tagView.mas_bottom).offset(32);
-        make.right.equalTo(self.view.mas_right).offset(-30);
-    }];
 
     UIButton *doneBtn = [UIButton new];
     self.doneBtn = doneBtn;
@@ -126,12 +125,20 @@ static const int kCloseBtnWH = 30;
         make.left.equalTo(self.view.mas_left).offset(20);
         make.width.and.height.mas_equalTo(kCloseBtnWH);
     }];
+
+    [self.view addSubview:self.timesSwitchView];
+    [self.timesSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.top.equalTo(self.tagView.mas_bottom).offset(15);
+        make.width.height.mas_equalTo(30);
+    }];
 }
 
 - (void) showTime {
-    self.switchView.on = !self.switchView.on;
+    self.isShowTimeView = !self.isShowTimeView;
+    self.selectedLayer.hidden = !self.isShowTimeView;
 
-    if (self.switchView.on) {
+    if (self.isShowTimeView) {
         [UIView animateWithDuration:0.35 animations:^{
             self.timeView.alpha = 1;
         }];
@@ -145,8 +152,8 @@ static const int kCloseBtnWH = 30;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
 }
 
-- (void) selectTimeDuration {
-    NSLog(@" = ");
+- (void) turnToTimeDuration {
+    self.switchView.on = !self.switchView.on;
 }
 
 - (void) selectTag:(UIButton *)btn {
@@ -223,6 +230,7 @@ static const int kCloseBtnWH = 30;
     if (!_starImageView) {
         _starImageView = [UIImageView new];
         _starImageView.image = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//        _starImageView.image = [UIImage imageNamed:@"timer_highlight"];
         _starImageView.tintColor = GRAY_BACKGROUND_COLOR;
         _starImageView.alpha = 0.6;
 
@@ -264,42 +272,48 @@ static const int kCloseBtnWH = 30;
             make.centerX.equalTo(self->_timeView.mas_centerX);
         }];
 
-        [_timeView addSubview:self.timesDurationSelectedView];
-        [self.timesDurationSelectedView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self->_timeView.mas_centerX);
-            make.top.equalTo(self->_timeView.mas_bottom);
-            make.width.height.mas_equalTo(30);
+        JNSwitchView *switchView = [JNSwitchView new];
+        self.switchView = switchView;
+        [switchView addTarget:self action:@selector(turnToTimeDuration) forControlEvents:UIControlEventTouchUpInside];
+        [_timeView addSubview:switchView];
+        [switchView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kTimeSwitchViewWidth);
+            make.height.mas_equalTo(kTimeSwitchViewHeight);
+            make.centerY.equalTo(self->_timeView.mas_centerY).offset(4);
+            make.right.equalTo(self->_timeView.mas_right).offset(-6);
         }];
     }
     return _timeView;
 }
 
-- (UIView *)timesDurationSelectedView {
-    if (!_timesDurationSelectedView) {
-        _timesDurationSelectedView = [UIView new];
+- (UIView *)timesSwitchView {
+    if (!_timesSwitchView) {
+        _timesSwitchView = [UIView new];
 
         UIView *circleView = [UIView new];
         circleView.layer.borderWidth = 1;
         circleView.layer.borderColor = MAIN_COLOR.CGColor;
         circleView.layer.cornerRadius = 6;
-        [_timesDurationSelectedView addSubview:circleView];
+        [_timesSwitchView addSubview:circleView];
         [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.mas_equalTo(12);
-            make.centerX.equalTo(self->_timesDurationSelectedView.mas_centerX);
-            make.centerY.equalTo(self->_timesDurationSelectedView.mas_centerY);
+            make.centerX.equalTo(self->_timesSwitchView.mas_centerX);
+            make.centerY.equalTo(self->_timesSwitchView.mas_centerY);
         }];
 
         CALayer *centerLayer = [CALayer layer];
+        centerLayer.hidden = !self.isShowTimeView;
+        self.selectedLayer = centerLayer;
         centerLayer.backgroundColor = MAIN_COLOR.CGColor;
         centerLayer.frame = CGRectMake(3, 3, 6, 6);
         centerLayer.cornerRadius = 3;
         [circleView.layer addSublayer:centerLayer];
 
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectTimeDuration)];
-        [_timesDurationSelectedView addGestureRecognizer:tapGestureRecognizer];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTime)];
+        [_timesSwitchView addGestureRecognizer:tapGestureRecognizer];
 
     }
-    return _timesDurationSelectedView;
+    return _timesSwitchView;
 }
 
 - (UIView *)tagView {
@@ -382,29 +396,6 @@ static const int kCloseBtnWH = 30;
         make.width.height.mas_equalTo(20);
         make.centerY.equalTo(superView.mas_centerY);
     }];
-}
-
-- (UIView *)timeSwitchView {
-    if (!_timeSwitchView) {
-        _timeSwitchView = [UIView new];
-        _timeSwitchView.backgroundColor = [UIColor clearColor];
-
-        _timeSwitchView.layer.cornerRadius = kTimeSwitchViewHeight / 2;
-        _timeSwitchView.layer.borderColor = MAIN_COLOR.CGColor;
-        _timeSwitchView.layer.borderWidth = 1;
-
-        UIView *circleView = [UIView new];
-        circleView.backgroundColor = MAIN_COLOR;
-        circleView.layer.cornerRadius = 7;
-        [_timeSwitchView addSubview:circleView];
-        [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(14);
-            make.centerY.equalTo(self->_timeSwitchView.mas_centerY);
-            make.left.equalTo(self->_timeSwitchView.mas_left).offset(5);
-        }];
-
-    }
-    return _timeSwitchView;
 }
 
 - (NSArray *)allTagModels {
