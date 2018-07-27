@@ -63,7 +63,8 @@ static const int kCloseBtnWH = 30;
 }
 
 - (void) dataInit {
-    self.isShowTimeView = YES;
+    self.isShowTimeView = NO;
+    // todo: 这里后面可以改成自己设置默认是否显示时间视图
 }
 
 - (void) viewLayout {
@@ -130,17 +131,19 @@ static const int kCloseBtnWH = 30;
     coverView.backgroundColor = [UIColor whiteColor];
     self.coverView = coverView;
     [self.view addSubview:coverView];
+    CGFloat height = self.isShowTimeView ? 0 : 95;
     [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.timeView.mas_bottom).offset(15);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.mas_equalTo(0);
+        make.height.mas_equalTo(height);
     }];
 
     [self.view addSubview:self.timesSwitchView];
+    UIView *referenceView = self.isShowTimeView ? self.timeView : self.tagView;
     [self.timesSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.top.equalTo(self.timeView.mas_bottom).offset(15);
+        make.top.equalTo(referenceView.mas_bottom).offset(15);
         make.width.height.mas_equalTo(30);
     }];
 }
