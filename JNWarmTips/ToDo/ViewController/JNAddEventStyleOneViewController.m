@@ -27,6 +27,8 @@ static const int kTimeSwitchViewHeight = 16;
 static const int kCloseBtnWH = 30;
 
 
+static const int kTimeIndicateWH = 22;
+
 @interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
@@ -39,8 +41,13 @@ static const int kCloseBtnWH = 30;
 
 @property (nonatomic, strong) UIView *timesSwitchView;
 @property (nonatomic, strong) CALayer *selectedLayer;
-@property (nonatomic) BOOL isShowTimeView;
+@property (nonatomic) BOOL isShowTimeView; // 当前是否显示时间视图
 @property (nonatomic, strong) UIView *coverView;
+
+@property (nonatomic, strong) UIView *timeIndicate;
+@property (nonatomic, strong) UIBezierPath *timeIndicateBeginPath;
+@property (nonatomic, strong) UIBezierPath *timeIndicateEndPath;
+@property (nonatomic, strong) CAShapeLayer *timeIndicateLayer;
 
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *closeBtn;
@@ -146,38 +153,65 @@ static const int kCloseBtnWH = 30;
         make.top.equalTo(referenceView.mas_bottom).offset(15);
         make.width.height.mas_equalTo(30);
     }];
+
+    [self.view addSubview:self.timeIndicate];
+    [self.timeIndicate mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.top.equalTo(referenceView.mas_bottom).offset(20);
+        make.width.height.mas_equalTo(kTimeIndicateWH);
+    }];
 }
 
 - (void) showTime {
     self.isShowTimeView = !self.isShowTimeView;
     self.selectedLayer.hidden = !self.isShowTimeView;
 
+    CGFloat coverViewUpdateHeight;
+    UIView *referenceView;
+    UIBezierPath *fromPath;
+    UIBezierPath *toPath;
     if (self.isShowTimeView) {
-        [self.timesSwitchView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.view.mas_centerX);
-            make.top.equalTo(self.timeView.mas_bottom).offset(15);
-            make.width.height.mas_equalTo(30);
-        }];
-        [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(0);
-        }];
+        coverViewUpdateHeight = 0;
+        referenceView = self.timeView;
 
-        [UIView animateWithDuration:0.35 animations:^{
-            [self.view layoutIfNeeded];
-        }];
+        fromPath = self.timeIndicateBeginPath;
+        toPath = self.timeIndicateEndPath;
+
     } else {
-        [self.timesSwitchView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.view.mas_centerX);
-            make.top.equalTo(self.tagView.mas_bottom).offset(15);
-            make.width.height.mas_equalTo(30);
-        }];
-        [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(95);
-        }];
-        [UIView animateWithDuration:0.35 animations:^{
-            [self.view layoutIfNeeded];
-        }];
+        coverViewUpdateHeight = 95;
+        referenceView = self.tagView;
+
+        fromPath = self.timeIndicateEndPath;
+        toPath = self.timeIndicateBeginPath;
     }
+
+    [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(coverViewUpdateHeight);
+    }];
+
+    [self.timesSwitchView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.top.equalTo(referenceView.mas_bottom).offset(15);
+        make.width.height.mas_equalTo(30);
+    }];
+
+    [self.timeIndicate mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.top.equalTo(referenceView.mas_bottom).offset(20);
+        make.width.height.mas_equalTo(kTimeIndicateWH);
+    }];
+
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+    basicAnimation.duration = 0.35;
+    basicAnimation.fromValue = (__bridge id)fromPath.CGPath;
+    basicAnimation.toValue = (__bridge id) toPath.CGPath;
+    basicAnimation.fillMode = kCAFillModeForwards;
+    basicAnimation.removedOnCompletion = NO;
+    [self.timeIndicateLayer addAnimation:basicAnimation forKey:nil];
+
+    [UIView animateWithDuration:0.35 animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
@@ -320,6 +354,7 @@ static const int kCloseBtnWH = 30;
 - (UIView *)timesSwitchView {
     if (!_timesSwitchView) {
         _timesSwitchView = [UIView new];
+        _timesSwitchView.hidden = YES;
 
         UIView *circleView = [UIView new];
         circleView.layer.borderWidth = 1;
@@ -392,6 +427,67 @@ static const int kCloseBtnWH = 30;
         }
     }
     return _tagView;
+}
+
+- (UIView *)timeIndicate {
+    if (!_timeIndicate) {
+        _timeIndicate = [UIView new];
+        _timeIndicate.backgroundColor = [UIColor clearColor];
+        _timeIndicate.layer.cornerRadius = kTimeIndicateWH / 2;
+
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTime)];
+        [_timeIndicate addGestureRecognizer:tapGestureRecognizer];
+
+        [_timeIndicate.layer addSublayer:self.timeIndicateLayer];
+    }
+    return _timeIndicate;
+}
+
+- (CAShapeLayer *)timeIndicateLayer {
+    if (!_timeIndicateLayer) {
+        _timeIndicateLayer = [CAShapeLayer layer];
+        _timeIndicateLayer.path =self.timeIndicateBeginPath.CGPath;
+        _timeIndicateLayer.lineWidth = 2;
+        _timeIndicateLayer.strokeColor = [UIColor colorWithHexString:@"919191"].CGColor;
+        _timeIndicateLayer.fillColor = [UIColor clearColor].CGColor;
+        _timeIndicateLayer.lineCap = kCALineCapRound;
+        _timeIndicateLayer.lineJoin = kCALineJoinRound;
+    }
+    return _timeIndicateLayer;
+}
+
+- (UIBezierPath *)timeIndicateBeginPath {
+    if (!_timeIndicateBeginPath) {
+        _timeIndicateBeginPath = [UIBezierPath bezierPath];
+        CGFloat length = 6;  // 三角形的高为3
+        CGFloat baseX = kTimeIndicateWH / 2;  // 基准点X坐标
+        CGFloat baseY = kTimeIndicateWH / 2 - length / 2; // 基准点Y坐标
+        CGPoint startPoint = CGPointMake(baseX - length, baseY);
+        CGPoint vertexPoint = CGPointMake(baseX, baseY + length); // 顶点坐标
+        CGPoint endPoint = CGPointMake(baseX + length, baseY);
+
+        [_timeIndicateBeginPath moveToPoint:startPoint];
+        [_timeIndicateBeginPath addLineToPoint:vertexPoint];
+        [_timeIndicateBeginPath addLineToPoint:endPoint];
+    }
+    return _timeIndicateBeginPath;
+}
+
+- (UIBezierPath *)timeIndicateEndPath {
+    if (!_timeIndicateEndPath) {
+        _timeIndicateEndPath = [UIBezierPath bezierPath];
+        CGFloat length = 6;  // 三角形的高为3
+        CGFloat baseX = kTimeIndicateWH / 2;  // 基准点X坐标
+        CGFloat baseY = kTimeIndicateWH / 2 + length / 2; // 基准点Y坐标
+        CGPoint startPoint = CGPointMake(baseX - length, baseY);
+        CGPoint vertexPoint = CGPointMake(baseX, baseY - length); // 顶点坐标
+        CGPoint endPoint = CGPointMake(baseX + length, baseY);
+
+        [_timeIndicateEndPath moveToPoint:startPoint];
+        [_timeIndicateEndPath addLineToPoint:vertexPoint];
+        [_timeIndicateEndPath addLineToPoint:endPoint];
+    }
+    return _timeIndicateEndPath;
 }
 
 - (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title WithImageName:(NSString *)imageName{
