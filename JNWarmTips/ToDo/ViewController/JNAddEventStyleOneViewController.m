@@ -26,8 +26,9 @@ static const int kTimeSwitchViewHeight = 16;
 
 static const int kCloseBtnWH = 30;
 
+static const int kTimeIndicateWH = 22;  // 是否显示事件视图指示器的宽高
 
-static const int kTimeIndicateWH = 22;
+static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
 @interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIImageView *topImageView;
@@ -94,7 +95,7 @@ static const int kTimeIndicateWH = 22;
     [self.eventView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.topImageView.mas_bottom).offset(60);
         make.left.equalTo(self.view.mas_left).offset(40);
-        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
         make.height.mas_equalTo(60);
     }];
 
@@ -124,7 +125,7 @@ static const int kTimeIndicateWH = 22;
         make.width.mas_equalTo(120);
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.view.mas_centerX);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-30);
+        make.bottom.equalTo(self.view.mas_bottom).offset(kDefaultRightMargin);
     }];
 
     [self.view addSubview:self.closeBtn];
@@ -156,7 +157,7 @@ static const int kTimeIndicateWH = 22;
 
     [self.view addSubview:self.timeIndicate];
     [self.timeIndicate mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
         make.top.equalTo(referenceView.mas_bottom).offset(20);
         make.width.height.mas_equalTo(kTimeIndicateWH);
     }];
@@ -196,7 +197,7 @@ static const int kTimeIndicateWH = 22;
     }];
 
     [self.timeIndicate mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.view.mas_right).offset(-30);
+        make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
         make.top.equalTo(referenceView.mas_bottom).offset(20);
         make.width.height.mas_equalTo(kTimeIndicateWH);
     }];
