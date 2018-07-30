@@ -14,6 +14,7 @@
 #import "JNDBManager+Events.h"
 #import "JNEventTypeModel.h"
 #import "JNSwitchView.h"
+#import "JNArrowIndicateView.h"
 
 static const int kTopImageViewHeight = 180;
 
@@ -45,10 +46,7 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 @property (nonatomic) BOOL isShowTimeView; // 当前是否显示时间视图
 @property (nonatomic, strong) UIView *coverView;
 
-@property (nonatomic, strong) UIView *timeIndicate;
-@property (nonatomic, strong) UIBezierPath *timeIndicateBeginPath;
-@property (nonatomic, strong) UIBezierPath *timeIndicateEndPath;
-@property (nonatomic, strong) CAShapeLayer *timeIndicateLayer;
+@property (nonatomic, strong) JNArrowIndicateView *arrowIndicateView;
 
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *closeBtn;
@@ -155,11 +153,11 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         make.width.height.mas_equalTo(30);
     }];
 
-    [self.view addSubview:self.timeIndicate];
-    [self.timeIndicate mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
-        make.top.equalTo(referenceView.mas_bottom).offset(20);
+    [self.view addSubview:self.arrowIndicateView];
+    [self.arrowIndicateView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kTimeIndicateWH);
+        make.top.equalTo(referenceView.mas_bottom).offset(20);
+        make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
     }];
 }
 
@@ -169,21 +167,16 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
     CGFloat coverViewUpdateHeight;
     UIView *referenceView;
-    UIBezierPath *fromPath;
-    UIBezierPath *toPath;
     if (self.isShowTimeView) {
         coverViewUpdateHeight = 0;
         referenceView = self.timeView;
 
-        fromPath = self.timeIndicateBeginPath;
-        toPath = self.timeIndicateEndPath;
-
+        [self.arrowIndicateView close];
     } else {
         coverViewUpdateHeight = 95;
         referenceView = self.tagView;
 
-        fromPath = self.timeIndicateEndPath;
-        toPath = self.timeIndicateBeginPath;
+        [self.arrowIndicateView open];
     }
 
     [self.coverView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -196,19 +189,11 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         make.width.height.mas_equalTo(30);
     }];
 
-    [self.timeIndicate mas_remakeConstraints:^(MASConstraintMaker *make) {
+    [self.arrowIndicateView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
         make.top.equalTo(referenceView.mas_bottom).offset(20);
         make.width.height.mas_equalTo(kTimeIndicateWH);
     }];
-
-    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    basicAnimation.duration = 0.35;
-    basicAnimation.fromValue = (__bridge id)fromPath.CGPath;
-    basicAnimation.toValue = (__bridge id) toPath.CGPath;
-    basicAnimation.fillMode = kCAFillModeForwards;
-    basicAnimation.removedOnCompletion = NO;
-    [self.timeIndicateLayer addAnimation:basicAnimation forKey:nil];
 
     [UIView animateWithDuration:0.35 animations:^{
         [self.view layoutIfNeeded];
@@ -296,7 +281,6 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     if (!_starImageView) {
         _starImageView = [UIImageView new];
         _starImageView.image = [[UIImage imageNamed:@"type"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//        _starImageView.image = [UIImage imageNamed:@"timer_highlight"];
         _starImageView.tintColor = GRAY_BACKGROUND_COLOR;
         _starImageView.alpha = 0.6;
 
@@ -430,65 +414,15 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     return _tagView;
 }
 
-- (UIView *)timeIndicate {
-    if (!_timeIndicate) {
-        _timeIndicate = [UIView new];
-        _timeIndicate.backgroundColor = [UIColor clearColor];
-        _timeIndicate.layer.cornerRadius = kTimeIndicateWH / 2;
+- (JNArrowIndicateView *)arrowIndicateView {
+    if (!_arrowIndicateView) {
+        _arrowIndicateView = [JNArrowIndicateView new];
+        _arrowIndicateView.backgroundColor = [UIColor clearColor];
 
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTime)];
-        [_timeIndicate addGestureRecognizer:tapGestureRecognizer];
-
-        [_timeIndicate.layer addSublayer:self.timeIndicateLayer];
+        [_arrowIndicateView addGestureRecognizer:tapGestureRecognizer];
     }
-    return _timeIndicate;
-}
-
-- (CAShapeLayer *)timeIndicateLayer {
-    if (!_timeIndicateLayer) {
-        _timeIndicateLayer = [CAShapeLayer layer];
-        _timeIndicateLayer.path =self.timeIndicateBeginPath.CGPath;
-        _timeIndicateLayer.lineWidth = 2;
-        _timeIndicateLayer.strokeColor = [UIColor colorWithHexString:@"919191"].CGColor;
-        _timeIndicateLayer.fillColor = [UIColor clearColor].CGColor;
-        _timeIndicateLayer.lineCap = kCALineCapRound;
-        _timeIndicateLayer.lineJoin = kCALineJoinRound;
-    }
-    return _timeIndicateLayer;
-}
-
-- (UIBezierPath *)timeIndicateBeginPath {
-    if (!_timeIndicateBeginPath) {
-        _timeIndicateBeginPath = [UIBezierPath bezierPath];
-        CGFloat length = 6;  // 三角形的高为3
-        CGFloat baseX = kTimeIndicateWH / 2;  // 基准点X坐标
-        CGFloat baseY = kTimeIndicateWH / 2 - length / 2; // 基准点Y坐标
-        CGPoint startPoint = CGPointMake(baseX - length, baseY);
-        CGPoint vertexPoint = CGPointMake(baseX, baseY + length); // 顶点坐标
-        CGPoint endPoint = CGPointMake(baseX + length, baseY);
-
-        [_timeIndicateBeginPath moveToPoint:startPoint];
-        [_timeIndicateBeginPath addLineToPoint:vertexPoint];
-        [_timeIndicateBeginPath addLineToPoint:endPoint];
-    }
-    return _timeIndicateBeginPath;
-}
-
-- (UIBezierPath *)timeIndicateEndPath {
-    if (!_timeIndicateEndPath) {
-        _timeIndicateEndPath = [UIBezierPath bezierPath];
-        CGFloat length = 6;  // 三角形的高为3
-        CGFloat baseX = kTimeIndicateWH / 2;  // 基准点X坐标
-        CGFloat baseY = kTimeIndicateWH / 2 + length / 2; // 基准点Y坐标
-        CGPoint startPoint = CGPointMake(baseX - length, baseY);
-        CGPoint vertexPoint = CGPointMake(baseX, baseY - length); // 顶点坐标
-        CGPoint endPoint = CGPointMake(baseX + length, baseY);
-
-        [_timeIndicateEndPath moveToPoint:startPoint];
-        [_timeIndicateEndPath addLineToPoint:vertexPoint];
-        [_timeIndicateEndPath addLineToPoint:endPoint];
-    }
-    return _timeIndicateEndPath;
+    return _arrowIndicateView;
 }
 
 - (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title WithImageName:(NSString *)imageName{
