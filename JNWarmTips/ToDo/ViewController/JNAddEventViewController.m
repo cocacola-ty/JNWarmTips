@@ -271,7 +271,6 @@ static const int kDoneBtnWH = 30;
         [_closeBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 
         UIBezierPath *path = [UIBezierPath bezierPath];
-        path.lineCapStyle = kCALineCapRound;
         [path moveToPoint:CGPointMake(17, 17)];
         [path addLineToPoint:CGPointMake(43, 43)];
         [path moveToPoint:CGPointMake(17, 43)];

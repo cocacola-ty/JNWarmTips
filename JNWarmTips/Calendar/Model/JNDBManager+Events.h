@@ -28,6 +28,8 @@
 /*添加事件*/
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndEventTypeId:(NSString *)eventTypeId AndEventColor:(NSString *)color;
 
+- (void)addEventWithModel:(JNEventModel *)eventModel;
+
 /*获取所有事件类型*/
 - (NSArray *)getAllEventTypes ;
 

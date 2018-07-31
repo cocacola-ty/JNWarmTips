@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+@class JNEventModel;
 
 @interface JNAddEventStyleOneViewController : UIViewController
-
+@property(nonatomic, copy) void (^addEventBlock)(JNEventModel *eventModel);
 @end

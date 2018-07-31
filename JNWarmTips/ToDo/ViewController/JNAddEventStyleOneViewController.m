@@ -10,6 +10,7 @@
 #import "JNAddEventStyleOneViewController.h"
 #import "JNWarmTipsPublicFile.h"
 #import "UIColor+Extension.h"
+#import "JNEventModel.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Events.h"
 #import "JNEventTypeModel.h"
@@ -36,6 +37,7 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 @property (nonatomic, strong) UIImageView *starImageView;
 
 @property (nonatomic, strong) UIView *eventView;
+@property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
 
@@ -118,6 +120,8 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     [doneBtn setTitle:@"ADD" forState:UIControlStateNormal];
     doneBtn.backgroundColor = GRAY_BACKGROUND_COLOR;
     doneBtn.layer.cornerRadius = 4;
+    [doneBtn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
+
     [self.view addSubview:doneBtn];
     [doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(120);
@@ -223,6 +227,21 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
 }
 
+- (void)finish {
+    if (self.addEventBlock) {
+        JNEventModel *eventModel = [JNEventModel new];
+        eventModel.content = self.inputField.text;
+        eventModel.eventTypeId = self.selectedTagModel.typeId;
+        eventModel.color = self.selectedTagModel.typeColor;
+        if (self.isShowTimeView) {
+            eventModel.startTime;
+            eventModel.endTime;
+            eventModel.needNotification = 0;
+        }
+        self.addEventBlock(eventModel);
+    }
+}
+
 - (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
 };
@@ -298,6 +317,7 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         UITextField *inputField = [[UITextField alloc] init];
         inputField.placeholder = @"请输入内容";
         inputField.delegate = self;
+        self.inputField = inputField;
         [_eventView addSubview:inputField];
         [inputField mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self->_eventView.mas_left).offset(35);

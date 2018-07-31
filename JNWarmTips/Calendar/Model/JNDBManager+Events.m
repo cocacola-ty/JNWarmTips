@@ -122,6 +122,22 @@
     [self addEvent:sql];
 }
 
+- (void)addEventWithModel:(JNEventModel *)eventModel {
+    NSString *sql = [NSString stringWithFormat:@"insert into %@"
+                                               "('content',"
+                                               "'show_date',"
+                                               "'event_type_id',"
+                                               "'event_type_color',"
+                                               "'start_time',"
+                                               "'end_time',"
+                                               "'notification'"
+                                               ") values ("
+                                               "%@', '%@', '%@', '%@', '%lld', '%lld', '%d'"
+                                               , kJNDBEventsTable, eventModel.content, eventModel.showDate,
+    eventModel.eventTypeId, eventModel.color, eventModel.startTime, eventModel.endTime, eventModel.needNotification];
+    [self addEvent:sql];
+}
+
 - (void)addEvent:(NSString *)sql {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];
