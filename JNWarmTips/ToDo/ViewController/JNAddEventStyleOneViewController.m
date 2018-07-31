@@ -57,6 +57,9 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 @property (nonatomic, strong) UIButton *selectedTagBtn;
 @property (nonatomic, strong) JNEventTypeModel *selectedTagModel;
 @property (nonatomic, strong) NSMutableArray *allTagBtns;
+
+@property(nonatomic, assign) long long startTime;
+@property(nonatomic, assign) long long endTime;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -72,6 +75,8 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
 - (void) dataInit {
     self.isShowTimeView = NO;
+    self.startTime = 0;
+    self.endTime = 0;
     // todo: 这里后面可以改成自己设置默认是否显示时间视图
 }
 

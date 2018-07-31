@@ -4,6 +4,7 @@
 //
 
 #import "ViewController+EventList.h"
+#import "JNWarmTipsPublicFile.h"
 #import "JNDayEventTableViewCell.h"
 #import "JNEventEditorViewController.h"
 #import "JNEventModel.h"
@@ -67,7 +68,19 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
 
     switch (selectStyle) {
         case 1: {
+            @weakify(self)
             JNAddEventStyleOneViewController *addEventStyleOneViewController = [JNAddEventStyleOneViewController new];
+            addEventStyleOneViewController.addEventBlock = ^(JNEventModel *eventModel) {
+                @strongify(self)
+                eventModel.showDate = self.currentSelectDay;
+                [[JNDBManager shareInstance] addEventWithModel:eventModel];
+                [self reloadEventList];
+
+                self.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor];
+                NSArray *selectItems = [self.collectionView indexPathsForSelectedItems];
+                [self.collectionView reloadItemsAtIndexPaths:selectItems];
+
+            };
             [self presentViewController:addEventStyleOneViewController animated:YES completion:nil];
         }
             break;
