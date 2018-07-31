@@ -79,7 +79,6 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
                 self.allEventsDate = [[JNDBManager shareInstance] getAllDateAndEventColor];
                 NSArray *selectItems = [self.collectionView indexPathsForSelectedItems];
                 [self.collectionView reloadItemsAtIndexPaths:selectItems];
-
             };
             [self presentViewController:addEventStyleOneViewController animated:YES completion:nil];
         }

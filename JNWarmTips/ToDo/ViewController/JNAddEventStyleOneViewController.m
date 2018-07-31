@@ -244,6 +244,8 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
             eventModel.needNotification = 0;
         }
         self.addEventBlock(eventModel);
+
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

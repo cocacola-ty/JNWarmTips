@@ -132,7 +132,7 @@
                                                "'end_time',"
                                                "'notification'"
                                                ") values ("
-                                               "%@', '%@', '%@', '%@', '%lld', '%lld', '%d'"
+                                               "'%@', '%@', '%@', '%@', %lld, %lld, %d)"
                                                , kJNDBEventsTable, eventModel.content, eventModel.showDate,
     eventModel.eventTypeId, eventModel.color, eventModel.startTime, eventModel.endTime, eventModel.needNotification];
     [self addEvent:sql];
