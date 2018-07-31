@@ -33,4 +33,6 @@
 /*获取所有事件类型*/
 - (NSArray *)getAllEventTypes ;
 
+/*删除垃圾数据*/
+- (void)deleteRubbishData;
 @end

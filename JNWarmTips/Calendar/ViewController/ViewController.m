@@ -62,7 +62,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     //test
-    [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:6 InYear:2018];
+    [[JNDBManager shareInstance] deleteRubbishData];
     // test end
 
     // 初始化设置
