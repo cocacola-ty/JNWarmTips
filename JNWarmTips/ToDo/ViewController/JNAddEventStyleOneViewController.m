@@ -17,6 +17,7 @@
 #import "JNSwitchView.h"
 #import "JNArrowIndicateView.h"
 #import "JNTimePickerView.h"
+#import "CAShapeLayer+Extension.h"
 
 static const int kTopImageViewHeight = 180;
 
@@ -554,37 +555,12 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         _closeBtn.alpha = 0.8;
         _closeBtn.backgroundColor = [UIColor clearColor];
 
-        CAShapeLayer *shapeLayer = [self closeLayerWithWidth:kCloseBtnWH];
+        CAShapeLayer *shapeLayer = [CAShapeLayer closeLayerWithWidth:kCloseBtnWH];
         [_closeBtn.layer addSublayer:shapeLayer];
 
     }
     return _closeBtn;
 }
-
-- (CAShapeLayer *)closeLayerWithWidth:(CGFloat)width {
-
-    CGPoint centerPoint = CGPointMake(width/ 2, width / 2);
-    CGFloat step = 5;
-    CGPoint point1 = CGPointMake(centerPoint.x - step, centerPoint.y - step);
-    CGPoint point2 = CGPointMake(centerPoint.x + step, centerPoint.y + step);
-    CGPoint point3 = CGPointMake(centerPoint.x - step, centerPoint.y + step);
-    CGPoint point4 = CGPointMake(centerPoint.x + step, centerPoint.y - step);
-
-    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
-    [bezierPath moveToPoint:point1];
-    [bezierPath addLineToPoint:point2];
-    [bezierPath moveToPoint:point3];
-    [bezierPath addLineToPoint:point4];
-
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = bezierPath.CGPath;
-    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.strokeColor = [UIColor colorWithHexString:@"C4c4c4"].CGColor;
-    shapeLayer.lineWidth = 2;
-
-    return shapeLayer;
-}
-
 
 - (JNTimePickerView *)timePickerView {
     if (!_timePickerView) {

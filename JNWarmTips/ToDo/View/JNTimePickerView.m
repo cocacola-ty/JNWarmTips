@@ -6,6 +6,7 @@
 #import <Masonry/View+MASAdditions.h>
 #import "JNTimePickerView.h"
 #import "JNWarmTipsPublicFile.h"
+#import "CAShapeLayer+Extension.h"
 
 
 @interface JNTimePickerView() <UIPickerViewDelegate, UIPickerViewDataSource>
@@ -13,6 +14,7 @@
 @property(nonatomic, strong) UIButton *startTimeBtn;
 @property(nonatomic, strong) UIButton *endTimeBtn;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIButton *closeBtn;
 @end
 
 @implementation JNTimePickerView
@@ -24,8 +26,8 @@
         [self.timePickerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.mas_top).offset(30);
             make.bottom.equalTo(self.mas_bottom).offset(-50);
-            make.left.equalTo(self.mas_left);
-            make.right.equalTo(self.mas_right);
+            make.left.equalTo(self.mas_left).offset(55);
+            make.right.equalTo(self.mas_right).offset(-55);
         }];
 
         [self addSubview:self.startTimeBtn];
@@ -50,6 +52,13 @@
             make.width.mas_equalTo(60);
             make.left.equalTo(self.mas_centerX).offset(25);
             make.centerY.equalTo(self.startTimeBtn.mas_centerY);
+        }];
+
+        [self addSubview:self.closeBtn];
+        [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.mas_top).offset(8);
+            make.right.equalTo(self.mas_right).offset(-8);
+            make.width.height.mas_equalTo(30);
         }];
     }
     return self;
@@ -112,5 +121,15 @@
         [_endTimeBtn setTitleColor:MAIN_COLOR forState:UIControlStateNormal];
     }
     return _endTimeBtn;
+}
+
+- (UIButton *)closeBtn {
+    if (!_closeBtn) {
+        _closeBtn = [UIButton new];
+
+        CAShapeLayer *shapeLayer = [CAShapeLayer closeLayerWithWidth:30];
+        [_closeBtn.layer addSublayer:shapeLayer];
+    }
+    return _closeBtn;
 }
 @end

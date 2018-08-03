@@ -33,6 +33,7 @@
 		8B8D842A580DC3564C2750C7 /* JNAddGroupAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */; };
 		8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8781F35BA519B838AEEB /* JNDayCollectionViewCell.m */; };
 		8B8D866EA43101BD0D892938 /* UIColor+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8610D0F451F8B40CEC0F /* UIColor+Extension.m */; };
+		8B8D869BEE556D0544AE824E /* CAShapeLayer+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8040A5651811BE1BD8F2 /* CAShapeLayer+Extension.m */; };
 		8B8D86B6145EC54C09D364E3 /* JNEventsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D87DB454D20F68D450D45 /* JNEventsListViewController.m */; };
 		8B8D86D32D7E51E3AA147856 /* JNToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8EB4D6432615CCFF0F86 /* JNToDoListViewController.m */; };
 		8B8D8727352533082FF59CB9 /* JNTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E4ED5067973DAE46442 /* JNTextView.m */; };
@@ -90,6 +91,7 @@
 		61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddEventStyleOneViewController.m; sourceTree = "<group>"; };
 		61E4640220A002730045C737 /* HannotateSC-W5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HannotateSC-W5.ttf"; sourceTree = "<group>"; };
 		8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSwitchView.h; sourceTree = "<group>"; };
+		8B8D8040A5651811BE1BD8F2 /* CAShapeLayer+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAShapeLayer+Extension.m"; sourceTree = "<group>"; };
 		8B8D806D8F1DF3DC4714B271 /* JNToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoListViewController.h; sourceTree = "<group>"; };
 		8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoGroupListViewController.m; sourceTree = "<group>"; };
 		8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNToDoItemCell.m; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		8B8D85B9ED7F53DAF5A1C98E /* JNTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNTextView.h; sourceTree = "<group>"; };
 		8B8D85BB835C11CB6620EFAD /* JNGroupListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNGroupListCell.h; sourceTree = "<group>"; };
 		8B8D8610D0F451F8B40CEC0F /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
+		8B8D8630A48917273D024E57 /* CAShapeLayer+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CAShapeLayer+Extension.h"; sourceTree = "<group>"; };
 		8B8D863217D9B0BFC1D6834C /* JNDayEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNDayEventTableViewCell.h; sourceTree = "<group>"; };
 		8B8D8640A302074E270DF722 /* JNAddEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddEventsViewController.h; sourceTree = "<group>"; };
 		8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNButtonTagView.m; sourceTree = "<group>"; };
@@ -314,6 +317,8 @@
 				8B8D874EDA71D5C733983989 /* JNDBManager.h */,
 				8B8D8610D0F451F8B40CEC0F /* UIColor+Extension.m */,
 				8B8D81A7F4BF3B0D02E2B15B /* UIColor+Extension.h */,
+				8B8D8040A5651811BE1BD8F2 /* CAShapeLayer+Extension.m */,
+				8B8D8630A48917273D024E57 /* CAShapeLayer+Extension.h */,
 			);
 			path = PublicFile;
 			sourceTree = "<group>";
@@ -620,6 +625,7 @@
 				8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */,
 				8B8D8F91F2A3D8F5798242E5 /* JNArrowIndicateView.m in Sources */,
 				8B8D82C4FAF6CD959B4A4737 /* JNTimePickerView.m in Sources */,
+				8B8D869BEE556D0544AE824E /* CAShapeLayer+Extension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
