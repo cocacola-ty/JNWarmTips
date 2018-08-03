@@ -32,7 +32,7 @@ static const int kTimeIndicateWH = 22;  // 是否显示事件视图指示器的�
 
 static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
-@interface JNAddEventStyleOneViewController () <UITextFieldDelegate>
+@interface JNAddEventStyleOneViewController () <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
 
@@ -60,6 +60,9 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
 @property(nonatomic, assign) long long startTime;
 @property(nonatomic, assign) long long endTime;
+
+@property (nonatomic, strong) UIPickerView *timePickerView;
+@property (nonatomic, strong) UIButton *closeTimePickerBtn;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -168,6 +171,14 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         make.top.equalTo(referenceView.mas_bottom).offset(20);
         make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
     }];
+
+    [self.view addSubview:self.timePickerView];
+    [self.timePickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.mas_equalTo(220);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
 }
 
 - (void) showTime {
@@ -268,6 +279,29 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 2;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    if (component == 0) {
+        return 12;
+    } else {
+        return 59;
+    }
+}
+
+- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [NSString stringWithFormat:@"%d", row+1];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+    return 100;
 }
 
 #pragma mark - Getter & Setter
@@ -504,27 +538,63 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
         _closeBtn.alpha = 0.8;
         _closeBtn.backgroundColor = [UIColor clearColor];
 
-        CGPoint centerPoint = CGPointMake(kCloseBtnWH / 2, kCloseBtnWH / 2);
-        CGFloat step = 5;
-        CGPoint point1 = CGPointMake(centerPoint.x - step, centerPoint.y - step);
-        CGPoint point2 = CGPointMake(centerPoint.x + step, centerPoint.y + step);
-        CGPoint point3 = CGPointMake(centerPoint.x - step, centerPoint.y + step);
-        CGPoint point4 = CGPointMake(centerPoint.x + step, centerPoint.y - step);
-
-        UIBezierPath *bezierPath = [UIBezierPath bezierPath];
-        [bezierPath moveToPoint:point1];
-        [bezierPath addLineToPoint:point2];
-        [bezierPath moveToPoint:point3];
-        [bezierPath addLineToPoint:point4];
-
-        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-        shapeLayer.path = bezierPath.CGPath;
-        shapeLayer.fillColor = [UIColor clearColor].CGColor;
-        shapeLayer.strokeColor = [UIColor colorWithHexString:@"C4c4c4"].CGColor;
-        shapeLayer.lineWidth = 2;
+        CAShapeLayer *shapeLayer = [self closeLayerWithWidth:kCloseBtnWH];
         [_closeBtn.layer addSublayer:shapeLayer];
 
     }
     return _closeBtn;
+}
+
+- (CAShapeLayer *)closeLayerWithWidth:(CGFloat)width {
+
+    CGPoint centerPoint = CGPointMake(width/ 2, width / 2);
+    CGFloat step = 5;
+    CGPoint point1 = CGPointMake(centerPoint.x - step, centerPoint.y - step);
+    CGPoint point2 = CGPointMake(centerPoint.x + step, centerPoint.y + step);
+    CGPoint point3 = CGPointMake(centerPoint.x - step, centerPoint.y + step);
+    CGPoint point4 = CGPointMake(centerPoint.x + step, centerPoint.y - step);
+
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    [bezierPath moveToPoint:point1];
+    [bezierPath addLineToPoint:point2];
+    [bezierPath moveToPoint:point3];
+    [bezierPath addLineToPoint:point4];
+
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = bezierPath.CGPath;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.strokeColor = [UIColor colorWithHexString:@"C4c4c4"].CGColor;
+    shapeLayer.lineWidth = 2;
+
+    return shapeLayer;
+}
+
+- (UIPickerView *)timePickerView {
+    if (!_timePickerView) {
+        _timePickerView = [[UIPickerView alloc] init];
+        _timePickerView.delegate = self;
+        _timePickerView.dataSource = self;
+
+        _timePickerView.backgroundColor = [UIColor colorWithHexString:@"EEE9E9"];
+
+        [_timePickerView addSubview:self.closeTimePickerBtn];
+        [self.closeTimePickerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(kCloseBtnWH);
+            make.top.equalTo(self->_timePickerView.mas_top).offset(10);
+            make.right.equalTo(self->_timePickerView.mas_right).offset(-8);
+        }];
+    }
+    return _timePickerView;
+}
+
+- (UIButton *)closeTimePickerBtn {
+    if (!_closeTimePickerBtn) {
+        _closeTimePickerBtn = [[UIButton alloc] init];
+
+        CAShapeLayer *shapeLayer = [self closeLayerWithWidth:kCloseBtnWH];
+        [_closeTimePickerBtn.layer addSublayer:shapeLayer];
+
+    }
+    return _closeTimePickerBtn;
 }
 @end
