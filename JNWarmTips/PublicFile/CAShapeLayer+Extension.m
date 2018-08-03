@@ -37,19 +37,17 @@
 
     CGFloat midX = width / 2;
     CGFloat midY = height / 2;
-    CGFloat stepX = width / 4 ;
-    CGFloat stepY = height / 4 ;
+    CGFloat stepX = width / 5 ;
+    CGFloat stepY = height / 5 ;
 
     CGPoint startPoint = CGPointMake(midX - stepX, midY);
     CGPoint midPoint = CGPointMake(midX, midY + stepY);
     CGPoint endPoint = CGPointMake(midX + stepX, midY - stepY);
-    CGPoint controlPoint = CGPointMake(midX, height+10);
 
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     [bezierPath moveToPoint:startPoint];
     [bezierPath addLineToPoint:midPoint];
     [bezierPath addLineToPoint:endPoint];
-//    [bezierPath addQuadCurveToPoint:endPoint controlPoint:controlPoint];
 
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = bezierPath.CGPath;
