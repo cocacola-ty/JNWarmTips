@@ -68,10 +68,22 @@ static const int kDoneBthWH = 36;
         [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.mas_equalTo(kDoneBthWH);
             make.centerX.equalTo(self.mas_centerX);
-            make.bottom.equalTo(self.mas_bottom).offset(-8);
+            make.bottom.equalTo(self.mas_bottom).offset(-10);
         }];
     }
     return self;
+}
+
+- (void) dismiss {
+    if (self.closeBlock) {
+        self.closeBlock();
+    }
+}
+
+- (void) done {
+    if (self.doneBlock) {
+        self.doneBlock();
+    }
 }
 
 #pragma mark - Delegate & DataSource
@@ -136,6 +148,7 @@ static const int kDoneBthWH = 36;
 - (UIButton *)closeBtn {
     if (!_closeBtn) {
         _closeBtn = [UIButton new];
+        [_closeBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 
         CAShapeLayer *shapeLayer = [CAShapeLayer closeLayerWithWidth:30];
         [_closeBtn.layer addSublayer:shapeLayer];
@@ -152,6 +165,7 @@ static const int kDoneBthWH = 36;
         CAShapeLayer *shapeLayer = [CAShapeLayer rightLayerWithWidth:kDoneBthWH WithHeight:kDoneBthWH];
         [_doneBtn.layer addSublayer:shapeLayer];
         _doneBtn.alpha = 0.8;
+        [_doneBtn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     }
     return _doneBtn;
 }

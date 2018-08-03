@@ -7,4 +7,7 @@
 
 
 @interface JNTimePickerView : UIView
+
+@property(nonatomic, copy) void (^closeBlock)();
+@property(nonatomic, copy) void (^doneBlock)();
 @end

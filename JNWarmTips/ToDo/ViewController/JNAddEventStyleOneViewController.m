@@ -34,6 +34,8 @@ static const int kTimeIndicateWH = 22;  // 是否显示事件视图指示器的�
 
 static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
+static const int kTimePickerViewHeight = 220;
+
 @interface JNAddEventStyleOneViewController () <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
@@ -180,7 +182,7 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     [self.timePickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.mas_equalTo(220);
+        make.height.mas_equalTo(kTimePickerViewHeight);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
 }
@@ -566,6 +568,22 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     if (!_timePickerView) {
         _timePickerView = [[JNTimePickerView alloc] init];
         _timePickerView.backgroundColor = [UIColor colorWithHexString:@"F0FFFF"];
+
+        @weakify(self)
+        _timePickerView.closeBlock = ^() {
+            @strongify(self)
+            [self->_timePickerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.view.mas_left);
+                make.right.equalTo(self.view.mas_right);
+                make.height.mas_equalTo(kTimePickerViewHeight);
+                make.top.equalTo(self.view.mas_bottom);
+            }];
+
+            [UIView animateWithDuration:0.25 animations:^{
+                [self.view setNeedsLayout];
+                [self.view layoutIfNeeded];
+            }];
+        };
     }
     return _timePickerView;
 }
