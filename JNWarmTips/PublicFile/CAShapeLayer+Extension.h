@@ -6,5 +6,8 @@
 #import <UIKit/UIKit.h>
 
 @interface CAShapeLayer (Extension)
+
 + (CAShapeLayer *)closeLayerWithWidth:(CGFloat)width;
-@end
+
++ (CAShapeLayer *)rightLayerWithWidth:(CGFloat)width WithHeight:(CGFloat)height;
+@end;

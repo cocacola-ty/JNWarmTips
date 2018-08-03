@@ -9,12 +9,15 @@
 #import "CAShapeLayer+Extension.h"
 
 
+static const int kDoneBthWH = 36;
+
 @interface JNTimePickerView() <UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic, strong) UIPickerView *timePickerView;
 @property(nonatomic, strong) UIButton *startTimeBtn;
 @property(nonatomic, strong) UIButton *endTimeBtn;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *closeBtn;
+@property (nonatomic, strong) UIButton *doneBtn;
 @end
 
 @implementation JNTimePickerView
@@ -59,6 +62,13 @@
             make.top.equalTo(self.mas_top).offset(8);
             make.right.equalTo(self.mas_right).offset(-8);
             make.width.height.mas_equalTo(30);
+        }];
+
+        [self addSubview:self.doneBtn];
+        [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(kDoneBthWH);
+            make.centerX.equalTo(self.mas_centerX);
+            make.bottom.equalTo(self.mas_bottom).offset(-8);
         }];
     }
     return self;
@@ -131,5 +141,18 @@
         [_closeBtn.layer addSublayer:shapeLayer];
     }
     return _closeBtn;
+}
+
+- (UIButton *)doneBtn {
+    if (!_doneBtn) {
+        _doneBtn = [UIButton new];
+        _doneBtn.layer.cornerRadius = kDoneBthWH / 2;
+        _doneBtn.layer.borderColor = MAIN_COLOR.CGColor;
+        _doneBtn.layer.borderWidth = 2;
+        CAShapeLayer *shapeLayer = [CAShapeLayer rightLayerWithWidth:kDoneBthWH WithHeight:kDoneBthWH];
+        [_doneBtn.layer addSublayer:shapeLayer];
+        _doneBtn.alpha = 0.8;
+    }
+    return _doneBtn;
 }
 @end
