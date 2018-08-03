@@ -25,6 +25,7 @@
 		8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */; };
 		8B8D81F39C44C415A95C970A /* JNItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88E67434D3790068CFA2 /* JNItemModel.m */; };
 		8B8D82B9B68F61F865807318 /* JNButtonTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */; };
+		8B8D82C4FAF6CD959B4A4737 /* JNTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8C2A93F12C7D31473C67 /* JNTimePickerView.m */; };
 		8B8D82D0095163A877576A10 /* JNTopContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E88977C2DF0F9B33EE8 /* JNTopContainerView.m */; };
 		8B8D8311A594230342333C5F /* JNEventEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */; };
 		8B8D8371855566BBCA52BD8D /* JNToDoItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */; };
@@ -136,12 +137,14 @@
 		8B8D8A4C4BA7EF77945B0E67 /* JNEventTimeLineTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventTimeLineTableViewCell.h; sourceTree = "<group>"; };
 		8B8D8A9E45A2D8E84BF63EEA /* JNAddEventTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddEventTransitionAnimator.h; sourceTree = "<group>"; };
 		8B8D8AF5F9761F22DBBE7530 /* ViewController+EventList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+EventList.h"; sourceTree = "<group>"; };
+		8B8D8B7476E6B8276DAE9D79 /* JNTimePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNTimePickerView.h; sourceTree = "<group>"; };
 		8B8D8BB4A219C1FABE890500 /* JNPresentTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNPresentTransitionAnimator.h; sourceTree = "<group>"; };
 		8B8D8BBF211467AF88CC5EF1 /* JNDBManager+Items.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JNDBManager+Items.m"; sourceTree = "<group>"; };
 		8B8D8BDFC346DA698F577D49 /* JNEventTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventTypeModel.h; sourceTree = "<group>"; };
 		8B8D8C02395800B33CEA4D9D /* JNDBManager+Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JNDBManager+Items.h"; sourceTree = "<group>"; };
 		8B8D8C11F809578247CF45DB /* ViewController+EventList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+EventList.m"; sourceTree = "<group>"; };
 		8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSwitchView.m; sourceTree = "<group>"; };
+		8B8D8C2A93F12C7D31473C67 /* JNTimePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNTimePickerView.m; sourceTree = "<group>"; };
 		8B8D8C544E8CCA8E17938B80 /* JNGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNGroupModel.h; sourceTree = "<group>"; };
 		8B8D8C9B183B31163C81DA8E /* JNEventEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventEditorViewController.h; sourceTree = "<group>"; };
 		8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddEventTransitionAnimator.m; sourceTree = "<group>"; };
@@ -394,6 +397,8 @@
 				8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */,
 				8B8D89F5061530D5B42767FA /* JNArrowIndicateView.m */,
 				8B8D8E75FF28D6F9A675DFD5 /* JNArrowIndicateView.h */,
+				8B8D8C2A93F12C7D31473C67 /* JNTimePickerView.m */,
+				8B8D8B7476E6B8276DAE9D79 /* JNTimePickerView.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -614,6 +619,7 @@
 				8B8D87F0B6F800AB773D238F /* JNAddEventsViewController.m in Sources */,
 				8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */,
 				8B8D8F91F2A3D8F5798242E5 /* JNArrowIndicateView.m in Sources */,
+				8B8D82C4FAF6CD959B4A4737 /* JNTimePickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

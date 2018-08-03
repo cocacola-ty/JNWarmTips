@@ -16,6 +16,7 @@
 #import "JNEventTypeModel.h"
 #import "JNSwitchView.h"
 #import "JNArrowIndicateView.h"
+#import "JNTimePickerView.h"
 
 static const int kTopImageViewHeight = 180;
 
@@ -61,8 +62,10 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 @property(nonatomic, assign) long long startTime;
 @property(nonatomic, assign) long long endTime;
 
-@property (nonatomic, strong) UIPickerView *timePickerView;
-@property (nonatomic, strong) UIButton *closeTimePickerBtn;
+//@property (nonatomic, strong) UIView *timeContainerView;
+//@property (nonatomic, strong) UIPickerView *timePickerView;
+//@property (nonatomic, strong) UIButton *closeTimePickerBtn;
+@property (nonatomic, strong) JNTimePickerView *timePickerView;
 @end
 
 @implementation JNAddEventStyleOneViewController
@@ -287,21 +290,34 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     if (component == 0) {
-        return 12;
+        return 23;
     } else {
         return 59;
     }
 }
 
-- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return [NSString stringWithFormat:@"%d", row+1];
+//- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+//    NSAttributedString *title = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", row + 1] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:10.0]}];
+//    return title;
+//}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.font = [UIFont systemFontOfSize:16.0];
+    titleLabel.textColor = MAIN_COLOR;
+    titleLabel.text = [NSString stringWithFormat:@"%d", row + 1];
+    return titleLabel;
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
+    return 30;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    return 100;
+    return 70;
 }
 
 #pragma mark - Getter & Setter
@@ -569,32 +585,12 @@ static const int kDefaultRightMargin = -30; // 右侧边距默认值
     return shapeLayer;
 }
 
-- (UIPickerView *)timePickerView {
+
+- (JNTimePickerView *)timePickerView {
     if (!_timePickerView) {
-        _timePickerView = [[UIPickerView alloc] init];
-        _timePickerView.delegate = self;
-        _timePickerView.dataSource = self;
-
-        _timePickerView.backgroundColor = [UIColor colorWithHexString:@"EEE9E9"];
-
-        [_timePickerView addSubview:self.closeTimePickerBtn];
-        [self.closeTimePickerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(kCloseBtnWH);
-            make.top.equalTo(self->_timePickerView.mas_top).offset(10);
-            make.right.equalTo(self->_timePickerView.mas_right).offset(-8);
-        }];
+        _timePickerView = [[JNTimePickerView alloc] init];
+        _timePickerView.backgroundColor = [UIColor colorWithHexString:@"F0FFFF"];
     }
     return _timePickerView;
-}
-
-- (UIButton *)closeTimePickerBtn {
-    if (!_closeTimePickerBtn) {
-        _closeTimePickerBtn = [[UIButton alloc] init];
-
-        CAShapeLayer *shapeLayer = [self closeLayerWithWidth:kCloseBtnWH];
-        [_closeTimePickerBtn.layer addSublayer:shapeLayer];
-
-    }
-    return _closeTimePickerBtn;
 }
 @end
