@@ -16,6 +16,7 @@
 #import "JNEventTypeModel.h"
 #import "JNSwitchView.h"
 #import "JNArrowIndicateView.h"
+#import "JNAddEventCellView.h"
 #import "JNTimePickerView.h"
 #import "CAShapeLayer+Extension.h"
 
@@ -44,6 +45,9 @@ static const int kTimePickerViewHeight = 220;
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIView *timeView;
 @property (nonatomic, strong) UIView *tagView;
+@property (nonatomic, strong) JNAddEventCellView *eventCellView;
+@property (nonatomic, strong) JNAddEventCellView *timeCellView;
+@property (nonatomic, strong) JNAddEventCellView *tagCellView;
 
 @property (nonatomic, strong) JNSwitchView *switchView;
 
@@ -370,6 +374,27 @@ static const int kTimePickerViewHeight = 220;
     return _starImageView;
 }
 
+- (JNAddEventCellView *)eventCellView {
+    if (!_eventCellView) {
+        _eventCellView = [[JNAddEventCellView alloc] initWithTitle:@"EVENT" WithIconImageName:@"event_list_full"];
+    }
+    return _eventCellView;
+}
+
+- (JNAddEventCellView *)tagCellView {
+    if (!_tagCellView) {
+        _tagCellView = [[JNAddEventCellView alloc] initWithTitle:@"TAG" WithIconImageName:@"tag_full"];
+    }
+    return _tagCellView;
+}
+
+- (JNAddEventCellView *)timeCellView {
+    if (!_timeCellView) {
+        _timeCellView = [[JNAddEventCellView alloc] initWithTitle:@"TIME" WithIconImageName:@"timer_highlight"];
+    }
+    return _timeCellView;
+}
+
 - (UIView *)eventView {
     if (!_eventView) {
         _eventView = [UIView new];
@@ -520,7 +545,6 @@ static const int kTimePickerViewHeight = 220;
 
     UIView *line = [UIView new];
     line.alpha = 0.6;
-    line.backgroundColor = GRAY_BACKGROUND_COLOR;
     line.backgroundColor = MAIN_COLOR;
     [superView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
