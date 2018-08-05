@@ -227,6 +227,9 @@ static const int kTimePickerViewHeight = 220;
 
 - (void) turnToTimeDuration {
     self.switchView.on = !self.switchView.on;
+    NSString *title = self.switchView.on ? @"DURATION" : @"TIME";
+    [self.timeCellView setTitle:title];
+
 }
 
 - (void) selectTag:(UIButton *)btn {
