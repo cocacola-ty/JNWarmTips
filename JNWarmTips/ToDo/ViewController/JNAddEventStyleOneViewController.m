@@ -41,10 +41,7 @@ static const int kTimePickerViewHeight = 220;
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *starImageView;
 
-@property (nonatomic, strong) UIView *eventView;
 @property (nonatomic, strong) UITextField *inputField;
-@property (nonatomic, strong) UIView *timeView;
-@property (nonatomic, strong) UIView *tagView;
 @property (nonatomic, strong) JNAddEventCellView *eventCellView;
 @property (nonatomic, strong) JNAddEventCellView *timeCellView;
 @property (nonatomic, strong) JNAddEventCellView *tagCellView;
@@ -69,9 +66,6 @@ static const int kTimePickerViewHeight = 220;
 @property(nonatomic, assign) long long startTime;
 @property(nonatomic, assign) long long endTime;
 
-//@property (nonatomic, strong) UIView *timeContainerView;
-//@property (nonatomic, strong) UIPickerView *timePickerView;
-//@property (nonatomic, strong) UIButton *closeTimePickerBtn;
 @property (nonatomic, strong) JNTimePickerView *timePickerView;
 @end
 
@@ -109,27 +103,25 @@ static const int kTimePickerViewHeight = 220;
         make.width.height.mas_equalTo(kStarImageViewWH);
     }];
 
-    [self.view addSubview:self.eventView];
-    [self.eventView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.topImageView.mas_bottom).offset(60);
+    [self.view addSubview:self.eventCellView];
+    [self.eventCellView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(40);
         make.right.equalTo(self.view.mas_right).offset(kDefaultRightMargin);
+        make.top.equalTo(self.topImageView.mas_bottom).offset(60);
         make.height.mas_equalTo(60);
     }];
-
-    [self.view addSubview:self.tagView];
-    [self.tagView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.eventView.mas_bottom).offset(25);
-        make.left.equalTo(self.eventView.mas_left);
-        make.width.equalTo(self.eventView.mas_width);
+    [self.view addSubview:self.tagCellView];
+    [self.tagCellView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.eventCellView.mas_bottom).offset(25);
+        make.left.equalTo(self.eventCellView.mas_left);
+        make.right.equalTo(self.eventCellView.mas_right);
         make.height.mas_equalTo(kTagViewHeight);
     }];
-
-    [self.view addSubview:self.timeView];
-    [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.tagView.mas_bottom).offset(40);
-        make.width.equalTo(self.eventView.mas_width);
-        make.left.equalTo(self.eventView.mas_left);
+    [self.view addSubview:self.timeCellView];
+    [self.timeCellView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.tagCellView.mas_bottom).offset(40);
+        make.left.equalTo(self.eventCellView.mas_left);
+        make.right.equalTo(self.eventCellView.mas_right);
         make.height.mas_equalTo(55);
     }];
 
@@ -161,14 +153,14 @@ static const int kTimePickerViewHeight = 220;
     [self.view addSubview:coverView];
     CGFloat height = self.isShowTimeView ? 0 : 95;
     [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.timeView.mas_bottom).offset(15);
+        make.bottom.equalTo(self.timeCellView.mas_bottom).offset(15);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.height.mas_equalTo(height);
     }];
 
     [self.view addSubview:self.timesSwitchView];
-    UIView *referenceView = self.isShowTimeView ? self.timeView : self.tagView;
+    UIView *referenceView = self.isShowTimeView ? self.timeCellView : self.tagCellView;
     [self.timesSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.top.equalTo(referenceView.mas_bottom).offset(15);
@@ -199,12 +191,12 @@ static const int kTimePickerViewHeight = 220;
     UIView *referenceView;
     if (self.isShowTimeView) {
         coverViewUpdateHeight = 0;
-        referenceView = self.timeView;
+        referenceView = self.timeCellView;
 
         [self.arrowIndicateView close];
     } else {
         coverViewUpdateHeight = 95;
-        referenceView = self.tagView;
+        referenceView = self.tagCellView;
 
         [self.arrowIndicateView open];
     }
@@ -303,11 +295,6 @@ static const int kTimePickerViewHeight = 220;
     }
 }
 
-//- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-//    NSAttributedString *title = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", row + 1] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:10.0]}];
-//    return title;
-//}
-
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
     UILabel *titleLabel = [UILabel new];
     titleLabel.font = [UIFont systemFontOfSize:16.0];
@@ -377,6 +364,16 @@ static const int kTimePickerViewHeight = 220;
 - (JNAddEventCellView *)eventCellView {
     if (!_eventCellView) {
         _eventCellView = [[JNAddEventCellView alloc] initWithTitle:@"EVENT" WithIconImageName:@"event_list_full"];
+        UITextField *inputField = [[UITextField alloc] init];
+        inputField.placeholder = @"请输入内容";
+        inputField.delegate = self;
+        self.inputField = inputField;
+        [_eventCellView addSubview:inputField];
+        [inputField mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self->_eventCellView.mas_left).offset(35);
+            make.height.mas_equalTo(44);
+            make.bottom.equalTo(self->_eventCellView.mas_bottom).offset(-1);
+        }];
     }
     return _eventCellView;
 }
@@ -384,6 +381,44 @@ static const int kTimePickerViewHeight = 220;
 - (JNAddEventCellView *)tagCellView {
     if (!_tagCellView) {
         _tagCellView = [[JNAddEventCellView alloc] initWithTitle:@"TAG" WithIconImageName:@"tag_full"];
+        CGFloat offset = 0;
+        self.allTagBtns = [NSMutableArray array];
+        for (JNEventTypeModel *model in self.allTagModels) {
+            UIButton *tagBtn = [UIButton  new];
+            tagBtn.font = [UIFont systemFontOfSize:14.0];
+            tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+            [tagBtn setTitle:[model.typeName substringToIndex:1] forState:UIControlStateNormal];
+            [tagBtn addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
+
+            [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+            [tagBtn setTitleColor:[UIColor colorWithHexString:model.typeColor] forState:UIControlStateSelected];
+
+            tagBtn.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
+            tagBtn.layer.borderWidth = 1;
+            [_tagCellView addSubview:tagBtn];
+            [self.allTagBtns addObject:tagBtn];
+
+
+            UILabel *nameLabel = [UILabel new];
+            nameLabel.font = [UIFont systemFontOfSize:12.0];
+            nameLabel.text = model.typeName;
+            [_tagCellView addSubview:nameLabel];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.equalTo(_tagCellView.mas_bottom).offset(-6);
+                make.left.equalTo(self->_tagCellView.mas_left).offset(35 + offset);
+            }];
+
+            CGRect rect = [model.typeName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]} context:nil];
+            [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.equalTo(nameLabel.mas_top).offset(-4);
+                make.centerX.equalTo(nameLabel.mas_centerX);
+                make.width.height.mas_equalTo(30);
+            }];
+            tagBtn.layer.cornerRadius = (rect.size.height + 4) / 2;
+            tagBtn.layer.cornerRadius = 15;
+
+            offset += 50;
+        }
     }
     return _tagCellView;
 }
@@ -391,54 +426,19 @@ static const int kTimePickerViewHeight = 220;
 - (JNAddEventCellView *)timeCellView {
     if (!_timeCellView) {
         _timeCellView = [[JNAddEventCellView alloc] initWithTitle:@"TIME" WithIconImageName:@"timer_highlight"];
-    }
-    return _timeCellView;
-}
-
-- (UIView *)eventView {
-    if (!_eventView) {
-        _eventView = [UIView new];
-        [self configCommonView:_eventView AndTitle:@"EVENT" WithImageName:@"event_list_full"];
-        UITextField *inputField = [[UITextField alloc] init];
-        inputField.placeholder = @"请输入内容";
-        inputField.delegate = self;
-        self.inputField = inputField;
-        [_eventView addSubview:inputField];
-        [inputField mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self->_eventView.mas_left).offset(35);
-            make.height.mas_equalTo(44);
-            make.bottom.equalTo(self->_eventView.mas_bottom).offset(-1);
-        }];
-    }
-    return _eventView;
-}
-
-- (UIView *)timeView {
-    if (!_timeView) {
-        _timeView = [UIView new];
-        [self configCommonView:_timeView AndTitle:@"TIME" WithImageName:@"timer_highlight"];
-
-        UILabel *timeLabel = [UILabel new];
-        timeLabel.text = @"12:00";
-        timeLabel.textColor = GRAY_TEXT_COLOR;
-        [_timeView addSubview:timeLabel];
-        [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self->_timeView.mas_centerY).offset(5);
-            make.centerX.equalTo(self->_timeView.mas_centerX);
-        }];
 
         JNSwitchView *switchView = [JNSwitchView new];
         self.switchView = switchView;
         [switchView addTarget:self action:@selector(turnToTimeDuration) forControlEvents:UIControlEventTouchUpInside];
-        [_timeView addSubview:switchView];
+        [_timeCellView addSubview:switchView];
         [switchView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kTimeSwitchViewWidth);
             make.height.mas_equalTo(kTimeSwitchViewHeight);
-            make.centerY.equalTo(self->_timeView.mas_centerY).offset(4);
-            make.right.equalTo(self->_timeView.mas_right).offset(-6);
+            make.centerY.equalTo(self->_timeCellView.mas_centerY).offset(4);
+            make.right.equalTo(self->_timeCellView.mas_right).offset(-6);
         }];
     }
-    return _timeView;
+    return _timeCellView;
 }
 
 - (UIView *)timesSwitchView {
@@ -470,53 +470,6 @@ static const int kTimePickerViewHeight = 220;
 
     }
     return _timesSwitchView;
-}
-
-- (UIView *)tagView {
-    if (!_tagView) {
-        _tagView = [UIView new];
-        [self configCommonView:_tagView AndTitle:@"TAG" WithImageName:@"tag_full"];
-
-        CGFloat offset = 0;
-        self.allTagBtns = [NSMutableArray array];
-        for (JNEventTypeModel *model in self.allTagModels) {
-            UIButton *tagBtn = [UIButton  new];
-            tagBtn.font = [UIFont systemFontOfSize:14.0];
-            tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
-            [tagBtn setTitle:[model.typeName substringToIndex:1] forState:UIControlStateNormal];
-            [tagBtn addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
-
-            [tagBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
-            [tagBtn setTitleColor:[UIColor colorWithHexString:model.typeColor] forState:UIControlStateSelected];
-
-            tagBtn.layer.borderColor = GRAY_TEXT_COLOR.CGColor;
-            tagBtn.layer.borderWidth = 1;
-            [_tagView addSubview:tagBtn];
-            [self.allTagBtns addObject:tagBtn];
-
-
-            UILabel *nameLabel = [UILabel new];
-            nameLabel.font = [UIFont systemFontOfSize:12.0];
-            nameLabel.text = model.typeName;
-            [_tagView addSubview:nameLabel];
-            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(_tagView.mas_bottom).offset(-6);
-                make.left.equalTo(self->_tagView.mas_left).offset(35 + offset);
-            }];
-
-            CGRect rect = [model.typeName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]} context:nil];
-            [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(nameLabel.mas_top).offset(-4);
-                make.centerX.equalTo(nameLabel.mas_centerX);
-                make.width.height.mas_equalTo(30);
-            }];
-            tagBtn.layer.cornerRadius = (rect.size.height + 4) / 2;
-            tagBtn.layer.cornerRadius = 15;
-
-            offset += 50;
-        }
-    }
-    return _tagView;
 }
 
 - (JNArrowIndicateView *)arrowIndicateView {
