@@ -483,40 +483,6 @@ static const int kTimePickerViewHeight = 220;
     return _arrowIndicateView;
 }
 
-- (void) configCommonView:(UIView *)superView AndTitle:(NSString *)title WithImageName:(NSString *)imageName{
-
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.text = title;
-    titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
-    titleLabel.textColor = [UIColor colorWithHexString:@"c8c8c8"];
-    titleLabel.textColor = MAIN_COLOR;
-    [superView addSubview:titleLabel];
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(superView.mas_top);
-        make.left.equalTo(superView.mas_left).offset(35);
-    }];
-
-    UIView *line = [UIView new];
-    line.alpha = 0.6;
-    line.backgroundColor = MAIN_COLOR;
-    [superView addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(1);
-        make.left.equalTo(superView.mas_left).offset(35);
-        make.right.equalTo(superView.mas_right);
-        make.bottom.equalTo(superView.mas_bottom);
-    }];
-
-    UIImageView *iconImageView = [UIImageView new];
-    iconImageView.image = [UIImage imageNamed:imageName];
-    [superView addSubview:iconImageView];
-    [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(superView.mas_left);
-        make.width.height.mas_equalTo(20);
-        make.centerY.equalTo(superView.mas_centerY);
-    }];
-}
-
 - (NSArray *)allTagModels {
     if (!_allTagModels) {
         _allTagModels = [[JNDBManager shareInstance] getAllEventTypes];
