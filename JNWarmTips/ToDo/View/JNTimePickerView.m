@@ -35,7 +35,7 @@ static const int kDoneBthWH = 36;
 
         [self addSubview:self.startTimeBtn];
         [self.startTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(24);
+            make.height.mas_equalTo(30);
             make.width.mas_equalTo(60);
             make.top.equalTo(self.mas_top).offset(8);
             make.right.equalTo(self.mas_centerX).offset(-25);
@@ -51,7 +51,7 @@ static const int kDoneBthWH = 36;
 
         [self addSubview:self.endTimeBtn];
         [self.endTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(24);
+            make.height.mas_equalTo(30);
             make.width.mas_equalTo(60);
             make.left.equalTo(self.mas_centerX).offset(25);
             make.centerY.equalTo(self.startTimeBtn.mas_centerY);
@@ -70,6 +70,9 @@ static const int kDoneBthWH = 36;
             make.centerX.equalTo(self.mas_centerX);
             make.bottom.equalTo(self.mas_bottom).offset(-10);
         }];
+
+        self.startTimeBtn.selected = YES;
+        self.startTimeBtn.backgroundColor = MAIN_COLOR;
     }
     return self;
 }
@@ -126,8 +129,9 @@ static const int kDoneBthWH = 36;
         _startTimeBtn.layer.borderWidth = 1;
         _startTimeBtn.layer.borderColor = MAIN_COLOR.CGColor;
         [_startTimeBtn setTitle:@"start" forState:UIControlStateNormal];
-        _startTimeBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        _startTimeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
         [_startTimeBtn setTitleColor:MAIN_COLOR forState:UIControlStateNormal];
+        [_startTimeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     }
     return _startTimeBtn;
 }
@@ -139,7 +143,7 @@ static const int kDoneBthWH = 36;
         _endTimeBtn.layer.borderWidth = 1;
         _endTimeBtn.layer.borderColor = MAIN_COLOR.CGColor;
         [_endTimeBtn setTitle:@"end" forState:UIControlStateNormal];
-        _endTimeBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        _endTimeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
         [_endTimeBtn setTitleColor:MAIN_COLOR forState:UIControlStateNormal];
     }
     return _endTimeBtn;
