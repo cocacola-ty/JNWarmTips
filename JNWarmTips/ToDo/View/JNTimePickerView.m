@@ -20,6 +20,13 @@ static const int kDoneBthWH = 36;
 @property (nonatomic, strong) UIButton *doneBtn;
 
 @property (nonatomic, strong) UIButton *currentSelectBtn;
+@property(nonatomic, assign) BOOL isSelectStart;
+
+@property (nonatomic, strong) NSString *startTimeStr;
+@property (nonatomic, strong) NSString *startHour;
+@property (nonatomic, strong) NSString *startMinute;
+@property (nonatomic, strong) NSString *endHour;
+@property (nonatomic, strong) NSString *endMinute;
 @end
 
 @implementation JNTimePickerView
@@ -73,9 +80,16 @@ static const int kDoneBthWH = 36;
             make.bottom.equalTo(self.mas_bottom).offset(-10);
         }];
 
+        // Data Init
         self.currentSelectBtn = self.startTimeBtn;
         self.currentSelectBtn.selected = YES;
         self.currentSelectBtn.backgroundColor = MAIN_COLOR;
+        self.isSelectStart = YES;
+
+        self.startHour = @"00";
+        self.startMinute = @"00";
+        self.endHour = @"00";
+        self.endMinute = @"00";
     }
     return self;
 }
@@ -90,6 +104,8 @@ static const int kDoneBthWH = 36;
         self.currentSelectBtn = timeBtn;
         self.currentSelectBtn.selected = YES;
         self.currentSelectBtn.backgroundColor = MAIN_COLOR;
+
+        self.isSelectStart = self.currentSelectBtn == self.startTimeBtn;
     }
 }
 
@@ -125,6 +141,30 @@ static const int kDoneBthWH = 36;
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
     return 44;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+
+    if (component == 0) {
+        if (self.isSelectStart) {
+            self.startHour = [NSString stringWithFormat:@"%02d", row];
+        } else {
+            self.endHour =  [NSString stringWithFormat:@"%02d", row];
+        }
+    } else {
+        if (self.isSelectStart) {
+            self.startMinute = [NSString stringWithFormat:@"%02d", row];
+        } else {
+            self.endMinute = [NSString stringWithFormat:@"%02d", row];
+        }
+    }
+
+    if (self.isSelectStart) {
+        [self.startTimeBtn setTitle:[NSString stringWithFormat:@"%@:%@", self.startHour, self.startMinute] forState:UIControlStateNormal];
+    } else {
+        [self.endTimeBtn setTitle:[NSString stringWithFormat:@"%@:%@", self.endHour, self.endMinute] forState:UIControlStateNormal];
+    }
+
 }
 
 #pragma mark - Getter & Setter
