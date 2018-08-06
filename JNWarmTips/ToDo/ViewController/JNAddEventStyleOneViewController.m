@@ -229,6 +229,8 @@ static const int kTimePickerViewHeight = 220;
     self.switchView.on = !self.switchView.on;
     NSString *title = self.switchView.on ? @"DURATION" : @"TIME";
     [self.timeCellView setTitle:title];
+    JNTimeType type = self.switchView.on ? JNTimeTypeDuration : JNTimeTypeTime;
+    [self.timePickerView changeType:type];
 
 }
 

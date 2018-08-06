@@ -5,8 +5,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_OPTIONS(NSInteger , JNTimeType) {
+    JNTimeTypeDuration = 1,
+    JNTimeTypeTime = 2,
+};
 
 @interface JNTimePickerView : UIView
+
+- (instancetype)initWithType:(JNTimeType)type;
+
+- (void)changeType:(JNTimeType)type;
 
 @property(nonatomic, copy) void (^closeBlock)();
 @property(nonatomic, copy) void (^doneBlock)();

@@ -62,7 +62,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     //test
-    [[JNDBManager shareInstance] deleteRubbishData];
+    //[[JNDBManager shareInstance] deleteRubbishData];
     // test end
 
     // 初始化设置
@@ -140,7 +140,24 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     [self addObserver:self forKeyPath:@"currentSelectDay" options:NSKeyValueObservingOptionNew context:nil];
 
+    // TEST
+    NSString *tiemStr = [NSString stringWithFormat:@"%@ 09:10", self.currentSelectDay];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+    NSDate *time = [dateFormatter dateFromString:tiemStr];
+    NSTimeInterval timeInterval = [time timeIntervalSince1970];
+    long long timeLong = [[NSNumber numberWithDouble:timeInterval] longLongValue];
+    NSLog(@"%lf", timeInterval);
+    NSLog(@"timeLong = %lli", timeLong);
+
+    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
+    dateFormatter1.dateFormat = @"HH:mm";
+    NSDate *dateFromInterval = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+    NSString *str = [dateFormatter1 stringFromDate:dateFromInterval];
+    NSLog(@"str = %@", str);
+    // END TEST
 }
+
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
