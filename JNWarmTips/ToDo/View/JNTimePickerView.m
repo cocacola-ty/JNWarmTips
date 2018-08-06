@@ -42,7 +42,7 @@ static const int kDoneBthWH = 36;
         }];
 
         UILabel *separateLabel = [UILabel new];
-        separateLabel.text = @"-";
+        separateLabel.text = @">";
         [self addSubview:separateLabel];
         [separateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.mas_centerX);
@@ -93,13 +93,13 @@ static const int kDoneBthWH = 36;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return component == 0 ? 23 : 59;
+    return component == 0 ? 24 : 60;
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
     UILabel *titleLabel = [UILabel new];
     titleLabel.font = [UIFont systemFontOfSize:16.0];
-    titleLabel.text = [NSString stringWithFormat:@"%d", row + 1];
+    titleLabel.text = [NSString stringWithFormat:@"%02d", row];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     return titleLabel;
 }
