@@ -47,6 +47,7 @@ static const int kTimePickerViewHeight = 220;
 @property (nonatomic, strong) JNAddEventCellView *tagCellView;
 
 @property (nonatomic, strong) JNSwitchView *switchView;
+@property (nonatomic, strong) UILabel *timeLabel;
 
 @property (nonatomic, strong) UIView *timesSwitchView;
 @property (nonatomic, strong) CALayer *selectedLayer;
@@ -179,7 +180,7 @@ static const int kTimePickerViewHeight = 220;
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.height.mas_equalTo(kTimePickerViewHeight);
-        make.bottom.equalTo(self.view.mas_bottom);
+        make.top.equalTo(self.view.mas_bottom);
     }];
 }
 
@@ -227,11 +228,38 @@ static const int kTimePickerViewHeight = 220;
 
 - (void) turnToTimeDuration {
     self.switchView.on = !self.switchView.on;
-    NSString *title = self.switchView.on ? @"DURATION" : @"TIME";
-    [self.timeCellView setTitle:title];
-    JNTimeType type = self.switchView.on ? JNTimeTypeDuration : JNTimeTypeTime;
-    [self.timePickerView changeType:type];
 
+    NSString *title;
+    JNTimeType type;
+
+    if (self.switchView.on) {
+        self.timeLabel.text = @"00:00  >  23:59";
+        title = @"DURATION";
+        type = JNTimeTypeDuration;
+    } else {
+        self.timeLabel.text = @"00:00";
+        type = JNTimeTypeTime;
+        title = @"TIME";
+    }
+
+    [self.timePickerView changeType:type];
+    [self.timeCellView setTitle:title];
+
+}
+
+- (void)showTimePicker {
+
+    [self.timePickerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.mas_equalTo(kTimePickerViewHeight);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
+
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }];
 }
 
 - (void) selectTag:(UIButton *)btn {
@@ -442,6 +470,21 @@ static const int kTimePickerViewHeight = 220;
             make.centerY.equalTo(self->_timeCellView.mas_centerY).offset(4);
             make.right.equalTo(self->_timeCellView.mas_right).offset(-6);
         }];
+
+        UILabel *timeLabel = [UILabel new];
+        timeLabel.userInteractionEnabled = YES;
+        self.timeLabel = timeLabel;
+        timeLabel.text = @"00:00";
+        timeLabel.textColor = GRAY_TEXT_COLOR;
+        timeLabel.textAlignment = NSTextAlignmentCenter;
+        [_timeCellView addSubview:timeLabel];
+        [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self->_timeCellView.mas_left).offset(35);
+            make.right.equalTo(switchView.mas_left).offset(-20);
+            make.centerY.equalTo(self->_timeCellView.mas_centerY).offset(10);
+        }];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTimePicker)];
+        [timeLabel addGestureRecognizer:tapGestureRecognizer];
     }
     return _timeCellView;
 }
