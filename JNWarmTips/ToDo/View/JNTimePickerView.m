@@ -18,6 +18,8 @@ static const int kDoneBthWH = 36;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *closeBtn;
 @property (nonatomic, strong) UIButton *doneBtn;
+
+@property (nonatomic, strong) UIButton *currentSelectBtn;
 @end
 
 @implementation JNTimePickerView
@@ -71,10 +73,24 @@ static const int kDoneBthWH = 36;
             make.bottom.equalTo(self.mas_bottom).offset(-10);
         }];
 
-        self.startTimeBtn.selected = YES;
-        self.startTimeBtn.backgroundColor = MAIN_COLOR;
+        self.currentSelectBtn = self.startTimeBtn;
+        self.currentSelectBtn.selected = YES;
+        self.currentSelectBtn.backgroundColor = MAIN_COLOR;
     }
     return self;
+}
+
+- (void) selectTime:(UIButton *)timeBtn {
+    if (self.currentSelectBtn != timeBtn) {
+        // 将原来选中的按钮状态重置
+        self.currentSelectBtn.backgroundColor = [UIColor clearColor];
+        self.currentSelectBtn.selected = NO;
+
+        // 将选中按钮更新为当前点击按钮
+        self.currentSelectBtn = timeBtn;
+        self.currentSelectBtn.selected = YES;
+        self.currentSelectBtn.backgroundColor = MAIN_COLOR;
+    }
 }
 
 - (void) dismiss {
@@ -132,6 +148,7 @@ static const int kDoneBthWH = 36;
         _startTimeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
         [_startTimeBtn setTitleColor:MAIN_COLOR forState:UIControlStateNormal];
         [_startTimeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [_startTimeBtn addTarget:self action:@selector(selectTime:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startTimeBtn;
 }
@@ -145,6 +162,9 @@ static const int kDoneBthWH = 36;
         [_endTimeBtn setTitle:@"end" forState:UIControlStateNormal];
         _endTimeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
         [_endTimeBtn setTitleColor:MAIN_COLOR forState:UIControlStateNormal];
+        [_endTimeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+
+        [_endTimeBtn addTarget:self action:@selector(selectTime:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _endTimeBtn;
 }
