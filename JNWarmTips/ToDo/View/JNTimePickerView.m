@@ -11,11 +11,20 @@
 
 static const int kDoneBthWH = 36;
 
+static const int kTimeBtnHeight = 30;
+
+static const int kTimeBtnWidth = 60;
+
+static const int kTimeBtnMargin = 25;
+
+static const int kTimeBtnTopMargin = 8;
+
 @interface JNTimePickerView() <UIPickerViewDelegate, UIPickerViewDataSource>
 @property(nonatomic, assign) JNTimeType type;
 
 @property (nonatomic, strong) UIPickerView *timePickerView;
 @property(nonatomic, strong) UIButton *startTimeBtn;
+@property (nonatomic, strong) UILabel *separateLabel;
 @property(nonatomic, strong) UIButton *endTimeBtn;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *closeBtn;
@@ -24,7 +33,8 @@ static const int kDoneBthWH = 36;
 @property (nonatomic, strong) UIButton *currentSelectBtn;
 @property(nonatomic, assign) BOOL isSelectStart;
 
-@property (nonatomic, strong) NSString *startTimeStr;
+@property (nonatomic, strong) NSString *startTime;
+@property (nonatomic, strong) NSString *endTime;
 @property (nonatomic, strong) NSString *startHour;
 @property (nonatomic, strong) NSString *startMinute;
 @property (nonatomic, strong) NSString *endHour;
@@ -55,6 +65,7 @@ static const int kDoneBthWH = 36;
         }];
 
         UILabel *separateLabel = [UILabel new];
+        self.separateLabel = separateLabel;
         separateLabel.text = @">";
         [self addSubview:separateLabel];
         [separateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -111,13 +122,14 @@ static const int kDoneBthWH = 36;
 
         [self addSubview:self.startTimeBtn];
         [self.startTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(30);
-            make.width.mas_equalTo(60);
-            make.top.equalTo(self.mas_top).offset(8);
-            make.right.equalTo(self.mas_centerX).offset(-25);
+            make.height.mas_equalTo(kTimeBtnHeight);
+            make.width.mas_equalTo(kTimeBtnWidth);
+            make.top.equalTo(self.mas_top).offset(kTimeBtnTopMargin);
+            make.right.equalTo(self.mas_centerX).offset(-kTimeBtnMargin);
         }];
 
         UILabel *separateLabel = [UILabel new];
+        self.separateLabel = separateLabel;
         separateLabel.text = @">";
         [self addSubview:separateLabel];
         [separateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,9 +139,9 @@ static const int kDoneBthWH = 36;
 
         [self addSubview:self.endTimeBtn];
         [self.endTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(30);
-            make.width.mas_equalTo(60);
-            make.left.equalTo(self.mas_centerX).offset(25);
+            make.height.mas_equalTo(kTimeBtnHeight);
+            make.width.mas_equalTo(kTimeBtnWidth);
+            make.left.equalTo(self.mas_centerX).offset(kTimeBtnMargin);
             make.centerY.equalTo(self.startTimeBtn.mas_centerY);
         }];
 
@@ -178,11 +190,25 @@ static const int kDoneBthWH = 36;
 
 - (void) changeType:(JNTimeType)type {
     self.type = type;
-
     if (type == JNTimeTypeDuration) {
-
+        [self.startTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kTimeBtnHeight);
+            make.width.mas_equalTo(kTimeBtnWidth);
+            make.top.equalTo(self.mas_top).offset(kTimeBtnTopMargin);
+            make.right.equalTo(self.mas_centerX).offset(-kTimeBtnMargin);
+        }];
+        self.endTimeBtn.hidden = NO;
+        self.separateLabel.hidden = NO;
     } else {
+        [self.startTimeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.mas_centerX);
+            make.width.mas_equalTo(kTimeBtnWidth);
+            make.height.mas_equalTo(kTimeBtnHeight);
+            make.top.equalTo(self.mas_top).offset(kTimeBtnTopMargin);
+        }];
 
+        self.endTimeBtn.hidden = YES;
+        self.separateLabel.hidden = YES;
     }
 }
 
