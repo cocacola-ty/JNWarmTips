@@ -83,8 +83,8 @@ static const int kTimePickerViewHeight = 220;
 
 - (void) dataInit {
     self.isShowTimeView = NO;
-    self.startTime = 0;
-    self.endTime = 0;
+    self.startTime = @"00:00";
+    self.endTime = @"00:00";
     // todo: 这里后面可以改成自己设置默认是否显示时间视图
 }
 
@@ -224,6 +224,7 @@ static const int kTimePickerViewHeight = 220;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void) turnToTimeDuration {
@@ -284,8 +285,21 @@ static const int kTimePickerViewHeight = 220;
         eventModel.eventTypeId = self.selectedTagModel.typeId;
         eventModel.color = self.selectedTagModel.typeColor;
         if (self.isShowTimeView) {
-            eventModel.startTime;
-            eventModel.endTime;
+
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+
+            NSString *startTimeStr = [NSString stringWithFormat:@"%@ %@", self.selectedDate, self.startTime];
+            NSDate *start = [dateFormatter dateFromString:startTimeStr];
+            long long startTimeInterval = [[NSNumber numberWithDouble:[start timeIntervalSince1970]] longLongValue];
+            eventModel.startTime = startTimeInterval;
+
+            if (self.switchView.on) {
+                NSString *endTimeStr = [NSString stringWithFormat:@"%@ %@", self.selectedDate, self.endTime];
+                NSDate *end = [dateFormatter dateFromString:endTimeStr];
+                long long endTimeInterval = [[NSNumber numberWithDouble:[end timeIntervalSince1970]] longLongValue];
+                eventModel.endTime = endTimeInterval;
+            }
             eventModel.needNotification = 0;
         }
         self.addEventBlock(eventModel);

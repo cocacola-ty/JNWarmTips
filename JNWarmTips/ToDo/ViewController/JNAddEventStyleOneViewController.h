@@ -11,4 +11,5 @@
 
 @interface JNAddEventStyleOneViewController : UIViewController
 @property(nonatomic, copy) void (^addEventBlock)(JNEventModel *eventModel);
+@property (nonatomic, strong) NSString *selectedDate;
 @end

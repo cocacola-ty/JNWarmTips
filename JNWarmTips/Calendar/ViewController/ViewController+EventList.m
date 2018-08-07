@@ -70,6 +70,7 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
         case 1: {
             @weakify(self)
             JNAddEventStyleOneViewController *addEventStyleOneViewController = [JNAddEventStyleOneViewController new];
+            addEventStyleOneViewController.selectedDate = self.currentSelectDay;
             addEventStyleOneViewController.addEventBlock = ^(JNEventModel *eventModel) {
                 @strongify(self)
                 eventModel.showDate = self.currentSelectDay;
