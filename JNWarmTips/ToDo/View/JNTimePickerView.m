@@ -169,6 +169,10 @@ static const int kTimeBtnTopMargin = 8;
         self.startMinute = @"00";
         self.endHour = @"00";
         self.endMinute = @"00";
+        self.startTime = [NSString stringWithFormat:@"%@:%@", self.startHour, self.startMinute];
+        self.endTime = [NSString stringWithFormat:@"%@:%@", self.endHour, self.endMinute];
+        [self changeType:JNTimeTypeTime];
+
     }
     return self;
 }
@@ -191,7 +195,7 @@ static const int kTimeBtnTopMargin = 8;
 - (void) changeType:(JNTimeType)type {
     self.type = type;
     if (type == JNTimeTypeDuration) {
-        [self.startTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.startTimeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(kTimeBtnHeight);
             make.width.mas_equalTo(kTimeBtnWidth);
             make.top.equalTo(self.mas_top).offset(kTimeBtnTopMargin);
@@ -199,6 +203,7 @@ static const int kTimeBtnTopMargin = 8;
         }];
         self.endTimeBtn.hidden = NO;
         self.separateLabel.hidden = NO;
+
     } else {
         [self.startTimeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.mas_centerX);
@@ -207,6 +212,7 @@ static const int kTimeBtnTopMargin = 8;
             make.top.equalTo(self.mas_top).offset(kTimeBtnTopMargin);
         }];
 
+        [self selectTime:self.startTimeBtn];
         self.endTimeBtn.hidden = YES;
         self.separateLabel.hidden = YES;
     }
@@ -220,7 +226,8 @@ static const int kTimeBtnTopMargin = 8;
 
 - (void) done {
     if (self.doneBlock) {
-        self.doneBlock();
+        NSString *endTime = self.type == JNTimeTypeTime ? nil : self.endTime;
+        self.doneBlock(self.startTime, endTime);
     }
 }
 
@@ -263,9 +270,11 @@ static const int kTimeBtnTopMargin = 8;
     }
 
     if (self.isSelectStart) {
-        [self.startTimeBtn setTitle:[NSString stringWithFormat:@"%@:%@", self.startHour, self.startMinute] forState:UIControlStateNormal];
+        self.startTime = [NSString stringWithFormat:@"%@:%@", self.startHour, self.startMinute];
+        [self.startTimeBtn setTitle:self.startTime forState:UIControlStateNormal];
     } else {
-        [self.endTimeBtn setTitle:[NSString stringWithFormat:@"%@:%@", self.endHour, self.endMinute] forState:UIControlStateNormal];
+        self.endTime = [NSString stringWithFormat:@"%@:%@", self.endHour, self.endMinute];
+        [self.endTimeBtn setTitle:self.endTime forState:UIControlStateNormal];
     }
 
 }

@@ -17,5 +17,5 @@ typedef NS_OPTIONS(NSInteger , JNTimeType) {
 - (void)changeType:(JNTimeType)type;
 
 @property(nonatomic, copy) void (^closeBlock)();
-@property(nonatomic, copy) void (^doneBlock)();
+@property(nonatomic, copy) void (^doneBlock)(__nonnull NSString *startTime, __nullable NSString *endTiem);
 @end
