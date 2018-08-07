@@ -12,10 +12,8 @@ typedef NS_OPTIONS(NSInteger , JNTimeType) {
 
 @interface JNTimePickerView : UIView
 
-- (instancetype)initWithType:(JNTimeType)type;
-
 - (void)changeType:(JNTimeType)type;
 
 @property(nonatomic, copy) void (^closeBlock)();
-@property(nonatomic, copy) void (^doneBlock)(__nonnull NSString *startTime, __nullable NSString *endTiem);
+@property(nonatomic, copy) void (^doneBlock)(NSString *startTime, NSString *endTiem);
 @end

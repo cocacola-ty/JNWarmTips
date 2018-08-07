@@ -62,10 +62,10 @@ static const int kTimePickerViewHeight = 220;
 @property (nonatomic, strong) NSArray<JNEventTypeModel *> *allTagModels;
 @property (nonatomic, strong) UIButton *selectedTagBtn;
 @property (nonatomic, strong) JNEventTypeModel *selectedTagModel;
-@property (nonatomic, strong) NSMutableArray *allTagBtns;
+@property(nonatomic, strong) NSMutableArray *allTagBtns;
 
-@property(nonatomic, assign) long long startTime;
-@property(nonatomic, assign) long long endTime;
+@property(nonatomic, strong) NSString *startTime;
+@property(nonatomic, strong) NSString *endTime;
 
 @property (nonatomic, strong) JNTimePickerView *timePickerView;
 @end
@@ -233,18 +233,17 @@ static const int kTimePickerViewHeight = 220;
     JNTimeType type;
 
     if (self.switchView.on) {
-        self.timeLabel.text = @"00:00  >  23:59";
+        self.timeLabel.text = self.endTime == nil ? @"00:00  >  23:59" : [NSString stringWithFormat:@"%@  >  %@", self.startTime, self.endTime];
         title = @"DURATION";
         type = JNTimeTypeDuration;
     } else {
-        self.timeLabel.text = @"00:00";
+        self.timeLabel.text = self.startTime == nil ? @"00:00" : self.startTime;
         type = JNTimeTypeTime;
         title = @"TIME";
     }
 
     [self.timePickerView changeType:type];
     [self.timeCellView setTitle:title];
-
 }
 
 - (void)showTimePicker {
@@ -574,6 +573,25 @@ static const int kTimePickerViewHeight = 220;
                 [self.view setNeedsLayout];
                 [self.view layoutIfNeeded];
             }];
+        };
+
+        _timePickerView.doneBlock = ^(NSString *startTime, NSString *endTime) {
+            @strongify(self)
+            [self->_timePickerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.view.mas_left);
+                make.right.equalTo(self.view.mas_right);
+                make.height.mas_equalTo(kTimePickerViewHeight);
+                make.top.equalTo(self.view.mas_bottom);
+            }];
+
+            [UIView animateWithDuration:0.25 animations:^{
+                [self.view setNeedsLayout];
+                [self.view layoutIfNeeded];
+            }];
+
+            self.startTime = startTime;
+            self.endTime = endTime;
+            self.timeLabel.text = self.endTime == nil ? self.startTime : [NSString stringWithFormat:@"%@  >  %@", self.startTime, self.endTime];
         };
     }
     return _timePickerView;
