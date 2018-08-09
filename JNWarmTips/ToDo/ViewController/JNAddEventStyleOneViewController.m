@@ -19,6 +19,7 @@
 #import "JNAddEventCellView.h"
 #import "JNTimePickerView.h"
 #import "CAShapeLayer+Extension.h"
+#import "JNCalendarAssistant.h"
 
 static const int kTopImageViewHeight = 180;
 
@@ -286,17 +287,16 @@ static const int kTimePickerViewHeight = 220;
         eventModel.color = self.selectedTagModel.typeColor;
         if (self.isShowTimeView) {
 
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+            [JNCalendarAssistant shareInstance].dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
 
             NSString *startTimeStr = [NSString stringWithFormat:@"%@ %@", self.selectedDate, self.startTime];
-            NSDate *start = [dateFormatter dateFromString:startTimeStr];
+            NSDate *start = [[JNCalendarAssistant shareInstance].dateFormatter dateFromString:startTimeStr];
             long long startTimeInterval = [[NSNumber numberWithDouble:[start timeIntervalSince1970]] longLongValue];
             eventModel.startTime = startTimeInterval;
 
             if (self.switchView.on) {
                 NSString *endTimeStr = [NSString stringWithFormat:@"%@ %@", self.selectedDate, self.endTime];
-                NSDate *end = [dateFormatter dateFromString:endTimeStr];
+                NSDate *end = [[JNCalendarAssistant shareInstance].dateFormatter dateFromString:endTimeStr];
                 long long endTimeInterval = [[NSNumber numberWithDouble:[end timeIntervalSince1970]] longLongValue];
                 eventModel.endTime = endTimeInterval;
             }

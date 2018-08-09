@@ -58,6 +58,8 @@
 
     if (!cacheResult) {
         // 如果没有缓存 计算并缓存
+        self.dateFormatter.dateFormat = @"yyyy-MM-dd";
+
         NSDate *firstDay = [self.dateFormatter dateFromString:firstDayStr];
         // 获取该日期是一周的第几天 周日为第一天
         NSDateComponents *weekComponents = [self.calendar components:NSCalendarUnitWeekday fromDate:firstDay];
@@ -76,6 +78,7 @@
     if (cacheResult) {
         return [cacheResult intValue];
     } else {
+        self.dateFormatter.dateFormat = @"yyyy-MM-dd";
         NSDate *date = [self.dateFormatter dateFromString:firstDayStr];
         NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
         [self.cacheCountOfDays setValue:@(range.length) forKey:firstDayStr];
