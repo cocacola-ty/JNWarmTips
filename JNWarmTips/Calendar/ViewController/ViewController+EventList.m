@@ -46,10 +46,20 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     };
     NSString *showDate = eventModel.showDate;
     if (eventModel.startTime != 0) {
-        [JNCalendarAssistant shareInstance].dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
-        showDate = @"";
+        [JNCalendarAssistant shareInstance].dateFormatter.dateFormat = @"HH:mm";
+        NSDate *startTime = [NSDate dateWithTimeIntervalSince1970:eventModel.startTime];
+        NSString *startTimeStr = [[JNCalendarAssistant shareInstance].dateFormatter stringFromDate:startTime];
+        showDate = [NSString stringWithFormat:@"%@", startTimeStr];
+
+        if (eventModel.endTime != 0) {
+            [JNCalendarAssistant shareInstance].dateFormatter.dateFormat = @"HH:mm";
+            NSDate *endTime = [NSDate dateWithTimeIntervalSince1970:eventModel.endTime];
+            NSString *endTimeStr = [[JNCalendarAssistant shareInstance].dateFormatter stringFromDate:endTime];
+
+            showDate = [NSString stringWithFormat:@"%@ - %@", startTimeStr, endTimeStr];
+        }
     }
-    [cell setDate:eventModel.showDate AndEventDetail:eventModel.content];
+    [cell setDate:showDate AndEventDetail:eventModel.content];
     return cell;
 }
 
