@@ -213,6 +213,7 @@
 		6108F13F207B119700590F4D /* JNWarmTips */ = {
 			isa = PBXGroup;
 			children = (
+				618EB3F8211F2C0F00B116B0 /* Editor */,
 				61550C8C20BCEF300050CB51 /* Resources */,
 				6108F140207B119700590F4D /* AppDelegate.h */,
 				6108F141207B119700590F4D /* AppDelegate.m */,
@@ -244,6 +245,53 @@
 				61550C8E20BCEF430050CB51 /* group_bg2.jpg */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		618EB3F8211F2C0F00B116B0 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				618EB3FA211F2C8E00B116B0 /* View */,
+				618EB3F9211F2C1F00B116B0 /* ViewController */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		618EB3F9211F2C1F00B116B0 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */,
+				8B8D8C9B183B31163C81DA8E /* JNEventEditorViewController.h */,
+				8B8D87D654675529B820B499 /* JNAddEventViewController.m */,
+				8B8D8CE9738E84E17A7CFB29 /* JNAddEventViewController.h */,
+				8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */,
+				8B8D8A9E45A2D8E84BF63EEA /* JNAddEventTransitionAnimator.h */,
+				8B8D8F8A73FFF141AFC08878 /* JNAddEventsViewController.m */,
+				8B8D8640A302074E270DF722 /* JNAddEventsViewController.h */,
+				61C9AF8F20FDE41E002F4A69 /* JNAddEventStyleOneViewController.h */,
+				61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		618EB3FA211F2C8E00B116B0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */,
+				8B8D8E03E4770AF8F97A3CC6 /* JNButtonTagView.h */,
+				8B8D831EB5111E9B5E39E84D /* JNWaringAlertView.m */,
+				8B8D8FE18FBDC03BCBEB2823 /* JNWaringAlertView.h */,
+				8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */,
+				8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */,
+				8B8D89F5061530D5B42767FA /* JNArrowIndicateView.m */,
+				8B8D8E75FF28D6F9A675DFD5 /* JNArrowIndicateView.h */,
+				8B8D8C2A93F12C7D31473C67 /* JNTimePickerView.m */,
+				8B8D8B7476E6B8276DAE9D79 /* JNTimePickerView.h */,
+				8B8D84AB715D682708D129EB /* JNAddEventCellView.m */,
+				8B8D839B83BB3166F7628654 /* JNAddEventCellView.h */,
+				8B8D8E4ED5067973DAE46442 /* JNTextView.m */,
+				8B8D85B9ED7F53DAF5A1C98E /* JNTextView.h */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		8B8D813DE1C35F121D6A15C2 /* Others */ = {
@@ -289,22 +337,12 @@
 		8B8D870116256E7A40596EF9 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */,
-				8B8D8C9B183B31163C81DA8E /* JNEventEditorViewController.h */,
 				8B8D8EB4D6432615CCFF0F86 /* JNToDoListViewController.m */,
 				8B8D806D8F1DF3DC4714B271 /* JNToDoListViewController.h */,
 				8B8D807E1D699C6A488E1290 /* JNToDoGroupListViewController.m */,
 				8B8D87AF7C4F4E7EDF8ACCAA /* JNToDoGroupListViewController.h */,
 				8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */,
 				8B8D8D7E1E538B4E04E78578 /* JNAddGroupAlertViewController.h */,
-				8B8D87D654675529B820B499 /* JNAddEventViewController.m */,
-				8B8D8CE9738E84E17A7CFB29 /* JNAddEventViewController.h */,
-				8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */,
-				8B8D8A9E45A2D8E84BF63EEA /* JNAddEventTransitionAnimator.h */,
-				8B8D8F8A73FFF141AFC08878 /* JNAddEventsViewController.m */,
-				8B8D8640A302074E270DF722 /* JNAddEventsViewController.h */,
-				61C9AF8F20FDE41E002F4A69 /* JNAddEventStyleOneViewController.h */,
-				61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -391,24 +429,10 @@
 		8B8D8F4FA39C36B48655B059 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8B8D8E4ED5067973DAE46442 /* JNTextView.m */,
-				8B8D85B9ED7F53DAF5A1C98E /* JNTextView.h */,
 				8B8D80984BC0E3F7C1208EB2 /* JNToDoItemCell.m */,
 				8B8D8788B0D63F1584690E4C /* JNToDoItemCell.h */,
 				8B8D8102465C8DF8C8CA53F6 /* JNGroupListCell.m */,
 				8B8D85BB835C11CB6620EFAD /* JNGroupListCell.h */,
-				8B8D864AC07E52D069F22F8D /* JNButtonTagView.m */,
-				8B8D8E03E4770AF8F97A3CC6 /* JNButtonTagView.h */,
-				8B8D831EB5111E9B5E39E84D /* JNWaringAlertView.m */,
-				8B8D8FE18FBDC03BCBEB2823 /* JNWaringAlertView.h */,
-				8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */,
-				8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */,
-				8B8D89F5061530D5B42767FA /* JNArrowIndicateView.m */,
-				8B8D8E75FF28D6F9A675DFD5 /* JNArrowIndicateView.h */,
-				8B8D8C2A93F12C7D31473C67 /* JNTimePickerView.m */,
-				8B8D8B7476E6B8276DAE9D79 /* JNTimePickerView.h */,
-				8B8D84AB715D682708D129EB /* JNAddEventCellView.m */,
-				8B8D839B83BB3166F7628654 /* JNAddEventCellView.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
