@@ -16,6 +16,7 @@
 		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
 		61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8D20BCEF430050CB51 /* group_bg1.jpg */; };
 		61550C9020BCEF430050CB51 /* group_bg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8E20BCEF430050CB51 /* group_bg2.jpg */; };
+		618EB3FD211F325800B116B0 /* JNAddListItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */; };
 		61B9287C20AEC2AB0040732F /* JNEventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287820AEC2AB0040732F /* JNEventModel.m */; };
 		61B9287D20AEC2AB0040732F /* JNDBManager+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287920AEC2AB0040732F /* JNDBManager+Events.m */; };
 		61C9AF9120FDE41E002F4A69 /* JNAddEventStyleOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */; };
@@ -84,6 +85,8 @@
 		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61550C8D20BCEF430050CB51 /* group_bg1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg1.jpg; sourceTree = "<group>"; };
 		61550C8E20BCEF430050CB51 /* group_bg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg2.jpg; sourceTree = "<group>"; };
+		618EB3FB211F325800B116B0 /* JNAddListItemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNAddListItemViewController.h; sourceTree = "<group>"; };
+		618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddListItemViewController.m; sourceTree = "<group>"; };
 		61B9287820AEC2AB0040732F /* JNEventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventModel.m; sourceTree = "<group>"; };
 		61B9287920AEC2AB0040732F /* JNDBManager+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JNDBManager+Events.m"; sourceTree = "<group>"; };
 		61B9287A20AEC2AB0040732F /* JNEventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNEventModel.h; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 				8B8D87AF7C4F4E7EDF8ACCAA /* JNToDoGroupListViewController.h */,
 				8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */,
 				8B8D8D7E1E538B4E04E78578 /* JNAddGroupAlertViewController.h */,
+				618EB3FB211F325800B116B0 /* JNAddListItemViewController.h */,
+				618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -506,7 +511,7 @@
 				TargetAttributes = {
 					6108F13C207B119700590F4D = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					61433849208DBFD400DFB91F = {
 						CreatedOnToolsVersion = 9.2;
@@ -620,6 +625,7 @@
 				61C9AF9120FDE41E002F4A69 /* JNAddEventStyleOneViewController.m in Sources */,
 				8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */,
 				8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */,
+				618EB3FD211F325800B116B0 /* JNAddListItemViewController.m in Sources */,
 				8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */,
 				8B8D80F3322F212274D1143C /* ViewController+CalculateCalendar.m in Sources */,
 				8B8D8DECA4453B6757CCDC21 /* ReadMe.md in Sources */,
@@ -810,15 +816,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TLWP697Z5D;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P7CJ6N6XA3;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.markday;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.ty.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8ecf44f7-2e91-4334-a264-d12688900350";
-				PROVISIONING_PROFILE_SPECIFIER = 6ceng.Common.DeveloperCer;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
@@ -830,15 +836,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TLWP697Z5D;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P7CJ6N6XA3;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.markday;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.ty.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8ecf44f7-2e91-4334-a264-d12688900350";
-				PROVISIONING_PROFILE_SPECIFIER = 6ceng.Common.DeveloperCer;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};

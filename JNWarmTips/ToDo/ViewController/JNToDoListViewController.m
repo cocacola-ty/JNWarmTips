@@ -12,6 +12,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
 #import "JNItemModel.h"
+#import "JNAddListItemViewController.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -158,6 +159,7 @@ static const double kViewShowAnimationDuration = 0.35;
 }
 
 - (void) addItem {
+    /*
     JNEventEditorViewController *editorViewController = [[JNEventEditorViewController alloc] init];
     editorViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     editorViewController.editFinishBlock = ^(NSString *text) {
@@ -184,6 +186,9 @@ static const double kViewShowAnimationDuration = 0.35;
         }
     };
     [self presentViewController:editorViewController animated:YES completion:nil];
+    */
+    JNAddListItemViewController *addListItemViewController = [[JNAddListItemViewController alloc] init];
+    [self presentViewController:addListItemViewController animated:YES completion:nil];
 }
 
 #pragma mark - Delegate & DataSource

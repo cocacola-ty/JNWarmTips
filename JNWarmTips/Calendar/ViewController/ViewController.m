@@ -61,9 +61,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //test
-    //[[JNDBManager shareInstance] deleteRubbishData];
-    // test end
 
     // 初始化设置
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
@@ -163,6 +160,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     [super viewDidLayoutSubviews];
     if (!onceToken) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:kAllSections/2] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        // 默认选中当前日期的cell
+        int currentDay = [JNCalendarAssistant shareInstance].currentDay;
+        int firstDayInWeek = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:[JNCalendarAssistant shareInstance].currentMonth InYear:[JNCalendarAssistant shareInstance].currentYear];
+        int blackDays = firstDayInWeek - 1; // 这个月前面空的天数 , 1号之前的天数
+        int row = currentDay + blackDays - 1;
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kAllSections / 2] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         onceToken = YES;
     }
 }
@@ -204,6 +207,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSString *nextMonthKey = [self getNextMonth:self.currentMonth currentYear:self.currentYear];
     [self.cacheList setObject:nextMonthArray forKey:nextMonthKey];
     [self.dataArray addObject:nextMonthKey];
+
 
 }
 
