@@ -32,9 +32,9 @@ static const int kCircleViewHeight = 10;
         [self.contentView addSubview:self.containerView];
         [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView.mas_top);
-            make.left.equalTo(self.contentView.mas_left).offset(20);
-            make.right.equalTo(self.contentView.mas_right).offset(-20);
-            make.height.mas_equalTo(110);
+            make.left.equalTo(self.contentView.mas_left).offset(35);
+            make.right.equalTo(self.contentView.mas_right).offset(-35);
+            make.height.mas_equalTo(160);
             make.bottom.equalTo(self.contentView.mas_bottom).offset(-15);
         }];
 
@@ -43,7 +43,7 @@ static const int kCircleViewHeight = 10;
             make.top.equalTo(self.containerView.mas_top);
             make.left.equalTo(self.containerView.mas_left);
             make.right.equalTo(self.containerView.mas_right);
-            make.height.mas_equalTo(70);
+            make.height.mas_equalTo(100);
         }];
 
         [self.bannerImageView addSubview:self.titleLabel];
@@ -138,7 +138,6 @@ static const int kCircleViewHeight = 10;
     if (!_bannerImageView) {
         _bannerImageView = [UIImageView new];
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
-        // TODO : 图片库随机取图片
         int num = arc4random() % 8 + 1;
         NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
         _bannerImageView.image = [UIImage imageNamed:imageName];
