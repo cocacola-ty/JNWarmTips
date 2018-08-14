@@ -139,7 +139,9 @@ static const int kCircleViewHeight = 10;
         _bannerImageView = [UIImageView new];
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
         // TODO : 图片库随机取图片
-        _bannerImageView.image = [UIImage imageNamed:@"group_bg1.jpg"];
+        int num = arc4random() % 8 + 1;
+        NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
+        _bannerImageView.image = [UIImage imageNamed:imageName];
         _backgroundImage = _bannerImageView.image;
     }
     return _bannerImageView;
