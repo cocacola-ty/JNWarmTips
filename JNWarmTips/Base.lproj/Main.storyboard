@@ -29,7 +29,7 @@
         <!--ToDo-->
         <scene sceneID="WON-Vx-4rs">
             <objects>
-                <viewController id="Esc-y1-sU8" customClass="JNToDoGroupListViewController" sceneMemberID="viewController">
+                <viewController id="Esc-y1-sU8" customClass="JNItemGroupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="A3h-rx-Lv7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
