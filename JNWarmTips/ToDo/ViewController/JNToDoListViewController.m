@@ -154,8 +154,12 @@ static const double kViewShowAnimationDuration = 0.35;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
 
+    /*
     [JNWarmTipsPublicFile showTabbar:(UITabBarController *)[UIApplication sharedApplication].delegate.window.rootViewController];
     [self viewDismissAnimation];
+    */
+    [self viewDismissAnimation];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) addItem {
@@ -194,7 +198,8 @@ static const double kViewShowAnimationDuration = 0.35;
 #pragma mark - Delegate & DataSource
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

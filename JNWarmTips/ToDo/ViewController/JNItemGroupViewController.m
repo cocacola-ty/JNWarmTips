@@ -7,6 +7,10 @@
 #import "JNItemGroupViewController.h"
 #import "JNItemGroupCell.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNToDoListViewController.h"
+#import "JNGroupModel.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Group.h"
 
 static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 
@@ -14,12 +18,16 @@ static const int kHMargin = 12;
 
 @interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
+
+@property (nonatomic, strong) NSMutableArray<JNGroupModel *> *groups;
 @end
 
 @implementation JNItemGroupViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.hidden = YES;
 
     [self.collectionView registerClass:[JNItemGroupCell class] forCellWithReuseIdentifier:kGroupCollectionCellID];
     [self.view addSubview:self.collectionView];
@@ -36,16 +44,38 @@ static const int kHMargin = 12;
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
-//    cell.backgroundColor = [UIColor orangeColor];
     return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return self.groups.count;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*
+    JNGroupListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    self.cellBackGroundImage = cell.backgroundImage;
+    self.currentSelectIndexPath = indexPath;
+    JNGroupModel *groupModel = self.groups[indexPath.row];
+    */
+    
+    @weakify(self)
+    JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
+//    toDoListViewController.transitioningDelegate = self;
+//    toDoListViewController.groupModel = groupModel;
+//    toDoListViewController.headerImage = cell.backgroundImage;
+    toDoListViewController.updateItemInGorup = ^(NSString *content) {
+//        groupModel.firstItemContent = content;
+//        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    };
+    
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:toDoListViewController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - Geeter & Setter
@@ -66,5 +96,12 @@ static const int kHMargin = 12;
         _collectionView.showsHorizontalScrollIndicator = NO;
     }
     return _collectionView;
+}
+
+- (NSMutableArray<JNGroupModel *> *)groups {
+    if (!_groups) {
+        _groups = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllGroups]] ;
+    }
+    return _groups;
 }
 @end
