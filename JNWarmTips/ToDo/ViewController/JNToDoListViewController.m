@@ -192,7 +192,8 @@ static const double kViewShowAnimationDuration = 0.35;
     [self presentViewController:editorViewController animated:YES completion:nil];
     */
     JNAddListItemViewController *addListItemViewController = [[JNAddListItemViewController alloc] init];
-    [self presentViewController:addListItemViewController animated:YES completion:nil];
+    addListItemViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:addListItemViewController animated:NO completion:nil];
 }
 
 #pragma mark - Delegate & DataSource
