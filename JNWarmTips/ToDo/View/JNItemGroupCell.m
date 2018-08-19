@@ -87,9 +87,14 @@ static const int kDefaultMargin = 20;
 - (UIImageView *)imageView {
     if (!_imageView) {
         _imageView = [UIImageView new];
-        int num = arc4random() % 8 + 1;
-        NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
-        _imageView.image = [UIImage imageNamed:imageName];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            int num = arc4random() % 8 + 1;
+            NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
+            UIImage *image = [UIImage imageNamed:imageName];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _imageView.image = image;
+            });
+        });
     }
     return _imageView;
 }
