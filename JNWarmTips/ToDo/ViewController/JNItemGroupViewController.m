@@ -10,6 +10,8 @@
 
 static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 
+static const int kHMargin = 12;
+
 @interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
 @end
@@ -22,7 +24,10 @@ static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
     [self.collectionView registerClass:[JNItemGroupCell class] forCellWithReuseIdentifier:kGroupCollectionCellID];
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
+        make.top.equalTo(self.view.mas_top).offset(5);
+        make.left.equalTo(self.view.mas_left).offset(kHMargin);
+        make.right.equalTo(self.view.mas_right).offset(-kHMargin);
+        make.bottom.equalTo(self.view.mas_bottom);
     }];
 
 }
@@ -31,6 +36,7 @@ static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
+//    cell.backgroundColor = [UIColor orangeColor];
     return cell;
 }
 
@@ -47,16 +53,17 @@ static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        CGFloat width = ceilf(SCREEN_WIDTH / 2) - 2;
-        layout.itemSize = CGSizeMake(width, 250);
+        CGFloat width = ceilf((SCREEN_WIDTH - kHMargin * 2) / 2) - 1;
+        layout.itemSize = CGSizeMake(width, 220);
         layout.minimumLineSpacing = 0;
-        layout.minimumInteritemSpacing = 0;
+        layout.minimumInteritemSpacing = 0.1;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
 
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
+        _collectionView.showsHorizontalScrollIndicator = NO;
     }
     return _collectionView;
 }
