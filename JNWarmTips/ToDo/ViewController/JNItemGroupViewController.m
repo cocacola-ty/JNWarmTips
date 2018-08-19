@@ -59,19 +59,18 @@ static const int kHMargin = 12;
     /*
     JNGroupListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     self.cellBackGroundImage = cell.backgroundImage;
-    self.currentSelectIndexPath = indexPath;
-    JNGroupModel *groupModel = self.groups[indexPath.row];
     */
     
-    @weakify(self)
+//    self.currentSelectIndexPath = indexPath;
+    JNGroupModel *groupModel = self.groups[indexPath.row];
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
 //    toDoListViewController.transitioningDelegate = self;
-//    toDoListViewController.groupModel = groupModel;
+    toDoListViewController.groupModel = groupModel;
 //    toDoListViewController.headerImage = cell.backgroundImage;
-    toDoListViewController.updateItemInGorup = ^(NSString *content) {
+//    toDoListViewController.updateItemInGorup = ^(NSString *content) {
 //        groupModel.firstItemContent = content;
 //        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    };
+//    };
     
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:toDoListViewController animated:YES];

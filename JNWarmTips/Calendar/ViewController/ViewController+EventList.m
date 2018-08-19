@@ -63,6 +63,16 @@ static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReu
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.alpha = 0;
+    cell.transform = CGAffineTransformMakeTranslation(0, -10);
+    CGFloat delayTime = 0.1 * indexPath.row;
+    [UIView animateWithDuration:0.25 delay:delayTime options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        cell.alpha = 1;
+        cell.transform = CGAffineTransformIdentity;
+    } completion:nil];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.oneDayEventsArray.count;
 }
