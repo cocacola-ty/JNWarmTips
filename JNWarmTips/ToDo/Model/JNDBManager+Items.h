@@ -9,14 +9,18 @@
 @class JNItemModel;
 
 @interface JNDBManager (Items)
-/*获取指定小组内指定日期下的所有item*/
-- (NSArray *)getAllItemsByShowDate:(NSString *)showDate WithGroupId:(NSString *)groupId ;
-/*获取指定小组的所有日期分类*/
-- (NSArray *) getAllDateSectionInGroup:(NSString *)groupId ;
 
 - (void) addItem:(JNItemModel *)itemModel ;
+
+/*获取该小组内的所有分类*/
+- (NSArray *)getAllSectionsInGroup:(NSString *)groupId;
+
+/*获取该小组内所有的事项*/
+- (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)getAllItemsInGroup:(NSString *)groupId;
+
 - (void) updateFinishStatus:(BOOL) finished withItemId:(long long)itemId ;
 
 /*删除一条item*/
 - (void) deleteItem:(long long)itemId ;
+
 @end

@@ -34,6 +34,7 @@ static const double kViewShowAnimationDuration = 0.35;
 @property (nonatomic, strong) UIButton *addItemBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray *> *dataArray;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *dataSourceDict;
 @property (nonatomic, strong) NSArray *sectionArray;
 @end
 
@@ -233,13 +234,18 @@ static const double kViewShowAnimationDuration = 0.35;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    /*
     NSArray *items = self.dataArray[section];
     return items.count;
+     */
+    NSDictionary *dict = self.sectionArray[section];
+    NSMutableArray *itemArray = [self.dataSourceDict valueForKey:dict[@"categoryName"]];
+    return itemArray.count;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSDictionary *dict = self.sectionArray[section];
-    NSString *sectionTitle = [dict valueForKey:@"showName"];
+    NSString *sectionTitle = [dict valueForKey:@"categoryName"];
 
     UIView *sectionView = [UIView new];
     sectionView.backgroundColor = [UIColor whiteColor];
@@ -344,13 +350,14 @@ static const double kViewShowAnimationDuration = 0.35;
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         _placeHolderLabel = [UILabel new];
-        _placeHolderLabel.text = @"这里啥子都么得..";
+        _placeHolderLabel.text = @"这里空空如也..";
         _placeHolderLabel.textColor = GRAY_TEXT_COLOR;
         _placeHolderLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:18.0];
     }
     return _placeHolderLabel;
 }
 
+/*
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -362,12 +369,20 @@ static const double kViewShowAnimationDuration = 0.35;
     }
     return _dataArray;
 }
-
+*/
 - (NSArray *)sectionArray {
     if (!_sectionArray) {
-        _sectionArray = [[JNDBManager shareInstance] getAllDateSectionInGroup:self.groupModel.groupId];
+//        _sectionArray = [[JNDBManager shareInstance] getAllDateSectionInGroup:self.groupModel.groupId];
+        _sectionArray = [[JNDBManager shareInstance] getAllSectionsInGroup:self.groupModel.groupId];
         self.placeHolderLabel.hidden = _sectionArray.count != 0;
     }
     return _sectionArray;
+}
+
+- (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)dataSourceDict {
+    if (!_dataSourceDict) {
+        _dataSourceDict = [[JNDBManager shareInstance] getAllItemsInGroup:self.groupModel.groupId];
+    }
+    return _dataSourceDict;
 }
 @end

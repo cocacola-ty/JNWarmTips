@@ -11,6 +11,7 @@
 
 @implementation JNDBManager (Items)
 
+/*
 - (NSArray *)getAllItemsByShowDate:(NSString *)showDate WithGroupId:(NSString *)groupId {
 
     NSString *date = showDate == nil ? @"NULL" : [NSString stringWithFormat:@"'%@'", showDate];
@@ -33,7 +34,9 @@
     }];
     return result;
 }
+ */
 
+/*
 - (NSArray *) getAllDateSectionInGroup:(NSString *)groupId {
     NSString *condition = @"";
     if (![groupId isEqualToString:@"0"]) {
@@ -58,33 +61,65 @@
     }];
     return result;
 }
+ */
 
 /*获取该小组内的所有分类*/
 - (NSArray *)getAllSectionsInGroup:(NSString *)groupId {
-
     NSMutableArray *result = [NSMutableArray array];
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBCategoryTable, groupId];
+//    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBCategoryTable, groupId];
+
+    NSString *sql = [NSString stringWithFormat:@"select category_id, category_name from %@ where groupId = %@", kJNDBListTable, groupId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
+        NSString *categoryName = [resultSet stringForColumn:@"category_name"];
+        NSString *categoryId = [resultSet stringForColumn:@"category_id"];
+        NSDictionary *dict = @{
+                @"categoryName" : categoryName,
+                @"categoryId" : categoryId
+        };
+        [result addObject:dict];
+    }];
+    return result;
+}
+
+- (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)getAllItemsInGroup:(NSString *)groupId {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBListTable, groupId];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+        JNItemModel *itemModel = [JNItemModel new];
+        itemModel.itemId = [resultSet intForColumn:@"item_id"];
+        itemModel.content = [resultSet stringForColumn:@"content"];
+        itemModel.groupId = [resultSet longLongIntForColumn:@"group_id"];
+        itemModel.categoryId = [resultSet intForColumn:@"category_id"];
+        itemModel.categoryName = [resultSet stringForColumn:@"category_name"];
+        itemModel.startTime = [resultSet longLongIntForColumn:@"start_time"];
+        itemModel.notification = [resultSet boolForColumn:@"notification"];
+        itemModel.finished = [resultSet boolForColumn:@"finished"];
+
+        if ([[result allKeys] containsObject:itemModel.categoryName]) {
+            NSMutableArray *list = [result valueForKey:itemModel.categoryName];
+            [list addObject:itemModel];
+        } else {
+            NSMutableArray *list = [NSMutableArray array];
+            [list addObject:itemModel];
+            [result setValue:list forKey:itemModel.categoryName];
+        }
     }];
     return result;
 }
 
 - (void) addItem:(JNItemModel *)itemModel {
 
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:itemModel.startTime];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *dateString = [formatter stringFromDate:date];
-    NSString *show_date = (itemModel.startTime == 0) ? @"''" : dateString;
-    NSString *startTime = (itemModel.startTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.startTime];
-    NSString *endTime = (itemModel.endTime == 0) ? @"NULL" : [NSString stringWithFormat:@"%lld", itemModel.endTime];
+    NSString *startTime = [NSString stringWithFormat:@"%lld", itemModel.startTime];
+    NSString *endTime = [NSString stringWithFormat:@"%lld", itemModel.endTime];
     NSString *groupId = [NSString stringWithFormat:@"%lld", itemModel.groupId];
     NSString *notification = [NSString stringWithFormat:@"%d", itemModel.notification];
     NSString *finish = [NSString stringWithFormat:@"%d", itemModel.finished];
+    NSString *categoryId = [NSString stringWithFormat:@"%d", itemModel.categoryId];
 
-    NSString *sql = [NSString stringWithFormat:@"insert into %@(content, show_date, start_time, end_time, group_id, NOTIFICATION, finished) values ('%@', %@, %@, %@, %@, %@, %@)", kJNDBListTable, itemModel.content, show_date, startTime, endTime, groupId, notification, finish];
+    NSString *sql = [NSString stringWithFormat:@"insert into %@(content, start_time, end_time, group_id, category_id, notification, finished) values ('%@', %@, %@, %@, %@, %@, %@)", kJNDBListTable, itemModel.content, startTime, endTime, groupId, categoryId, notification, finish];
     NSString *updateGroupSql = [NSString stringWithFormat:@"update %@ set group_first_content = '%@' where group_id='%@'", kJNDBGroupTable, itemModel.content, groupId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
