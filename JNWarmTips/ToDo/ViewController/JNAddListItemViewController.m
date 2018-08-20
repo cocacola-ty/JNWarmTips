@@ -177,6 +177,7 @@
         _itemModel.categoryName = @"未分类";
         _itemModel.notification = 0;
         _itemModel.finished = 0;
+        _itemModel.groupId = self.groupId;
     }
     return _itemModel;
 }

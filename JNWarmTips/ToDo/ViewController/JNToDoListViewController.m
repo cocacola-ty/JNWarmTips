@@ -19,7 +19,7 @@ static const int kToDoListSectionHeaderViewHeight = 60;
 
 static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
-static const int kTableViewHeaderViewHeight = 100;
+static const int kTableViewHeaderViewHeight = 130;
 
 static const int kLeftAndRightMargin = 8;
 
@@ -193,6 +193,7 @@ static const double kViewShowAnimationDuration = 0.35;
     [self presentViewController:editorViewController animated:YES completion:nil];
     */
     JNAddListItemViewController *addListItemViewController = [[JNAddListItemViewController alloc] init];
+    addListItemViewController.groupId = [self.groupModel.groupId longLongValue];
     addListItemViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [self presentViewController:addListItemViewController animated:NO completion:nil];
 }
@@ -310,7 +311,8 @@ static const double kViewShowAnimationDuration = 0.35;
         _headerView = [UIImageView  new];
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
         _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-kLeftAndRightMargin*2, kTableViewHeaderViewHeight);
-        _headerView.image = self.headerImage;
+//        _headerView.image = self.headerImage;
+        _headerView.image = [UIImage imageNamed:@"group_bg5.jpg"];
 
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];

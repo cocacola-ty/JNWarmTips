@@ -93,7 +93,7 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "end_time integer default 0, "
                                                        "group_id integer, "
                                                        "category_id integer default -100, "
-                                                       "category_name varchar(20) default NULL, "
+                                                       "category_name text default NULL, "
                                                        "notification integer default 0, "
                                                        "finished integer default 0, "
                                                        "foreign key(group_id) references %@(group_id), "
