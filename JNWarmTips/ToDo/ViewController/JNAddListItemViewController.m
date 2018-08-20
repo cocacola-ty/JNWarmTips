@@ -13,6 +13,9 @@
 
 @interface JNAddListItemViewController ()
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) UITextField *inputField;
+@property (nonatomic, strong) UIButton *doneBtn;
+@property (nonatomic, strong) UIButton *cancleBtn;
 @end
 
 @implementation JNAddListItemViewController
@@ -28,7 +31,26 @@
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
         make.top.equalTo(self.view.mas_top).offset(SCREEN_HEIGHT);
-//        make.top.equalTo(self.view.mas_bottom);
+    }];
+
+    [self.containerView addSubview:self.inputField];
+    [self.inputField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.containerView.mas_left).offset(40);
+        make.top.equalTo(self.containerView.mas_top).offset(50);
+        make.right.equalTo(self.containerView.mas_right).offset(-40);
+        make.height.mas_equalTo(40);
+    }];
+
+    [self.containerView addSubview:self.doneBtn];
+    [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.containerView.mas_right).offset(-15);
+        make.top.equalTo(self.containerView.mas_top).offset(8);
+    }];
+
+    [self.containerView addSubview:self.cancleBtn];
+    [self.cancleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.containerView.mas_left).offset(15);
+        make.top.equalTo(self.containerView.mas_top).offset(8);
     }];
 }
 
@@ -43,12 +65,18 @@
         [self.view layoutIfNeeded];
         [self.view setNeedsLayout];
     } completion:^(BOOL finished) {
-        // 成为第一响应者
+        [self.inputField becomeFirstResponder];
     }];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+#pragma mark - Event Response
+
+- (void) cancleAction {
     [self dismiss];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.inputField resignFirstResponder];
 }
 
 - (void) dismiss {
@@ -56,8 +84,14 @@
     [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(SCREEN_HEIGHT);
     }];
-    
-    [UIView animateWithDuration:0.25 animations:^{
+
+    NSTimeInterval delayInterval = 0;
+    if (self.inputField.isFirstResponder) {
+        [self.inputField resignFirstResponder];
+        delayInterval = 0.25;
+    }
+
+    [UIView animateKeyframesWithDuration:0.25 delay:delayInterval options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.view layoutIfNeeded];
         [self.view setNeedsLayout];
     } completion:^(BOOL finished) {
@@ -74,6 +108,35 @@
         _containerView.layer.cornerRadius = 8;
     }
     return _containerView;
+}
+
+- (UITextField *)inputField {
+    if (!_inputField) {
+        _inputField = [UITextField new];
+        _inputField.placeholder = @"添加事项内容";
+    }
+    return _inputField;
+}
+
+- (UIButton *)doneBtn {
+    if (!_doneBtn) {
+        _doneBtn = [UIButton new];
+        [_doneBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [_doneBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+        _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    }
+    return _doneBtn;
+}
+
+- (UIButton *)cancleBtn {
+    if (!_cancleBtn) {
+        _cancleBtn = [UIButton new];
+        [_cancleBtn setTitleColor:[UIColor colorWithHexString:@"222222"] forState:UIControlStateNormal];
+        [_cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
+        _cancleBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        [_cancleBtn addTarget:self action:@selector(cancleAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _cancleBtn;
 }
 
 @end

@@ -87,6 +87,7 @@ static const int kDefaultMargin = 20;
 - (UIImageView *)imageView {
     if (!_imageView) {
         _imageView = [UIImageView new];
+        _imageView.contentMode = UIViewContentModeScaleToFill;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             int num = arc4random() % 8 + 1;
             NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
