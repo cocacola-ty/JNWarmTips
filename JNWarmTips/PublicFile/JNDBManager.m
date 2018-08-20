@@ -83,26 +83,26 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
         }];
     }
 
-    // 待办清单表  (事项id，事项内容，事项的日期，事项的开始时间，事项的结束时间，事项所属于的小组，事项所属于的分类，是否提醒，是否完成)
+    // 待办清单表  (事项id，事项内容，事项的日期，事项的开始时间，事项的结束时间，事项所属于的小组id，事项所属于的分类id，是否提醒，是否完成)
     if (![self tableExist:kJNDBListTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
             NSString *sql = [NSString stringWithFormat:@"create table if not exists %@ ("
                                                        "item_id integer primary key autoincrement not null, "
                                                        "content text not null, "
-                                                       "show_date date default '', "
-                                                       "start_time integer default null, "
-                                                       "end_time integer default null, "
+                                                       "start_time integer default 0, "
+                                                       "end_time integer default 0, "
                                                        "group_id integer, "
                                                        "category_id integer , "
                                                        "notification integer default 0, "
                                                        "finished integer default 0, "
                                                        "foreign key(group_id) references %@(group_id), "
-                                                       "foreign key(group_id) references %@(category_id))",
+                                                       "foreign key(category_id) references %@(category_id))",
                                                        kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"清单表创建失败");
         }];
     }
+
 
     // 事件类型表 （事件类型id，事件类型名，事件类型的颜色）
     if (![self tableExist:kJNDBEventTypeTable]) {

@@ -59,6 +59,18 @@
     return result;
 }
 
+/*获取该小组内的所有分类*/
+- (NSArray *)getAllSectionsInGroup:(NSString *)groupId {
+
+    NSMutableArray *result = [NSMutableArray array];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBCategoryTable, groupId];
+
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+    }];
+    return result;
+}
+
 - (void) addItem:(JNItemModel *)itemModel {
 
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:itemModel.startTime];

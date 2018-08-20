@@ -91,7 +91,7 @@
         delayInterval = 0.25;
     }
 
-    [UIView animateKeyframesWithDuration:0.25 delay:delayInterval options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateKeyframesWithDuration:0.25 delay:delayInterval options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [self.view layoutIfNeeded];
         [self.view setNeedsLayout];
     } completion:^(BOOL finished) {
