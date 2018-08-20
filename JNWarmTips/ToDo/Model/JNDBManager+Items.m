@@ -88,7 +88,7 @@
 
 - (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)getAllItemsInGroup:(NSString *)groupId {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBListTable, groupId];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where group_id = %@", kJNDBListTable, groupId];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {

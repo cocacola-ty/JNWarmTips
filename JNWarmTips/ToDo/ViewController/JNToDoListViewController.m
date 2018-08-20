@@ -206,8 +206,9 @@ static const double kViewShowAnimationDuration = 0.35;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *itemArray = self.dataArray[indexPath.section];
-    JNItemModel *itemModel = itemArray[indexPath.row];
+    NSDictionary *categoryDict = self.sectionArray[indexPath.section];
+    NSArray *list = [self.dataSourceDict valueForKey:categoryDict[@"categoryName"]];
+    JNItemModel *itemModel = list[indexPath.row];
 
     JNToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:kToDoListCellReuseId];
     [cell reloadCellWithTitle:itemModel.content taskFinishStatus:itemModel.finished];
