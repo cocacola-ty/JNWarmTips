@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JNAddListItemViewController : UIViewController
-
+@property (nonatomic, strong) NSString *groupId;
 @end

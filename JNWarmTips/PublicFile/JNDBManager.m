@@ -138,10 +138,8 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "event_type_color varchar(10), "
                                                        "start_time integer default 0, "
                                                        "end_time integer default 0, "
-                                                       "notification integer default 0, "
-                                                       "foreign key(group_id) references %@(group_id), "
-                                                       "foreign key(category_id) references %@(category_id))",
-                                                       kJNDBEventsTable, kJNDBGroupTable, kJNDBCategoryTable];
+                                                       "notification integer default 0)",
+                                                       kJNDBEventsTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"事件表创建失败");
         }];

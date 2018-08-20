@@ -10,12 +10,17 @@
 #import <Masonry/Masonry.h>
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNItemModel.h"
+#import "JNDBManager.h"
+#import "JNDBManager+Items.h"
 
 @interface JNAddListItemViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *cancleBtn;
+
+@property (nonatomic, strong) JNItemModel *itemModel;
 @end
 
 @implementation JNAddListItemViewController
@@ -70,6 +75,14 @@
 }
 
 #pragma mark - Event Response
+
+- (void) doneAction {
+    self.itemModel.content = self.inputField.text;
+
+    [[JNDBManager shareInstance] addItem:self.itemModel];
+
+    [self cancleAction];
+}
 
 - (void) cancleAction {
     [self dismiss];
@@ -139,6 +152,7 @@
         [_doneBtn setTitleColor:[UIColor colorWithHexString:@"222222"] forState:UIControlStateNormal];
         _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
         _doneBtn.enabled = NO;
+        [_doneBtn addTarget:self action:@selector(doneAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _doneBtn;
 }
@@ -152,6 +166,19 @@
         [_cancleBtn addTarget:self action:@selector(cancleAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancleBtn;
+}
+
+- (JNItemModel *)itemModel {
+    if (!_itemModel) {
+        _itemModel = [JNItemModel new];
+        _itemModel.startTime = 0;
+        _itemModel.endTime = 0;
+        _itemModel.categoryId = -100;
+        _itemModel.categoryName = @"未分类";
+        _itemModel.notification = 0;
+        _itemModel.finished = 0;
+    }
+    return _itemModel;
 }
 
 @end

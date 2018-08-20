@@ -68,17 +68,20 @@
     NSMutableArray *result = [NSMutableArray array];
 //    NSString *sql = [NSString stringWithFormat:@"select * from %@ where groupId = %@", kJNDBCategoryTable, groupId];
 
-    NSString *sql = [NSString stringWithFormat:@"select category_id, category_name from %@ where groupId = %@", kJNDBListTable, groupId];
+    NSString *sql = [NSString stringWithFormat:@"select category_id, category_name from %@ where group_id = %@", kJNDBListTable, groupId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
         NSString *categoryName = [resultSet stringForColumn:@"category_name"];
         NSString *categoryId = [resultSet stringForColumn:@"category_id"];
-        NSDictionary *dict = @{
-                @"categoryName" : categoryName,
-                @"categoryId" : categoryId
-        };
-        [result addObject:dict];
+
+        if (categoryId != nil && categoryName != nil) {
+            NSDictionary *dict = @{
+                    @"categoryName" : categoryName,
+                    @"categoryId" : categoryId
+            };
+            [result addObject:dict];
+        }
     }];
     return result;
 }
