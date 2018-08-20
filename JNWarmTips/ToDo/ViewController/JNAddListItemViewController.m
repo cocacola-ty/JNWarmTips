@@ -11,7 +11,7 @@
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
 
-@interface JNAddListItemViewController ()
+@interface JNAddListItemViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) UIButton *doneBtn;
@@ -99,6 +99,18 @@
     }];
 }
 
+#pragma mark - Delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    self.doneBtn.enabled = text.length > 0;
+    return YES;
+}
+
 #pragma mark - Getter & Setter
 
 - (UIView *)containerView {
@@ -114,6 +126,7 @@
     if (!_inputField) {
         _inputField = [UITextField new];
         _inputField.placeholder = @"添加事项内容";
+        _inputField.delegate = self;
     }
     return _inputField;
 }
@@ -122,8 +135,10 @@
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
         [_doneBtn setTitle:@"完成" forState:UIControlStateNormal];
-        [_doneBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateNormal];
+        [_doneBtn setTitleColor:GRAY_TEXT_COLOR forState:UIControlStateDisabled];
+        [_doneBtn setTitleColor:[UIColor colorWithHexString:@"222222"] forState:UIControlStateNormal];
         _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        _doneBtn.enabled = NO;
     }
     return _doneBtn;
 }
