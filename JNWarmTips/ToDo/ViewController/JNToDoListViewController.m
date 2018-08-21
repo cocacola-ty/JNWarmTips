@@ -21,9 +21,9 @@ static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
 static const int kTableViewHeaderViewHeight = 130;
 
-static const int kLeftAndRightMargin = 8;
+static const int kLeftAndRightMargin = 0;
 
-static const int kTopAndBottomMargin = 70;
+static const int kTopAndBottomMargin = 0;
 
 static const double kViewShowAnimationDuration = 0.35;
 
@@ -218,13 +218,13 @@ static const double kViewShowAnimationDuration = 0.35;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     JNToDoItemCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
-    NSArray *itemArray = self.dataArray[indexPath.section];
-    JNItemModel *itemModel = itemArray[indexPath.row];
+    NSDictionary *categoryDict = self.sectionArray[indexPath.section];
+    NSArray *list = [self.dataSourceDict valueForKey:categoryDict[@"categoryName"]];
+    JNItemModel *itemModel = list[indexPath.row];
     itemModel.finished = !itemModel.finished;
     [[JNDBManager shareInstance] updateFinishStatus:itemModel.finished withItemId:itemModel.itemId];
 
     [cell refreshTaskStatus: itemModel.finished];
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -300,7 +300,8 @@ static const double kViewShowAnimationDuration = 0.35;
         _tableView.delegate = self;
         _tableView.dataSource = self;
 
-        _tableView.layer.cornerRadius = 8;
+//        _tableView.layer.cornerRadius = 8;
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.tableHeaderView = self.headerView;
     }
@@ -311,15 +312,18 @@ static const double kViewShowAnimationDuration = 0.35;
     if (!_headerView) {
         _headerView = [UIImageView  new];
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
-        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH-kLeftAndRightMargin*2, kTableViewHeaderViewHeight);
+        _headerView.layer.masksToBounds = YES;
+        _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, kTableViewHeaderViewHeight);
 //        _headerView.image = self.headerImage;
         _headerView.image = [UIImage imageNamed:@"group_bg5.jpg"];
 
+        /*
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = maskPath.CGPath;
         maskLayer.frame = _headerView.bounds;
         _headerView.layer.mask = maskLayer;
+         */
 
         [self.headerView addSubview:self.headerTitleLabel];
         [self.headerTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -333,7 +337,7 @@ static const double kViewShowAnimationDuration = 0.35;
 - (UILabel *)headerTitleLabel {
     if (!_headerTitleLabel) {
         _headerTitleLabel = [UILabel new];
-        _headerTitleLabel.font = [UIFont systemFontOfSize:18.0];
+        _headerTitleLabel.font = [UIFont systemFontOfSize:24.0];
         _headerTitleLabel.textColor = [UIColor whiteColor];
         _headerTitleLabel.text = self.groupModel.groupName;
     }

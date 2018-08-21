@@ -27,8 +27,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:0.6];
-    
+    self.view.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:0];
+
     [self.view addSubview:self.containerView];
     
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -67,6 +67,7 @@
     }];
     
     [UIView animateWithDuration:0.25 animations:^{
+        self.view.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:0.6];
         [self.view layoutIfNeeded];
         [self.view setNeedsLayout];
     } completion:^(BOOL finished) {
@@ -105,6 +106,7 @@
     }
 
     [UIView animateKeyframesWithDuration:0.25 delay:delayInterval options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+        self.view.backgroundColor = [UIColor colorWithRed:211/255.0 green:211/255.0 blue:211/255.0 alpha:0];
         [self.view layoutIfNeeded];
         [self.view setNeedsLayout];
     } completion:^(BOOL finished) {
