@@ -32,6 +32,10 @@ static const int kAddCategoryBtnHeight = 18;
 
 static const int kBackBtnWH = 20;
 
+static const int kAddCategoryViewWidth = 220;
+
+static const int kAddCategoryViewHeight = 140;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource, CAAnimationDelegate>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
@@ -40,6 +44,7 @@ static const int kBackBtnWH = 20;
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, strong) UIButton *addCategoryBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
+@property (nonatomic, strong) UIView *addCategoryView;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *dataSourceDict;
 @property (nonatomic, strong) NSArray *sectionArray;
@@ -188,6 +193,22 @@ static const int kBackBtnWH = 20;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) addCategoryAction {
+    [self.view addSubview:self.addCategoryView];
+    [self.addCategoryView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.centerY.equalTo(self.view.mas_centerY);
+        make.width.mas_equalTo(kAddCategoryViewWidth);
+        make.height.mas_equalTo(kAddCategoryViewHeight);
+    }];
+
+    self.addCategoryView.transform = CGAffineTransformMakeScale(0, 0);
+    [UIView animateWithDuration:0.25 animations:^{
+        self.addCategoryView.transform = CGAffineTransformIdentity;
+    }];
+
+}
+
 #pragma mark - Delegate & DataSource
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -301,6 +322,7 @@ static const int kBackBtnWH = 20;
         _headerView.layer.masksToBounds = YES;
         _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, kTableViewHeaderViewHeight);
         _headerView.image = [UIImage imageNamed:@"group_bg5.jpg"];
+        _headerView.userInteractionEnabled = YES;
 
         UIBezierPath *bezierPath = [UIBezierPath bezierPath];
         [bezierPath moveToPoint:CGPointMake(0, 0)];
@@ -354,6 +376,7 @@ static const int kBackBtnWH = 20;
 - (UIButton *)addCategoryBtn {
     if (!_addCategoryBtn) {
         _addCategoryBtn = [UIButton new];
+        [_addCategoryBtn addTarget:self action:@selector(addCategoryAction) forControlEvents:UIControlEventTouchUpInside];
 
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointMake(0, kAddCategoryBtnHeight / 2)];
@@ -371,6 +394,27 @@ static const int kBackBtnWH = 20;
         [_addCategoryBtn.layer addSublayer:layer];
     }
     return _addCategoryBtn;
+}
+
+- (UIView *)addCategoryView {
+    if (!_addCategoryView) {
+        _addCategoryView = [UIView new];
+        _addCategoryView.backgroundColor = [UIColor redColor];
+        _addCategoryView.layer.cornerRadius = 5;
+
+        UILabel *titleLabel = [UILabel new];
+        [_addCategoryView addSubview:titleLabel];
+
+        UITextField *categoryInputField = [[UITextField alloc] init];
+        [_addCategoryView addSubview:categoryInputField];
+
+        UIButton *cancleBtn = [UIButton new];
+        [_addCategoryView addSubview:cancleBtn];
+
+        UIButton *doneBtn = [UIButton new];
+        [_addCategoryView addSubview:doneBtn];
+    }
+    return _addCategoryView;
 }
 
 - (UIButton *)backBtn {
