@@ -19,7 +19,7 @@ static const int kToDoListSectionHeaderViewHeight = 60;
 
 static NSString *const kToDoListCellReuseId = @"kToDoListCellReuseId";
 
-static const int kTableViewHeaderViewHeight = 130;
+static const int kTableViewHeaderViewHeight = 150;
 
 static const int kLeftAndRightMargin = 0;
 
@@ -317,6 +317,18 @@ static const double kViewShowAnimationDuration = 0.35;
 //        _headerView.image = self.headerImage;
         _headerView.image = [UIImage imageNamed:@"group_bg5.jpg"];
 
+        UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+        [bezierPath moveToPoint:CGPointMake(0, 0)];
+        [bezierPath addLineToPoint:CGPointMake(0, kTableViewHeaderViewHeight - 25)];
+        [bezierPath addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, kTableViewHeaderViewHeight - 25) controlPoint:CGPointMake(SCREEN_WIDTH / 2, kTableViewHeaderViewHeight+10)];
+        [bezierPath addLineToPoint:CGPointMake(SCREEN_WIDTH, 0)];
+        [bezierPath closePath];
+
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = bezierPath.CGPath;
+        shapeLayer.fillColor = [UIColor redColor].CGColor;
+
+        _headerView.layer.mask = shapeLayer;
         /*
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_headerView.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
