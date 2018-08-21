@@ -30,6 +30,8 @@ static const double kViewShowAnimationDuration = 0.35;
 
 static const int kAddCategoryBtnHeight = 18;
 
+static const int kBackBtnWH = 20;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource, CAAnimationDelegate>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
@@ -87,6 +89,12 @@ static const int kAddCategoryBtnHeight = 18;
         make.width.height.mas_equalTo(kAddCategoryBtnHeight);
         make.top.equalTo(self.headerView.mas_top).offset(28);
         make.right.equalTo(self.headerView.mas_right).offset(-12);
+    }];
+    [self.headerView addSubview:self.backBtn];
+    [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kBackBtnWH);
+        make.centerY.equalTo(self.addCategoryBtn.mas_centerY);
+        make.left.equalTo(self.headerView.mas_left).offset(12);
     }];
 }
 
@@ -391,12 +399,22 @@ static const int kAddCategoryBtnHeight = 18;
         layer.frame = CGRectMake(0, 0, kAddCategoryBtnHeight, kAddCategoryBtnHeight);
         layer.path = path.CGPath;
         layer.strokeColor = [UIColor colorWithHexString:@"222222"].CGColor;
-//        layer.strokeColor = [UIColor whiteColor].CGColor;
+        layer.strokeColor = MAIN_COLOR.CGColor;
         layer.fillColor = [UIColor clearColor].CGColor;
         layer.lineWidth = 2;
         [_addCategoryBtn.layer addSublayer:layer];
     }
     return _addCategoryBtn;
+}
+
+- (UIButton *)backBtn {
+    if (!_backBtn) {
+        _backBtn = [UIButton new];
+        UIImage *image = [[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [_backBtn setImage:image forState:UIControlStateNormal];
+        _backBtn.tintColor = MAIN_COLOR;
+    }
+    return _backBtn;
 }
 
 - (UILabel *)placeHolderLabel {
