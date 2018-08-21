@@ -13,6 +13,7 @@
 #import "JNDBManager+Items.h"
 #import "JNItemModel.h"
 #import "JNAddListItemViewController.h"
+#import "UIColor+Extension.h"
 
 
 static const int kToDoListSectionHeaderViewHeight = 60;
@@ -27,13 +28,17 @@ static const int kTopAndBottomMargin = 0;
 
 static const double kViewShowAnimationDuration = 0.35;
 
+static const int kAddCategoryBtnHeight = 18;
+
 @interface JNToDoListViewController() <UITableViewDelegate, UITableViewDataSource, CAAnimationDelegate>
 @property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UILabel *headerTitleLabel;
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) UIButton *addItemBtn;
+@property (nonatomic, strong) UIButton *backBtn;
+@property (nonatomic, strong) UIButton *addCategoryBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) NSMutableArray<NSMutableArray *> *dataArray;
+
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *dataSourceDict;
 @property (nonatomic, strong) NSArray *sectionArray;
 @end
@@ -77,6 +82,12 @@ static const double kViewShowAnimationDuration = 0.35;
     }];
     self.addItemBtn.transform = CGAffineTransformMakeTranslation(0, 100);
 
+    [self.headerView addSubview:self.addCategoryBtn];
+    [self.addCategoryBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kAddCategoryBtnHeight);
+        make.top.equalTo(self.headerView.mas_top).offset(28);
+        make.right.equalTo(self.headerView.mas_right).offset(-12);
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -270,15 +281,16 @@ static const double kViewShowAnimationDuration = 0.35;
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewRowAction *action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-        NSMutableArray *array = self.dataArray[indexPath.section];
-        JNItemModel *itemModel = array[indexPath.row];
+        NSDictionary *categoryDict = self.sectionArray[indexPath.section];
+        NSMutableArray *list = [self.dataSourceDict valueForKey:categoryDict[@"categoryName"]];
+        JNItemModel *itemModel = list[indexPath.row];
         [[JNDBManager shareInstance] deleteItem:itemModel.itemId];
 
-        [array removeObject:itemModel];
+        [list removeObject:itemModel];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 
         BOOL hidden = NO;
-        for (NSArray *items in self.dataArray) {
+        for (NSArray *items in list) {
             if (items.count != 0) {
                 hidden = YES;
                 break;
@@ -365,6 +377,28 @@ static const double kViewShowAnimationDuration = 0.35;
     return _addItemBtn;
 }
 
+- (UIButton *)addCategoryBtn {
+    if (!_addCategoryBtn) {
+        _addCategoryBtn = [UIButton new];
+
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(0, kAddCategoryBtnHeight / 2)];
+        [path addLineToPoint:CGPointMake(kAddCategoryBtnHeight, kAddCategoryBtnHeight / 2)];
+        [path moveToPoint:CGPointMake(kAddCategoryBtnHeight / 2, 0)];
+        [path addLineToPoint:CGPointMake(kAddCategoryBtnHeight / 2, kAddCategoryBtnHeight)];
+
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.frame = CGRectMake(0, 0, kAddCategoryBtnHeight, kAddCategoryBtnHeight);
+        layer.path = path.CGPath;
+        layer.strokeColor = [UIColor colorWithHexString:@"222222"].CGColor;
+//        layer.strokeColor = [UIColor whiteColor].CGColor;
+        layer.fillColor = [UIColor clearColor].CGColor;
+        layer.lineWidth = 2;
+        [_addCategoryBtn.layer addSublayer:layer];
+    }
+    return _addCategoryBtn;
+}
+
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         _placeHolderLabel = [UILabel new];
@@ -375,22 +409,8 @@ static const double kViewShowAnimationDuration = 0.35;
     return _placeHolderLabel;
 }
 
-/*
-- (NSMutableArray *)dataArray {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
-        for (NSDictionary *dict in self.sectionArray) {
-            NSString *showDate = dict[@"name"];
-            NSMutableArray *array = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllItemsByShowDate:showDate WithGroupId:self.groupModel.groupId]];
-            [_dataArray addObject:array];
-        }
-    }
-    return _dataArray;
-}
-*/
 - (NSArray *)sectionArray {
     if (!_sectionArray) {
-//        _sectionArray = [[JNDBManager shareInstance] getAllDateSectionInGroup:self.groupModel.groupId];
         _sectionArray = [[JNDBManager shareInstance] getAllSectionsInGroup:self.groupModel.groupId];
         self.placeHolderLabel.hidden = _sectionArray.count != 0;
     }
