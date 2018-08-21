@@ -7,7 +7,7 @@
 #import "JNWarmTipsPublicFile.h"
 #import "View+MASAdditions.h"
 
-static const int kSelectBtnHeight = 14;
+static const int kSelectBtnHeight = 8;
 
 @interface JNToDoItemCell()
 @property (nonatomic, strong) UIButton *selectBtn;
@@ -29,8 +29,8 @@ static const int kSelectBtnHeight = 14;
 
         [self.contentView addSubview:self.selectBtn];
         [self.selectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.contentView.mas_top).offset(14);
-            make.left.equalTo(self.contentView.mas_left).offset(20);
+            make.top.equalTo(self.contentView.mas_top).offset(16); // (40 - kselectBtnHeight) / 2 40是cell的高度
+            make.left.equalTo(self.contentView.mas_left).offset(40);
             make.width.and.height.mas_equalTo(kSelectBtnHeight);
         }];
 
@@ -44,7 +44,7 @@ static const int kSelectBtnHeight = 14;
 
         [self.contentView addSubview:self.lineView];
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView.mas_left).offset(40);
+            make.left.equalTo(self.contentView.mas_left).offset(60);
             make.bottom.equalTo(self.contentView.mas_bottom);
             make.right.equalTo(self.contentView.mas_right).offset(-40);
             make.height.mas_equalTo(1);

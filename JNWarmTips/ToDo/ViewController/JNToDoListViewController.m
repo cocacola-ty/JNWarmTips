@@ -314,7 +314,6 @@ static const double kViewShowAnimationDuration = 0.35;
         _headerView.contentMode = UIViewContentModeScaleAspectFill;
         _headerView.layer.masksToBounds = YES;
         _headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, kTableViewHeaderViewHeight);
-//        _headerView.image = self.headerImage;
         _headerView.image = [UIImage imageNamed:@"group_bg5.jpg"];
 
         UIBezierPath *bezierPath = [UIBezierPath bezierPath];
