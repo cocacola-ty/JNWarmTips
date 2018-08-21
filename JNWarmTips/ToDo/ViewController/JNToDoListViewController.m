@@ -174,53 +174,23 @@ static const int kBackBtnWH = 20;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
 
-    /*
-    [JNWarmTipsPublicFile showTabbar:(UITabBarController *)[UIApplication sharedApplication].delegate.window.rootViewController];
     [self viewDismissAnimation];
-    */
-    [self viewDismissAnimation];
-//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) addItem {
-    /*
-    JNEventEditorViewController *editorViewController = [[JNEventEditorViewController alloc] init];
-    editorViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    editorViewController.editFinishBlock = ^(NSString *text) {
-        // 插入数据库
-
-        // 刷新当前视图
-        JNItemModel *itemModel = [JNItemModel new];
-        itemModel.content = text;
-        itemModel.finished = NO;
-        itemModel.startTime = 0;
-        itemModel.endTime = 0;
-        itemModel.notification = NO;
-        itemModel.groupId = [self.groupModel.groupId integerValue];
-
-        [[JNDBManager shareInstance] addItem:itemModel];
-
-        self.sectionArray = nil;
-        self.dataArray = nil;
-        [self.tableView reloadData];
-
-        // 回调更新group页面
-        if (self.updateItemInGorup) {
-            self.updateItemInGorup(text);
-        }
-    };
-    [self presentViewController:editorViewController animated:YES completion:nil];
-    */
     JNAddListItemViewController *addListItemViewController = [[JNAddListItemViewController alloc] init];
     addListItemViewController.groupId = [self.groupModel.groupId longLongValue];
     addListItemViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [self presentViewController:addListItemViewController animated:NO completion:nil];
 }
 
+- (void) backAction {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Delegate & DataSource
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-//    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -255,10 +225,6 @@ static const int kBackBtnWH = 20;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    /*
-    NSArray *items = self.dataArray[section];
-    return items.count;
-     */
     NSDictionary *dict = self.sectionArray[section];
     NSMutableArray *itemArray = [self.dataSourceDict valueForKey:dict[@"categoryName"]];
     return itemArray.count;
@@ -413,6 +379,8 @@ static const int kBackBtnWH = 20;
         UIImage *image = [[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_backBtn setImage:image forState:UIControlStateNormal];
         _backBtn.tintColor = MAIN_COLOR;
+
+        [_backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backBtn;
 }
