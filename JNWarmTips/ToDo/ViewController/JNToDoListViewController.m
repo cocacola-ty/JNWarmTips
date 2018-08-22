@@ -46,6 +46,7 @@ static const int kAddCategoryViewHeight = 140;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
 @property (nonatomic, strong) UIView *categoryBackView;
 @property (nonatomic, strong) UIView *addCategoryView;
+@property (nonatomic, strong) UITextField *categoryNameField;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *dataSourceDict;
 @property (nonatomic, strong) NSArray *sectionArray;
@@ -224,7 +225,12 @@ static const int kAddCategoryViewHeight = 140;
 
 - (void)addCategoryAction {
 
-    [self cancleAddCategory];
+    if (self.categoryNameField.text.length != 0) {
+        [[JNDBManager shareInstance] addCategory:self.categoryNameField.text InGroup:self.groupModel.groupId];
+        [self cancleAddCategory];
+    } else {
+        // shake
+    }
 }
 
 #pragma mark - Delegate & DataSource
@@ -441,6 +447,7 @@ static const int kAddCategoryViewHeight = 140;
         }];
 
         UITextField *categoryInputField = [[UITextField alloc] init];
+        self.categoryNameField = categoryInputField;
         categoryInputField.placeholder = @"请输入分类";
         categoryInputField.font = [UIFont systemFontOfSize:14.0];
         [_addCategoryView addSubview:categoryInputField];

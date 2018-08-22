@@ -11,57 +11,14 @@
 
 @implementation JNDBManager (Items)
 
-/*
-- (NSArray *)getAllItemsByShowDate:(NSString *)showDate WithGroupId:(NSString *)groupId {
+- (void)addCategory:(NSString *)categoryName InGroup:(NSString *)groupId {
 
-    NSString *date = showDate == nil ? @"NULL" : [NSString stringWithFormat:@"'%@'", showDate];
-    NSString *condition = @"";
-    if (![groupId isEqualToString:@"0"]) {
-        condition = [NSString stringWithFormat:@" and group_id = %@ ", groupId];
-    }
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ where show_date = %@%@", kJNDBListTable, date, condition];
-
-    NSMutableArray *result = [NSMutableArray array];
-    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        FMResultSet *resultSet = [db executeQuery:sql];
-        while ([resultSet next]) {
-            JNItemModel *itemModel = [JNItemModel new];
-            itemModel.itemId = [resultSet intForColumn:@"item_id"];
-            itemModel.content = [resultSet stringForColumn:@"content"];
-            itemModel.finished = [resultSet boolForColumn:@"finished"];
-            [result addObject:itemModel];
-        }
-    }];
-    return result;
-}
- */
-
-/*
-- (NSArray *) getAllDateSectionInGroup:(NSString *)groupId {
-    NSString *condition = @"";
-    if (![groupId isEqualToString:@"0"]) {
-        condition = [NSString stringWithFormat:@"where group_id = %@ ", groupId];
-    }
-    NSString *sql = [NSString stringWithFormat:@"select show_date, count(show_date) as count from %@ %@group by show_date order by show_date", kJNDBListTable, condition];
-    NSMutableArray *result = [NSMutableArray array];
+    NSString *sql = [NSString stringWithFormat:@"insert into %@ (category_name, group_id) values ('%@', %@)", kJNDBCategoryTable, categoryName, groupId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        FMResultSet *resultSet = [db executeQuery:sql];
-        while ([resultSet next]) {
-            NSString *sectionName = [resultSet stringForColumn:@"show_date"];
-            NSString *showName = sectionName.length == 0 ? @"未分类" : sectionName;
-            NSInteger count = [resultSet intForColumn:@"count"];
-            NSDictionary *dict = @{
-                    @"name" : sectionName,
-                    @"showName" : showName,
-                    @"count": @(count)
-            };
-            [result addObject:dict];
-        }
+        [db executeUpdate:sql];
     }];
-    return result;
 }
- */
 
 /*获取该小组内的所有分类*/
 - (NSArray *)getAllSectionsInGroup:(NSString *)groupId {
@@ -85,6 +42,8 @@
     }];
     return result;
 }
+
+#pragma mark - Item Method
 
 - (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)getAllItemsInGroup:(NSString *)groupId {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];

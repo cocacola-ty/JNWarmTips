@@ -10,6 +10,9 @@
 
 @interface JNDBManager (Items)
 
+/*添加一个分类*/
+- (void)addCategory:(NSString *)categoryName InGroup:(NSString *)groupId;
+
 - (void) addItem:(JNItemModel *)itemModel ;
 
 /*获取该小组内的所有分类*/
@@ -23,4 +26,4 @@
 /*删除一条item*/
 - (void) deleteItem:(long long)itemId ;
 
-@end
+@end;
