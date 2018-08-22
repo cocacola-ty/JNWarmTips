@@ -14,6 +14,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
 #import "JNCircleSelectIndicatorView.h"
+#import "JNAlertAssistant.h"
 
 @interface JNAddListItemViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIView *containerView;
@@ -87,6 +88,10 @@
 
 #pragma mark - Event Response
 
+- (void)addCategoryAction {
+    [JNAlertAssistant alertWarningInfo:@"当前没有分类"];
+};
+
 - (void) doneAction {
     self.itemModel.content = self.inputField.text;
 
@@ -159,6 +164,8 @@
 - (JNCircleSelectIndicatorView *)addCategorySelectorView {
     if (!_addCategorySelectorView) {
         _addCategorySelectorView = [JNCircleSelectIndicatorView new];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addCategoryAction)];
+        [_addCategorySelectorView addGestureRecognizer:tapGestureRecognizer];
     }
     return _addCategorySelectorView;
 }
