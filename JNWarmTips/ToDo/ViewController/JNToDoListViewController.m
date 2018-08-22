@@ -44,6 +44,7 @@ static const int kAddCategoryViewHeight = 140;
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, strong) UIButton *addCategoryBtn;
 @property (nonatomic, strong) UILabel *placeHolderLabel;
+@property (nonatomic, strong) UIView *categoryBackView;
 @property (nonatomic, strong) UIView *addCategoryView;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *dataSourceDict;
@@ -178,7 +179,6 @@ static const int kAddCategoryViewHeight = 140;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
-
     [self viewDismissAnimation];
 }
 
@@ -193,11 +193,16 @@ static const int kAddCategoryViewHeight = 140;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) addCategoryAction {
-    [self.view addSubview:self.addCategoryView];
+- (void)showCategoryViewAction{
+    [self.view addSubview:self.categoryBackView];
+    [self.categoryBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+
+    [self.categoryBackView addSubview:self.addCategoryView];
     [self.addCategoryView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.centerY.equalTo(self.view.mas_centerY);
+        make.centerX.equalTo(self.categoryBackView.mas_centerX);
+        make.centerY.equalTo(self.categoryBackView.mas_centerY);
         make.width.mas_equalTo(kAddCategoryViewWidth);
         make.height.mas_equalTo(kAddCategoryViewHeight);
     }];
@@ -207,6 +212,19 @@ static const int kAddCategoryViewHeight = 140;
         self.addCategoryView.transform = CGAffineTransformIdentity;
     }];
 
+}
+
+- (void) cancleAddCategory {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.addCategoryView.transform = CGAffineTransformMakeScale(0, 0);
+    }completion:^(BOOL complete){
+        [self.categoryBackView removeFromSuperview];
+    }];
+}
+
+- (void)addCategoryAction {
+
+    [self cancleAddCategory];
 }
 
 #pragma mark - Delegate & DataSource
@@ -376,7 +394,7 @@ static const int kAddCategoryViewHeight = 140;
 - (UIButton *)addCategoryBtn {
     if (!_addCategoryBtn) {
         _addCategoryBtn = [UIButton new];
-        [_addCategoryBtn addTarget:self action:@selector(addCategoryAction) forControlEvents:UIControlEventTouchUpInside];
+        [_addCategoryBtn addTarget:self action:@selector(showCategoryViewAction) forControlEvents:UIControlEventTouchUpInside];
 
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointMake(0, kAddCategoryBtnHeight / 2)];
@@ -396,6 +414,14 @@ static const int kAddCategoryViewHeight = 140;
     return _addCategoryBtn;
 }
 
+- (UIView *)categoryBackView {
+    if (!_categoryBackView) {
+        _categoryBackView = [UIView new];
+        _categoryBackView.backgroundColor = [UIColor clearColor];
+    }
+    return _categoryBackView;
+}
+
 - (UIView *)addCategoryView {
     if (!_addCategoryView) {
         _addCategoryView = [UIView new];
@@ -407,7 +433,6 @@ static const int kAddCategoryViewHeight = 140;
 
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = @"添加分类";
-//        titleLabel.textColor = [UIColor colorWithHexString:@"222222"];
         titleLabel.textColor = MAIN_COLOR;
         [_addCategoryView addSubview:titleLabel];
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -417,7 +442,6 @@ static const int kAddCategoryViewHeight = 140;
 
         UITextField *categoryInputField = [[UITextField alloc] init];
         categoryInputField.placeholder = @"请输入分类";
-//        categoryInputField.backgroundColor = [UIColor greenColor];
         categoryInputField.font = [UIFont systemFontOfSize:14.0];
         [_addCategoryView addSubview:categoryInputField];
         [categoryInputField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -444,6 +468,7 @@ static const int kAddCategoryViewHeight = 140;
         doneBtn.imageView.tintColor = MAIN_COLOR;
         doneBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [_addCategoryView addSubview:doneBtn];
+        [doneBtn addTarget:self action:@selector(addCategoryAction) forControlEvents:UIControlEventTouchUpInside];
         [doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.mas_equalTo(30);
             make.bottom.equalTo(self->_addCategoryView.mas_bottom).offset(-8);
@@ -453,13 +478,13 @@ static const int kAddCategoryViewHeight = 140;
         UIButton *cancleBtn = [UIButton new];
         [cancleBtn setImage:[UIImage imageNamed:@"error"] forState:UIControlStateNormal];
         cancleBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [cancleBtn addTarget:self action:@selector(cancleAddCategory) forControlEvents:UIControlEventTouchUpInside];
         [_addCategoryView addSubview:cancleBtn];
         [cancleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.mas_equalTo(23);
             make.centerX.equalTo(self->_addCategoryView.mas_centerX).offset(-45);
             make.centerY.equalTo(doneBtn.mas_centerY);
         }];
-
 
     }
     return _addCategoryView;
