@@ -13,10 +13,12 @@
 #import "JNItemModel.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Items.h"
+#import "JNCircleSelectIndicatorView.h"
 
 @interface JNAddListItemViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
+@property (nonatomic, strong) JNCircleSelectIndicatorView *addCategorySelectorView;
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *cancleBtn;
 
@@ -44,6 +46,14 @@
         make.top.equalTo(self.containerView.mas_top).offset(50);
         make.right.equalTo(self.containerView.mas_right).offset(-40);
         make.height.mas_equalTo(40);
+    }];
+
+    [self.containerView addSubview:self.addCategorySelectorView];
+    [self.addCategorySelectorView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.containerView.mas_left).offset(50);
+        make.top.equalTo(self.inputField.mas_bottom).offset(30);
+        make.right.equalTo(self.containerView.mas_right);
+        make.height.mas_equalTo(44);
     }];
 
     [self.containerView addSubview:self.doneBtn];
@@ -144,6 +154,13 @@
         _inputField.delegate = self;
     }
     return _inputField;
+}
+
+- (JNCircleSelectIndicatorView *)addCategorySelectorView {
+    if (!_addCategorySelectorView) {
+        _addCategorySelectorView = [JNCircleSelectIndicatorView new];
+    }
+    return _addCategorySelectorView;
 }
 
 - (UIButton *)doneBtn {
