@@ -399,20 +399,68 @@ static const int kAddCategoryViewHeight = 140;
 - (UIView *)addCategoryView {
     if (!_addCategoryView) {
         _addCategoryView = [UIView new];
-        _addCategoryView.backgroundColor = [UIColor redColor];
+        _addCategoryView.backgroundColor = [UIColor whiteColor];
         _addCategoryView.layer.cornerRadius = 5;
+        _addCategoryView.layer.shadowOffset = CGSizeMake(0.4, 2);
+        _addCategoryView.layer.shadowColor = [UIColor colorWithHexString:@"222222"].CGColor;
+        _addCategoryView.layer.shadowOpacity = 0.5;
 
         UILabel *titleLabel = [UILabel new];
+        titleLabel.text = @"添加分类";
+//        titleLabel.textColor = [UIColor colorWithHexString:@"222222"];
+        titleLabel.textColor = MAIN_COLOR;
         [_addCategoryView addSubview:titleLabel];
+        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self->_addCategoryView.mas_top).offset(12);
+            make.centerX.equalTo(self->_addCategoryView.mas_centerX);
+        }];
 
         UITextField *categoryInputField = [[UITextField alloc] init];
+        categoryInputField.placeholder = @"请输入分类";
+//        categoryInputField.backgroundColor = [UIColor greenColor];
+        categoryInputField.font = [UIFont systemFontOfSize:14.0];
         [_addCategoryView addSubview:categoryInputField];
-
-        UIButton *cancleBtn = [UIButton new];
-        [_addCategoryView addSubview:cancleBtn];
+        [categoryInputField mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self->_addCategoryView.mas_left).offset(20);
+            make.top.equalTo(titleLabel.mas_bottom).offset(20);
+            make.right.equalTo(self->_addCategoryView.mas_right).offset(-20);
+            make.height.mas_equalTo(30);
+        }];
+        
+        UIView *line = [UIView new];
+        line.backgroundColor = GRAY_BACKGROUND_COLOR;
+        [_addCategoryView addSubview:line];
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(categoryInputField.mas_bottom);
+            make.left.equalTo(categoryInputField.mas_left);
+            make.right.equalTo(categoryInputField.mas_right);
+            make.height.mas_equalTo(1);
+        }];
 
         UIButton *doneBtn = [UIButton new];
+        UIImage *doneImage = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [doneBtn setImage:doneImage forState:UIControlStateNormal];
+        [doneBtn setTintColor:MAIN_COLOR];
+        doneBtn.imageView.tintColor = MAIN_COLOR;
+        doneBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [_addCategoryView addSubview:doneBtn];
+        [doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(30);
+            make.bottom.equalTo(self->_addCategoryView.mas_bottom).offset(-8);
+            make.centerX.equalTo(self->_addCategoryView.mas_centerX).offset(45);
+        }];
+
+        UIButton *cancleBtn = [UIButton new];
+        [cancleBtn setImage:[UIImage imageNamed:@"error"] forState:UIControlStateNormal];
+        cancleBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [_addCategoryView addSubview:cancleBtn];
+        [cancleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(23);
+            make.centerX.equalTo(self->_addCategoryView.mas_centerX).offset(-45);
+            make.centerY.equalTo(doneBtn.mas_centerY);
+        }];
+
+
     }
     return _addCategoryView;
 }
