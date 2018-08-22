@@ -7,4 +7,5 @@
 
 
 @interface JNCircleSelectIndicatorView : UIView
+@property(nonatomic, assign) BOOL selected;
 @end

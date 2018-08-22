@@ -24,6 +24,7 @@ static const int kCircleViewWh = 14;
     self = [super initWithFrame:frame];
     kInnerCircleWH = kCircleViewWh / 2;
     if (self) {
+        self.selected = NO;
         [self addSubview:self.circleView];
         [self.circleView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.mas_centerY);
@@ -74,7 +75,13 @@ static const int kCircleViewWh = 14;
         _innerCircleView = [UIView new];
         _innerCircleView.backgroundColor = MAIN_COLOR;
         _innerCircleView.layer.cornerRadius = kInnerCircleWH / 2;
+        _innerCircleView.hidden = !self.selected;
     }
     return _innerCircleView;
+}
+
+- (void)setSelected:(BOOL)selected {
+    _selected = selected;
+    self.innerCircleView.hidden = !self.selected;
 }
 @end

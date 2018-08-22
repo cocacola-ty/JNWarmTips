@@ -15,7 +15,10 @@
 
 - (void) addItem:(JNItemModel *)itemModel ;
 
-/*获取该小组内的所有分类*/
+/*获取小组内所有已经创建的分类*/
+- (NSArray *)getAllCategoryInGroup:(NSString *)groupId;
+
+/*获取该小组内的所有含有事项的分类*/
 - (NSArray *)getAllSectionsInGroup:(NSString *)groupId;
 
 /*获取该小组内所有的事项*/

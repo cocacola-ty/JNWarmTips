@@ -20,6 +20,25 @@
     }];
 }
 
+- (NSArray *)getAllCategoryInGroup:(NSString *)groupId {
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where group_id = %@", kJNDBCategoryTable, groupId];
+    NSMutableArray *result = [NSMutableArray array];
+
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        FMResultSet *resultSet = [db executeQuery:sql];
+        while ([resultSet next]) {
+            NSString *categoryName = [resultSet stringForColumn:@"category_name"];
+            NSString *categoryId = [resultSet stringForColumn:@"category_id"];
+            NSDictionary *dict = @{
+                    @"categoryName" : categoryName,
+                    @"categoryId" : categoryId
+            };
+            [result addObject:dict];
+        }
+    }];
+    return result;
+}
+
 /*获取该小组内的所有分类*/
 - (NSArray *)getAllSectionsInGroup:(NSString *)groupId {
     NSMutableArray *result = [NSMutableArray array];
