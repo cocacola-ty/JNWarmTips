@@ -176,20 +176,21 @@ static const int kCategoryPickerViewHeight = 240;
     return self.categoryData.count;
 }
 
+/*
 - (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     NSDictionary *dict = self.categoryData[row];
-    NSLog(@"dict = %@", dict);
     NSString *name = dict[@"categoryName"];
-    NSLog(@"name = %@", name);
     return name;
+}
+ */
+
+- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"小组" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:14.0]}];
+    return attributedString;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-    return 44;
-}
-
-- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    return 300;
+    return 40;
 }
 
 
@@ -235,6 +236,20 @@ static const int kCategoryPickerViewHeight = 240;
             make.right.equalTo(self->_categoryPickerView.mas_right).offset(-50);
             make.top.equalTo(self->_categoryPickerView.mas_top);
             make.bottom.equalTo(self->_categoryPickerView.mas_bottom).offset(-50);
+        }];
+
+        UIButton *addCategoryBtn = [UIButton new];
+        UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [addCategoryBtn setImage:image forState:UIControlStateNormal];
+        addCategoryBtn.tintColor = MAIN_COLOR;
+        addCategoryBtn.layer.cornerRadius = 20;
+        addCategoryBtn.layer.borderColor = MAIN_COLOR.CGColor;
+        addCategoryBtn.layer.borderWidth = 2;
+        [_categoryPickerView addSubview:addCategoryBtn];
+        [addCategoryBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self->_categoryPickerView.mas_centerX);
+            make.bottom.equalTo(self->_categoryPickerView.mas_bottom).offset(-8);
+            make.width.height.mas_equalTo(40);
         }];
     }
     return _categoryPickerView;
