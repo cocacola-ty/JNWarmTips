@@ -62,6 +62,10 @@ static const int kContainerViewHeight = 220;
 #pragma mark - Event Response
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [self dismiss];
+}
+
+- (void) dismiss {
     [UIView animateWithDuration:0.25 animations:^{
         self.containerView.transform = CGAffineTransformMakeTranslation(0, kContainerViewHeight);
     } completion:^(BOOL finished) {
@@ -74,6 +78,7 @@ static const int kContainerViewHeight = 220;
         NSString *categoryId = [self.selectedCategory valueForKey:@"categoryId"];
         NSString *categoryName = [self.selectedCategory valueForKey:@"categoryName"];
         self.selectCategoryBlock(categoryId, categoryName);
+        [self dismiss];
     }
 }
 
@@ -102,6 +107,7 @@ static const int kContainerViewHeight = 220;
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     NSDictionary *categoryDict = self.categoryData[row];
+    self.selectedCategory = categoryDict;
 }
 
 #pragma mark - Getter & Setter

@@ -49,6 +49,10 @@ static const int kCircleViewWh = 14;
     return self;
 }
 
+- (void)updateTitle:(NSString *)title {
+    self.titleLabel.text = title;
+}
+
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [UILabel new];

@@ -8,4 +8,6 @@
 
 @interface JNCircleSelectIndicatorView : UIView
 @property(nonatomic, assign) BOOL selected;
-@end
+
+- (void)updateTitle:(NSString *)title;
+@end;

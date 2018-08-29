@@ -25,6 +25,9 @@ static const int kCategoryPickerViewHeight = 240;
 @property (nonatomic, strong) JNCircleSelectIndicatorView *addCategorySelectorView;
 @property (nonatomic, strong) NSArray *categoryData;
 
+@property (nonatomic, strong) NSString *selectedCategoryId;
+@property (nonatomic, strong) NSString *selectedCategoryName;
+
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *cancleBtn;
 
@@ -102,10 +105,23 @@ static const int kCategoryPickerViewHeight = 240;
         [JNAlertAssistant alertWarningInfo:@"当前没有分类"];
         return;
     } else {
-        JNCategoryPickerViewController *categoryPickerViewController = [JNCategoryPickerViewController new];
-        categoryPickerViewController.categoryData = self.categoryData;
-        categoryPickerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [self presentViewController:categoryPickerViewController animated:NO completion:nil];
+        if (self.addCategorySelectorView.selected) {
+            self.addCategorySelectorView.selected = NO;
+            self.selectedCategoryId = nil;
+            [self.addCategorySelectorView updateTitle:@"添加分类"];
+        }else {
+            JNCategoryPickerViewController *categoryPickerViewController = [JNCategoryPickerViewController new];
+            categoryPickerViewController.categoryData = self.categoryData;
+            @weakify(self)
+            categoryPickerViewController.selectCategoryBlock = ^(NSString *categoryId, NSString *categoryName) {
+                @strongify(self)
+                self.selectedCategoryId = categoryId;
+                self.addCategorySelectorView.selected = YES;
+                [self.addCategorySelectorView updateTitle:categoryName];
+            };
+            categoryPickerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            [self presentViewController:categoryPickerViewController animated:NO completion:nil];
+        }
     }
 };
 
