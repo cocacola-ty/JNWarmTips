@@ -15,6 +15,7 @@
 #import "JNDBManager+Items.h"
 #import "JNCircleSelectIndicatorView.h"
 #import "JNAlertAssistant.h"
+#import "JNCategoryPickerViewController.h"
 
 static const int kCategoryPickerViewHeight = 240;
 
@@ -26,6 +27,7 @@ static const int kCategoryPickerViewHeight = 240;
 @property (nonatomic, strong) UIButton *cancleBtn;
 
 @property (nonatomic, strong) UIView *categoryPickerView;
+@property(nonatomic, assign) BOOL pickerViewShowing;
 @property (nonatomic, strong) NSArray *categoryData;
 
 @property (nonatomic, strong) JNItemModel *itemModel;
@@ -111,11 +113,16 @@ static const int kCategoryPickerViewHeight = 240;
         [JNAlertAssistant alertWarningInfo:@"当前没有分类"];
         return;
     } else {
+        JNCategoryPickerViewController *categoryPickerViewController = [JNCategoryPickerViewController new];
+        categoryPickerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [self presentViewController:categoryPickerViewController animated:NO completion:nil];
+        /*
         self.addCategorySelectorView.selected = !self.addCategorySelectorView.selected;
         // 选择分类
         [UIView animateWithDuration:0.25 animations:^{
             self.categoryPickerView.transform = CGAffineTransformIdentity;
         }];
+         */
     }
 };
 
@@ -242,14 +249,14 @@ static const int kCategoryPickerViewHeight = 240;
         UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [addCategoryBtn setImage:image forState:UIControlStateNormal];
         addCategoryBtn.tintColor = MAIN_COLOR;
-        addCategoryBtn.layer.cornerRadius = 20;
+        addCategoryBtn.layer.cornerRadius = 18;
         addCategoryBtn.layer.borderColor = MAIN_COLOR.CGColor;
         addCategoryBtn.layer.borderWidth = 2;
         [_categoryPickerView addSubview:addCategoryBtn];
         [addCategoryBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self->_categoryPickerView.mas_centerX);
             make.bottom.equalTo(self->_categoryPickerView.mas_bottom).offset(-8);
-            make.width.height.mas_equalTo(40);
+            make.width.height.mas_equalTo(36);
         }];
     }
     return _categoryPickerView;
