@@ -23,12 +23,10 @@ static const int kCategoryPickerViewHeight = 240;
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) JNCircleSelectIndicatorView *addCategorySelectorView;
+@property (nonatomic, strong) NSArray *categoryData;
+
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIButton *cancleBtn;
-
-@property (nonatomic, strong) UIView *categoryPickerView;
-@property(nonatomic, assign) BOOL pickerViewShowing;
-@property (nonatomic, strong) NSArray *categoryData;
 
 @property (nonatomic, strong) JNItemModel *itemModel;
 @end
@@ -75,15 +73,6 @@ static const int kCategoryPickerViewHeight = 240;
         make.left.equalTo(self.containerView.mas_left).offset(15);
         make.top.equalTo(self.containerView.mas_top).offset(8);
     }];
-
-    [self.containerView addSubview:self.categoryPickerView];
-    [self.categoryPickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.containerView.mas_left);
-        make.right.equalTo(self.containerView.mas_right);
-        make.height.mas_equalTo(kCategoryPickerViewHeight);
-        make.bottom.mas_equalTo(self.containerView.mas_bottom);
-    }];
-    self.categoryPickerView.transform = CGAffineTransformMakeTranslation(0, kCategoryPickerViewHeight);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -114,15 +103,9 @@ static const int kCategoryPickerViewHeight = 240;
         return;
     } else {
         JNCategoryPickerViewController *categoryPickerViewController = [JNCategoryPickerViewController new];
+        categoryPickerViewController.categoryData = self.categoryData;
         categoryPickerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [self presentViewController:categoryPickerViewController animated:NO completion:nil];
-        /*
-        self.addCategorySelectorView.selected = !self.addCategorySelectorView.selected;
-        // 选择分类
-        [UIView animateWithDuration:0.25 animations:^{
-            self.categoryPickerView.transform = CGAffineTransformIdentity;
-        }];
-         */
     }
 };
 
@@ -175,32 +158,6 @@ static const int kCategoryPickerViewHeight = 240;
     return YES;
 }
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return self.categoryData.count;
-}
-
-/*
-- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSDictionary *dict = self.categoryData[row];
-    NSString *name = dict[@"categoryName"];
-    return name;
-}
- */
-
-- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"小组" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:14.0]}];
-    return attributedString;
-}
-
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-    return 40;
-}
-
-
 #pragma mark - Getter & Setter
 
 - (UIView *)containerView {
@@ -228,45 +185,6 @@ static const int kCategoryPickerViewHeight = 240;
         [_addCategorySelectorView addGestureRecognizer:tapGestureRecognizer];
     }
     return _addCategorySelectorView;
-}
-
-- (UIView *)categoryPickerView {
-    if (!_categoryPickerView) {
-        _categoryPickerView = [UIView new];
-        _categoryPickerView.backgroundColor = [UIColor colorWithHexString:@"f5f5f5"];
-
-        UIPickerView *pickerView = [UIPickerView new];
-        [_categoryPickerView addSubview:pickerView];
-        pickerView.delegate = self;
-        [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self->_categoryPickerView.mas_left).offset(50);
-            make.right.equalTo(self->_categoryPickerView.mas_right).offset(-50);
-            make.top.equalTo(self->_categoryPickerView.mas_top);
-            make.bottom.equalTo(self->_categoryPickerView.mas_bottom).offset(-50);
-        }];
-
-        UIButton *addCategoryBtn = [UIButton new];
-        UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [addCategoryBtn setImage:image forState:UIControlStateNormal];
-        addCategoryBtn.tintColor = MAIN_COLOR;
-        addCategoryBtn.layer.cornerRadius = 18;
-        addCategoryBtn.layer.borderColor = MAIN_COLOR.CGColor;
-        addCategoryBtn.layer.borderWidth = 2;
-        [_categoryPickerView addSubview:addCategoryBtn];
-        [addCategoryBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self->_categoryPickerView.mas_centerX);
-            make.bottom.equalTo(self->_categoryPickerView.mas_bottom).offset(-8);
-            make.width.height.mas_equalTo(36);
-        }];
-    }
-    return _categoryPickerView;
-}
-
-- (NSArray *)categoryData {
-    if (!_categoryData) {
-        _categoryData = [[JNDBManager shareInstance] getAllCategoryInGroup:[NSString stringWithFormat:@"%lld", self.groupId]];
-    }
-    return _categoryData;
 }
 
 - (UIButton *)doneBtn {
@@ -307,4 +225,10 @@ static const int kCategoryPickerViewHeight = 240;
     return _itemModel;
 }
 
+- (NSArray *)categoryData {
+    if (!_categoryData) {
+        _categoryData = [[JNDBManager shareInstance] getAllCategoryInGroup:[NSString stringWithFormat:@"%lld", self.groupId]];
+    }
+    return _categoryData;
+}
 @end

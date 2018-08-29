@@ -7,4 +7,5 @@
 
 
 @interface JNCategoryPickerViewController : UIViewController
+@property (nonatomic, strong) NSArray *categoryData;
 @end

@@ -6,6 +6,8 @@
 #import <Masonry/View+MASAdditions.h>
 #import "JNCategoryPickerViewController.h"
 #import "UIColor+Extension.h"
+#import "JNDBManager.h"
+#import "JNWarmTipsPublicFile.h"
 
 static const int kContainerViewHeight = 220;
 
@@ -105,8 +107,11 @@ static const int kContainerViewHeight = 220;
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
+        UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_doneBtn setImage:[UIImage imageNamed:@"done"] forState:UIControlStateNormal];
+        _doneBtn.tintColor = MAIN_COLOR;
     }
     return _doneBtn;
 }
+
 @end
