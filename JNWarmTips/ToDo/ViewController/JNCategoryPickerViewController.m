@@ -69,9 +69,13 @@ static const int kContainerViewHeight = 220;
 
 #pragma mark - Delegate & DataSource
 
-- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"小组" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:14.0]}];
-    return attributedString;
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
+    NSDictionary *categoryDict = self.categoryData[row];
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont systemFontOfSize:14.0];
+    titleLabel.text = [categoryDict valueForKey:@"categoryName"];
+    return titleLabel;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
@@ -83,7 +87,7 @@ static const int kContainerViewHeight = 220;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 1;
+    return self.categoryData.count;
 }
 
 #pragma mark - Getter & Setter
@@ -108,7 +112,7 @@ static const int kContainerViewHeight = 220;
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
         UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [_doneBtn setImage:[UIImage imageNamed:@"done"] forState:UIControlStateNormal];
+        [_doneBtn setImage:image forState:UIControlStateNormal];
         _doneBtn.tintColor = MAIN_COLOR;
     }
     return _doneBtn;
