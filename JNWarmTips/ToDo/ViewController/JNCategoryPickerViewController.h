@@ -8,4 +8,6 @@
 
 @interface JNCategoryPickerViewController : UIViewController
 @property (nonatomic, strong) NSArray *categoryData;
+
+@property (nonatomic, strong) void (^selectCategoryBlock)(NSString *categoryId, NSString *categoryName);
 @end

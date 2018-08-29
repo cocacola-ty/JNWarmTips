@@ -15,6 +15,8 @@ static const int kContainerViewHeight = 220;
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIPickerView *pickerView;
 @property (nonatomic, strong) UIButton *doneBtn;
+
+@property (nonatomic, strong) NSDictionary *selectedCategory;
 @end
 
 @implementation JNCategoryPickerViewController
@@ -67,6 +69,14 @@ static const int kContainerViewHeight = 220;
     }];
 }
 
+- (void)finishSelectCategory {
+    if (self.selectCategoryBlock) {
+        NSString *categoryId = [self.selectedCategory valueForKey:@"categoryId"];
+        NSString *categoryName = [self.selectedCategory valueForKey:@"categoryName"];
+        self.selectCategoryBlock(categoryId, categoryName);
+    }
+}
+
 #pragma mark - Delegate & DataSource
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
@@ -88,6 +98,10 @@ static const int kContainerViewHeight = 220;
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return self.categoryData.count;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSDictionary *categoryDict = self.categoryData[row];
 }
 
 #pragma mark - Getter & Setter
@@ -114,6 +128,8 @@ static const int kContainerViewHeight = 220;
         UIImage *image = [[UIImage imageNamed:@"done"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_doneBtn setImage:image forState:UIControlStateNormal];
         _doneBtn.tintColor = MAIN_COLOR;
+
+        [_doneBtn addTarget:self action:@selector(finishSelectCategory) forControlEvents:UIControlEventTouchUpInside];
     }
     return _doneBtn;
 }
