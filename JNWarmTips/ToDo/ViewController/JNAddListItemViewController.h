@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+UIKIT_EXTERN NSString *const JNITEMSCHANGEDNOTIFICATION;
+
 @interface JNAddListItemViewController : UIViewController
 @property (nonatomic, assign) long long groupId;
 @end

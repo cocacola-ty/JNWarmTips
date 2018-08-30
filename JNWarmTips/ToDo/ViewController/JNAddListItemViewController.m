@@ -19,6 +19,8 @@
 
 static const int kCategoryPickerViewHeight = 240;
 
+NSString *const JNITEMSCHANGEDNOTIFICATION = @"JNITEMSCHANGEDNOTIFICATION";
+
 @interface JNAddListItemViewController () <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
@@ -35,6 +37,16 @@ static const int kCategoryPickerViewHeight = 240;
 @end
 
 @implementation JNAddListItemViewController
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        // 数据初始化
+        self.selectedCategoryId = @"-100";
+        self.selectedCategoryName = @"未分类";
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -116,6 +128,7 @@ static const int kCategoryPickerViewHeight = 240;
             categoryPickerViewController.selectCategoryBlock = ^(NSString *categoryId, NSString *categoryName) {
                 @strongify(self)
                 self.selectedCategoryId = categoryId;
+                self.selectedCategoryName = categoryName;
                 self.addCategorySelectorView.selected = YES;
                 [self.addCategorySelectorView updateTitle:categoryName];
             };
@@ -127,8 +140,12 @@ static const int kCategoryPickerViewHeight = 240;
 
 - (void) doneAction {
     self.itemModel.content = self.inputField.text;
+    self.itemModel.categoryName = self.selectedCategoryName;
+    self.itemModel.categoryId = [self.selectedCategoryId integerValue];
 
     [[JNDBManager shareInstance] addItem:self.itemModel];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:JNITEMSCHANGEDNOTIFICATION object:nil];
 
     [self cancleAction];
 }

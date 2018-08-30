@@ -103,6 +103,9 @@ static const int kAddCategoryViewHeight = 140;
         make.centerY.equalTo(self.addCategoryBtn.mas_centerY);
         make.left.equalTo(self.headerView.mas_left).offset(12);
     }];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemsChanged) name:JNITEMSCHANGEDNOTIFICATION object:nil];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -181,6 +184,12 @@ static const int kAddCategoryViewHeight = 140;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     [self viewDismissAnimation];
+}
+
+- (void) itemsChanged {
+    self.dataSourceDict = nil;
+    self.sectionArray = nil;
+    [self.tableView reloadData];
 }
 
 - (void) addItem {
