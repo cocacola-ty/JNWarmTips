@@ -18,7 +18,6 @@ static const int kDefaultMargin = 20;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-//        self.contentView.backgroundColor = RANDOM_COLOR;
         [self.contentView addSubview:self.containerView];
         [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView.mas_left).offset(kDefaultMargin);
@@ -28,6 +27,12 @@ static const int kDefaultMargin = 20;
         }];
     }
     return self;
+}
+
+- (void)addAction {
+    if (self.clickActionBlock) {
+        self.clickActionBlock();
+    }
 }
 
 - (UIView *)containerView {
@@ -58,6 +63,10 @@ static const int kDefaultMargin = 20;
         shapeLayer.lineJoin = kCALineJoinRound;
 
         [_containerView.layer addSublayer:shapeLayer];
+
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addAction)];
+        [_containerView addGestureRecognizer:tapGestureRecognizer];
+
     }
     return _containerView;
 }

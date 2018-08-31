@@ -12,6 +12,7 @@
 #import "JNDBManager.h"
 #import "JNDBManager+Group.h"
 #import "JNAddGroupCollectionViewCell.h"
+#import "JNAlertAssistant.h"
 
 static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 
@@ -50,6 +51,35 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
     if (indexPath.row == self.groups.count) {
         JNAddGroupCollectionViewCell *addGroupCollectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:kAddGroupCollectionViewCellId forIndexPath:indexPath];
+        @weakify(self)
+        addGroupCollectionViewCell.clickActionBlock = ^() {
+            @strongify(self)
+            /*
+            UIView *alertView = [UIView new];
+            alertView.layer.cornerRadius = 8;
+            alertView.backgroundColor = RANDOM_COLOR;
+            [self.view addSubview:alertView];
+            [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.equalTo(self.view.mas_centerX);
+                make.centerY.equalTo(self.view.mas_centerY).offset(-60);
+                CGFloat  width = SCREEN_WIDTH * 0.7;
+                CGFloat height = width * 0.6;
+                make.width.mas_equalTo(width);
+                make.height.mas_equalTo(height);
+            }];
+
+            alertView.transform = CGAffineTransformMakeScale(0, 0);
+            alertView.alpha = 0;
+
+            [UIView animateWithDuration:0.25 animations:^{
+                alertView.transform = CGAffineTransformIdentity;
+                alertView.alpha = 1;
+            }];
+
+            */
+            [JNAlertAssistant alertMessage:@"保存成功" WithType:1];
+
+        };
         return addGroupCollectionViewCell;
     }
     return cell;
