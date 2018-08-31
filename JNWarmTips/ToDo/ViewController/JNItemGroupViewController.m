@@ -11,10 +11,13 @@
 #import "JNGroupModel.h"
 #import "JNDBManager.h"
 #import "JNDBManager+Group.h"
+#import "JNAddGroupCollectionViewCell.h"
 
 static NSString *const kGroupCollectionCellID= @"ItemGroupCellIdentity";
 
 static const int kHMargin = 12;
+
+static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionViewCell";
 
 @interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -30,6 +33,7 @@ static const int kHMargin = 12;
     self.navigationController.navigationBar.hidden = YES;
 
     [self.collectionView registerClass:[JNItemGroupCell class] forCellWithReuseIdentifier:kGroupCollectionCellID];
+    [self.collectionView registerClass:[JNAddGroupCollectionViewCell class] forCellWithReuseIdentifier:kAddGroupCollectionViewCellId];
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(5);
@@ -44,11 +48,15 @@ static const int kHMargin = 12;
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
+    if (indexPath.row == self.groups.count) {
+        JNAddGroupCollectionViewCell *addGroupCollectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:kAddGroupCollectionViewCellId forIndexPath:indexPath];
+        return addGroupCollectionViewCell;
+    }
     return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.groups.count;
+    return self.groups.count + 1;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -56,22 +64,11 @@ static const int kHMargin = 12;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    JNGroupListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    self.cellBackGroundImage = cell.backgroundImage;
-    */
-    
-//    self.currentSelectIndexPath = indexPath;
+
     JNGroupModel *groupModel = self.groups[indexPath.row];
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
-//    toDoListViewController.transitioningDelegate = self;
     toDoListViewController.groupModel = groupModel;
-//    toDoListViewController.headerImage = cell.backgroundImage;
-//    toDoListViewController.updateItemInGorup = ^(NSString *content) {
-//        groupModel.firstItemContent = content;
-//        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-//    };
-    
+
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:toDoListViewController animated:YES];
     self.hidesBottomBarWhenPushed = NO;

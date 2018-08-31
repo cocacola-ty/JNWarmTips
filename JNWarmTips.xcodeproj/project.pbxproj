@@ -59,6 +59,7 @@
 		8B8D8BEC95DA0DF78C8F9715 /* JNItemGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8A1D0EAEF92262EADE13 /* JNItemGroupCell.m */; };
 		8B8D8BF5FF7718CFFF554E80 /* JNItemGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8E1890BF2AA863E79A2C /* JNItemGroupViewController.m */; };
 		8B8D8C02BBC01BB3F788FD20 /* JNEventTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D852CF6F53CD8ECEB5A0E /* JNEventTypeModel.m */; };
+		8B8D8C211387AC3AB01714F7 /* JNAddGroupCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88299AF505AE1A4D9007 /* JNAddGroupCollectionViewCell.m */; };
 		8B8D8D718511EEF195E900A7 /* JNCircleSelectIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8BA3B24E916B7D04E5C1 /* JNCircleSelectIndicatorView.m */; };
 		8B8D8DB882312F8A45628321 /* JNAddEventTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8CC5C6B23565F084C97D /* JNAddEventTransitionAnimator.m */; };
 		8B8D8DCEEEB06799EF409A0F /* JNDBManager+Items.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8BBF211467AF88CC5EF1 /* JNDBManager+Items.m */; };
@@ -131,6 +132,7 @@
 		8B8D839B83BB3166F7628654 /* JNAddEventCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddEventCellView.h; sourceTree = "<group>"; };
 		8B8D845045EF929195B9E64A /* JNDayEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayEventTableViewCell.m; sourceTree = "<group>"; };
 		8B8D846A78DB3E839387D207 /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
+		8B8D84907385949A059F2C06 /* JNAddGroupCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddGroupCollectionViewCell.h; sourceTree = "<group>"; };
 		8B8D84A3FFA3DC8CF3E6E3A3 /* JNGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNGroupModel.m; sourceTree = "<group>"; };
 		8B8D84AB715D682708D129EB /* JNAddEventCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddEventCellView.m; sourceTree = "<group>"; };
 		8B8D85044124B5F44C647CA4 /* JNEventTimeLineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventTimeLineViewController.m; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		8B8D87DB454D20F68D450D45 /* JNEventsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventsListViewController.m; sourceTree = "<group>"; };
 		8B8D87E6ADAEE37DC7A9FD7D /* JNDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDBManager.m; sourceTree = "<group>"; };
 		8B8D8803AA9932366CA0F1F2 /* JNAddGroupAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddGroupAlertViewController.m; sourceTree = "<group>"; };
+		8B8D88299AF505AE1A4D9007 /* JNAddGroupCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddGroupCollectionViewCell.m; sourceTree = "<group>"; };
 		8B8D883D4FAAF41DBD1C04E6 /* ViewController+CalculateCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+CalculateCalendar.m"; sourceTree = "<group>"; };
 		8B8D88D48638D097B2DC519C /* JNEventEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNEventEditorViewController.m; sourceTree = "<group>"; };
 		8B8D88E67434D3790068CFA2 /* JNItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNItemModel.m; sourceTree = "<group>"; };
@@ -481,6 +484,8 @@
 				8B8D81C3124C258B174E2FD6 /* JNItemGroupCell.h */,
 				8B8D8BA3B24E916B7D04E5C1 /* JNCircleSelectIndicatorView.m */,
 				8B8D8DFC2DE172C114F2FBCD /* JNCircleSelectIndicatorView.h */,
+				8B8D88299AF505AE1A4D9007 /* JNAddGroupCollectionViewCell.m */,
+				8B8D84907385949A059F2C06 /* JNAddGroupCollectionViewCell.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -716,6 +721,7 @@
 				8B8D8D718511EEF195E900A7 /* JNCircleSelectIndicatorView.m in Sources */,
 				8B8D8E437C66458838755038 /* JNAlertAssistant.m in Sources */,
 				8B8D8EAB1F57B64B68DEF945 /* JNCategoryPickerViewController.m in Sources */,
+				8B8D8C211387AC3AB01714F7 /* JNAddGroupCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
