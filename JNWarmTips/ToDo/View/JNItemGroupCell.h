@@ -5,6 +5,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class JNGroupModel;
+
 
 @interface JNItemGroupCell : UICollectionViewCell
+@property (nonatomic, strong) JNGroupModel *groupModel;
 @end

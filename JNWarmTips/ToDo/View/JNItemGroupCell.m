@@ -7,6 +7,7 @@
 #import "JNItemGroupCell.h"
 #import "JNWarmTipsPublicFile.h"
 #import "UIColor+Extension.h"
+#import "JNGroupModel.h"
 
 static const int kDefaultMargin = 20;
 
@@ -104,8 +105,12 @@ static const int kDefaultMargin = 20;
     if (!_groupNameLabel) {
         _groupNameLabel = [UILabel new];
         _groupNameLabel.font = [UIFont boldSystemFontOfSize:14.0];
-        _groupNameLabel.text = @"ALL";
     }
     return _groupNameLabel;
+}
+
+- (void)setGroupModel:(JNGroupModel *)groupModel {
+    _groupModel = groupModel;
+    self.groupNameLabel.text = groupModel.groupName;
 }
 @end

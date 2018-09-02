@@ -23,6 +23,9 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 @interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
 
+@property (nonatomic, strong) UIView *alertView;
+@property (nonatomic, strong) UITextField *groupNameField;
+
 @property (nonatomic, strong) NSMutableArray<JNGroupModel *> *groups;
 @end
 
@@ -45,98 +48,144 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 
 }
 
+#pragma mark - Event Response
+
+- (void) terminateAddGroup {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.alertView.transform = CGAffineTransformMakeScale(0, 1);
+    } completion:^(BOOL finished) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.alertView removeFromSuperview];
+            self.alertView = nil;
+        });
+    }];
+}
+
+- (void) addGroup {
+    if (self.groupNameField.text) {
+        JNGroupModel *groupModel = [JNGroupModel new];
+        groupModel.groupName = self.groupNameField.text;
+        [[JNDBManager shareInstance] addGroup:groupModel];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self terminateAddGroup];
+
+            [JNAlertAssistant alertDoneMessage:@"添加成功"];
+            self.groups = nil;
+            [self.collectionView reloadData];
+        });
+    } else {
+        [JNAlertAssistant alertWarningInfo:@"小组名不能为空"];
+    }
+}
+
+- (void) showAddGroupView {
+    UIView *alertView = [UIView new];
+    self.alertView = alertView;
+    alertView.layer.cornerRadius = 8;
+    alertView.backgroundColor = GRAY_BACKGROUND_COLOR;
+    [self.view addSubview:alertView];
+    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.centerY.equalTo(self.view.mas_centerY).offset(-60);
+        CGFloat  width = SCREEN_WIDTH * 0.7;
+        CGFloat height = width * 0.6;
+        make.width.mas_equalTo(width);
+        make.height.mas_equalTo(height);
+    }];
+
+    UIImageView *iconImageView = [UIImageView new];
+    iconImageView.image = [UIImage imageNamed:@"group_icon"];
+    [alertView addSubview:iconImageView];
+    [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(32);
+        make.centerX.equalTo(alertView.mas_centerX);
+        make.centerY.equalTo(alertView.mas_top);
+    }];
+
+    UITextField *groupNameField = [UITextField new];
+    self.groupNameField = groupNameField;
+    groupNameField.backgroundColor = [UIColor whiteColor];
+    [groupNameField becomeFirstResponder];
+    groupNameField.placeholder = @"请输入小组名";
+    groupNameField.layer.cornerRadius = 6;
+    groupNameField.font = [UIFont systemFontOfSize:14.0];
+    [alertView addSubview:groupNameField];
+    [groupNameField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(alertView.mas_centerX);
+        make.centerY.equalTo(alertView.mas_centerY);
+        make.height.mas_equalTo(30);
+        make.left.mas_equalTo(alertView.mas_left).offset(30);
+        make.right.mas_equalTo(alertView.mas_right).offset(-30);
+    }];
+
+    UIButton *addGroupBtn = [UIButton new];
+    addGroupBtn.backgroundColor = MAIN_COLOR;
+    [addGroupBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [addGroupBtn setTitle:@"完成" forState:UIControlStateNormal];
+    addGroupBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    [addGroupBtn addTarget:self action:@selector(addGroup) forControlEvents:UIControlEventTouchUpInside];
+    addGroupBtn.layer.cornerRadius = 15;
+    [alertView addSubview:addGroupBtn];
+    [addGroupBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(alertView.mas_centerX);
+        make.height.mas_equalTo(30);
+        make.width.mas_equalTo(120);
+        make.bottom.equalTo(alertView.mas_bottom).offset(-10);
+    }];
+
+    UIButton *terminateAddGroup = [UIButton new ];
+    [terminateAddGroup setImage:[UIImage imageNamed:@"error"] forState:UIControlStateNormal];
+    [terminateAddGroup addTarget:self action:@selector(terminateAddGroup) forControlEvents:UIControlEventTouchUpInside];
+    [alertView addSubview:terminateAddGroup];
+    [terminateAddGroup mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(18);
+        make.top.equalTo(alertView.mas_top).offset(12);
+        make.right.equalTo(alertView.mas_right).offset(-12);
+    }];
+
+    UILabel *titleLabel = [UILabel new];
+    [alertView addSubview:titleLabel];
+    titleLabel.font = [UIFont systemFontOfSize:14.0];
+    titleLabel.textColor = MAIN_COLOR;
+    titleLabel.text = @"添加小组";
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(alertView.mas_centerX);
+        make.top.equalTo(iconImageView.mas_bottom).offset(12);
+    }];
+
+    alertView.transform = CGAffineTransformMakeScale(0, 1);
+    alertView.alpha = 0;
+
+    [UIView animateWithDuration:0.25 animations:^{
+        alertView.transform = CGAffineTransformIdentity;
+        alertView.alpha = 1;
+    }];
+
+}
+
 #pragma mark - Delegate & DataSource
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
     if (indexPath.row == self.groups.count) {
         JNAddGroupCollectionViewCell *addGroupCollectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:kAddGroupCollectionViewCellId forIndexPath:indexPath];
         @weakify(self)
         addGroupCollectionViewCell.clickActionBlock = ^() {
             @strongify(self)
-            UIView *alertView = [UIView new];
-            alertView.layer.cornerRadius = 8;
-            alertView.backgroundColor = GRAY_BACKGROUND_COLOR;
-            [self.view addSubview:alertView];
-            [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.equalTo(self.view.mas_centerX);
-                make.centerY.equalTo(self.view.mas_centerY).offset(-60);
-                CGFloat  width = SCREEN_WIDTH * 0.7;
-                CGFloat height = width * 0.6;
-                make.width.mas_equalTo(width);
-                make.height.mas_equalTo(height);
-            }];
-
-            UIImageView *iconImageView = [UIImageView new];
-            iconImageView.image = [UIImage imageNamed:@"group_icon"];
-            [alertView addSubview:iconImageView];
-            [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.mas_equalTo(32);
-                make.centerX.equalTo(alertView.mas_centerX);
-                make.centerY.equalTo(alertView.mas_top);
-            }];
-
-            UITextField *groupNameField = [UITextField new];
-            groupNameField.backgroundColor = [UIColor whiteColor];
-            groupNameField.placeholder = @"请输入小组名";
-            groupNameField.layer.cornerRadius = 6;
-            groupNameField.font = [UIFont systemFontOfSize:14.0];
-            [alertView addSubview:groupNameField];
-            [groupNameField mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.equalTo(alertView.mas_centerX);
-                make.centerY.equalTo(alertView.mas_centerY);
-                make.height.mas_equalTo(30);
-                make.left.mas_equalTo(alertView.mas_left).offset(30);
-                make.right.mas_equalTo(alertView.mas_right).offset(-30);
-            }];
-
-            UIButton *addGroupBtn = [UIButton new];
-            addGroupBtn.backgroundColor = MAIN_COLOR;
-            [addGroupBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [addGroupBtn setTitle:@"完成" forState:UIControlStateNormal];
-            addGroupBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
-            addGroupBtn.layer.cornerRadius = 15;
-            [alertView addSubview:addGroupBtn];
-            [addGroupBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.equalTo(alertView.mas_centerX);
-                make.height.mas_equalTo(30);
-                make.width.mas_equalTo(120);
-                make.bottom.equalTo(alertView.mas_bottom).offset(-10);
-            }];
-
-            UIButton *terminateAddGroup = [UIButton new ];
-            [terminateAddGroup setImage:[UIImage imageNamed:@"error"] forState:UIControlStateNormal];
-            [alertView addSubview:terminateAddGroup];
-            [terminateAddGroup mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.mas_equalTo(18);
-                make.top.equalTo(alertView.mas_top).offset(12);
-                make.right.equalTo(alertView.mas_right).offset(-12);
-            }];
-
-            UILabel *titleLabel = [UILabel new];
-            [alertView addSubview:titleLabel];
-            titleLabel.font = [UIFont systemFontOfSize:14.0];
-            titleLabel.textColor = MAIN_COLOR;
-            titleLabel.text = @"添加小组";
-            [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.equalTo(alertView.mas_centerX);
-                make.top.equalTo(iconImageView.mas_bottom).offset(12);
-            }];
-
-            alertView.transform = CGAffineTransformMakeScale(0, 1);
-            alertView.alpha = 0;
-
-            [UIView animateWithDuration:0.25 animations:^{
-                alertView.transform = CGAffineTransformIdentity;
-                alertView.alpha = 1;
-            }];
-
-
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showAddGroupView];
+            });
         };
         return addGroupCollectionViewCell;
     }
+
+    JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
+    JNGroupModel *groupModel = self.groups[indexPath.row];
+    cell.groupModel = groupModel;
+
     return cell;
 }
+
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.groups.count + 1;
@@ -147,6 +196,11 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.row == self.groups.count) {
+//        [self showAddGroupView];
+        return;
+    }
 
     JNGroupModel *groupModel = self.groups[indexPath.row];
     JNToDoListViewController *toDoListViewController = [[JNToDoListViewController alloc] init];
