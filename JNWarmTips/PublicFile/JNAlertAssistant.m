@@ -60,13 +60,13 @@
 
 }
 
-+ (void) alertMessage:(NSString *)message WithType:(NSInteger)type {
++ (void) alertDoneMessage:(NSString *)message {
 
     UIWindow *keyWindow = [UIApplication sharedApplication].delegate.window;
 
     UIView *alertView = [UIView new];
     alertView.backgroundColor = [UIColor whiteColor];
-    alertView.layer.cornerRadius = 5;
+    alertView.layer.cornerRadius = 8;
     alertView.layer.shadowColor = [UIColor colorWithHexString:@"9c9c9c"].CGColor;
     alertView.layer.shadowOffset = CGSizeMake(0, 0);
     alertView.layer.shadowOpacity = 0.3;
@@ -77,17 +77,6 @@
         make.height.mas_equalTo(100);
         make.width.mas_equalTo(100);
     }];
-
-    /*
-    UIImageView *iconImageView = [UIImageView new];
-    iconImageView.image = [UIImage imageNamed:@"warning_icon"];
-    [alertView addSubview:iconImageView];
-    [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(32);
-        make.top.equalTo(alertView.mas_top).offset(15);
-        make.centerX.equalTo(alertView.mas_centerX);
-    }];
-    */
 
     UIView *iconView = [UIView new];
     [alertView addSubview:iconView];
@@ -107,7 +96,7 @@
     shapeLayer.strokeColor = [UIColor blackColor].CGColor;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.lineWidth = 2;
-    [iconView.layer addSublayer:shapeLayer];
+//    [iconView.layer addSublayer:shapeLayer];
 
     UILabel *infoLabel = [UILabel new];
     infoLabel.textColor = [UIColor blackColor];
@@ -132,6 +121,7 @@
         pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
         pathAnimation.autoreverses = NO;
         [shapeLayer addAnimation:pathAnimation forKey:@""];
+        [iconView.layer addSublayer:shapeLayer];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [alertView removeFromSuperview];
         });

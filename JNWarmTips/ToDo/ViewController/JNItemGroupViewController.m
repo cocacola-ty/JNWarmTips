@@ -54,10 +54,9 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         @weakify(self)
         addGroupCollectionViewCell.clickActionBlock = ^() {
             @strongify(self)
-            /*
             UIView *alertView = [UIView new];
             alertView.layer.cornerRadius = 8;
-            alertView.backgroundColor = RANDOM_COLOR;
+            alertView.backgroundColor = GRAY_BACKGROUND_COLOR;
             [self.view addSubview:alertView];
             [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerX.equalTo(self.view.mas_centerX);
@@ -68,7 +67,63 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
                 make.height.mas_equalTo(height);
             }];
 
-            alertView.transform = CGAffineTransformMakeScale(0, 0);
+            UIImageView *iconImageView = [UIImageView new];
+            iconImageView.image = [UIImage imageNamed:@"group_icon"];
+            [alertView addSubview:iconImageView];
+            [iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.mas_equalTo(32);
+                make.centerX.equalTo(alertView.mas_centerX);
+                make.centerY.equalTo(alertView.mas_top);
+            }];
+
+            UITextField *groupNameField = [UITextField new];
+            groupNameField.backgroundColor = [UIColor whiteColor];
+            groupNameField.placeholder = @"请输入小组名";
+            groupNameField.layer.cornerRadius = 6;
+            groupNameField.font = [UIFont systemFontOfSize:14.0];
+            [alertView addSubview:groupNameField];
+            [groupNameField mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.equalTo(alertView.mas_centerX);
+                make.centerY.equalTo(alertView.mas_centerY);
+                make.height.mas_equalTo(30);
+                make.left.mas_equalTo(alertView.mas_left).offset(30);
+                make.right.mas_equalTo(alertView.mas_right).offset(-30);
+            }];
+
+            UIButton *addGroupBtn = [UIButton new];
+            addGroupBtn.backgroundColor = MAIN_COLOR;
+            [addGroupBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [addGroupBtn setTitle:@"完成" forState:UIControlStateNormal];
+            addGroupBtn.titleLabel.font = [UIFont systemFontOfSize:15.0];
+            addGroupBtn.layer.cornerRadius = 15;
+            [alertView addSubview:addGroupBtn];
+            [addGroupBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.equalTo(alertView.mas_centerX);
+                make.height.mas_equalTo(30);
+                make.width.mas_equalTo(120);
+                make.bottom.equalTo(alertView.mas_bottom).offset(-10);
+            }];
+
+            UIButton *terminateAddGroup = [UIButton new ];
+            [terminateAddGroup setImage:[UIImage imageNamed:@"error"] forState:UIControlStateNormal];
+            [alertView addSubview:terminateAddGroup];
+            [terminateAddGroup mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.mas_equalTo(18);
+                make.top.equalTo(alertView.mas_top).offset(12);
+                make.right.equalTo(alertView.mas_right).offset(-12);
+            }];
+
+            UILabel *titleLabel = [UILabel new];
+            [alertView addSubview:titleLabel];
+            titleLabel.font = [UIFont systemFontOfSize:14.0];
+            titleLabel.textColor = MAIN_COLOR;
+            titleLabel.text = @"添加小组";
+            [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.equalTo(alertView.mas_centerX);
+                make.top.equalTo(iconImageView.mas_bottom).offset(12);
+            }];
+
+            alertView.transform = CGAffineTransformMakeScale(0, 1);
             alertView.alpha = 0;
 
             [UIView animateWithDuration:0.25 animations:^{
@@ -76,8 +131,6 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
                 alertView.alpha = 1;
             }];
 
-            */
-            [JNAlertAssistant alertMessage:@"保存成功" WithType:1];
 
         };
         return addGroupCollectionViewCell;

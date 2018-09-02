@@ -9,5 +9,5 @@
 @interface JNAlertAssistant : NSObject
 + (void)alertWarningInfo:(NSString *)warningInfo;
 
-+ (void)alertMessage:(NSString *)message WithType:(NSInteger)type;
++ (void)alertDoneMessage:(NSString *)message;
 @end
