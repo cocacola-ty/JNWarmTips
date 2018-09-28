@@ -317,14 +317,8 @@ static const int kAddCategoryViewHeight = 140;
         [list removeObject:itemModel];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 
-        BOOL hidden = NO;
-        for (NSArray *items in list) {
-            if (items.count != 0) {
-                hidden = YES;
-                break;
-            }
-        }
-        self.placeHolderLabel.hidden = hidden;
+        // 全部删除后 显示占位符
+        self.placeHolderLabel.hidden = list.count != 0;
     }];
     return @[action];
 }
@@ -389,7 +383,8 @@ static const int kAddCategoryViewHeight = 140;
 - (UILabel *)headerTitleLabel {
     if (!_headerTitleLabel) {
         _headerTitleLabel = [UILabel new];
-        _headerTitleLabel.font = [UIFont systemFontOfSize:24.0];
+//        _headerTitleLabel.font = [UIFont systemFontOfSize:24.0];
+        _headerTitleLabel.font = [UIFont fontWithName:FONT_NAME_SHOUZHA size:24.0];
         _headerTitleLabel.textColor = [UIColor whiteColor];
         _headerTitleLabel.text = self.groupModel.groupName;
     }
