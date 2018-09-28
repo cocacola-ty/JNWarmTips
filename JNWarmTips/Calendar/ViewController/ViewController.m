@@ -124,7 +124,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
-    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%ld年 %02ld月 %02ld日", self.currentYear, self.currentMonth, self.currentDay];
+    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%d年 %02ld月 %02ld日", self.currentYear, self.currentMonth, self.currentDay];
     [self reloadEventList];
 
 
@@ -188,9 +188,9 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDate *currentDate = [NSDate date];
     NSDateComponents *components = [calendar components:NSCalendarUnitMonth|NSCalendarUnitYear|NSCalendarUnitDay fromDate:currentDate];
-    _currentMonth = components.month;
-    _currentYear = components.year;
-    _currentDay = components.day;
+    _currentMonth = (int)components.month;
+    _currentYear = (int)components.year;
+    _currentDay = (int)components.day;
 
     NSArray *lastMonthArray = [self getAllDaysOfMonth:self.currentMonth - 1 InYear:self.currentYear];
     NSString *lastMonthKey = [self getLastMonth:self.currentMonth currentYear:self.currentYear];
@@ -265,9 +265,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSArray *dateArray = [self getDateWithIndexPath:firstIndexPath];
     int year = [dateArray.firstObject intValue];
     int month = [dateArray[1] intValue];
-    NSString *dateStrign = [JNWarmTipsPublicFile dateStringFormat:year month:month day:nil];
+    NSString *dateStrign = [JNWarmTipsPublicFile dateStringFormat:year month:month day:0];
     self.currentDateShowLabel.text = dateStrign;
-
 
 }
 
@@ -280,8 +279,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     NSArray *dateArray = [self getDateWithIndexPath:indexPath];
 
-    int year = [dateArray.firstObject integerValue];
-    int month = [dateArray[1] integerValue];
+    int year = [dateArray.firstObject intValue];
+    int month = [dateArray[1] intValue];
     int day = [dateArray.lastObject intValue];
 
     BOOL isToday = (indexPath.section == kCurrentMonthSection && day == [JNCalendarAssistant shareInstance].currentDay);

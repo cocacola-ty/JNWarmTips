@@ -51,7 +51,7 @@
     return dateComponents;
 }
 
-- (NSInteger) getMonthFirstDayInWeek:(int)month InYear:(int)year {
+- (int) getMonthFirstDayInWeek:(int)month InYear:(int)year {
 
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
     id cacheResult = [self.cacheFirstDayInWeek valueForKey:firstDayStr];

@@ -17,9 +17,9 @@ static const int kCollectionViewHeight = 216;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSDictionary *allEventsDate;
 
-@property(nonatomic, assign, readonly) NSInteger currentYear;
-@property(nonatomic, assign, readonly) NSInteger currentMonth;
-@property(nonatomic, assign, readonly) NSInteger currentDay;
+@property(nonatomic, assign, readonly) int currentYear;
+@property(nonatomic, assign, readonly) int currentMonth;
+@property(nonatomic, assign, readonly) int currentDay;
 @property (nonatomic, strong) NSCache *cacheList;
 
 @property(nonatomic, strong) NSString *currentSelectDay;
