@@ -124,7 +124,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
-    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%d年 %02ld月 %02ld日", self.currentYear, self.currentMonth, self.currentDay];
+    self.currentDateShowLabel.text = [NSString stringWithFormat:@"%d年 %02d月 %02d日", self.currentYear, self.currentMonth, self.currentDay];
     [self reloadEventList];
 
 

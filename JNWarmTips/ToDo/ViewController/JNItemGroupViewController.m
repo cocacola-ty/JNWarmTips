@@ -106,6 +106,8 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     UITextField *groupNameField = [UITextField new];
     self.groupNameField = groupNameField;
     groupNameField.backgroundColor = [UIColor whiteColor];
+    groupNameField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 0)];
+    groupNameField.leftViewMode = UITextFieldViewModeAlways;
     [groupNameField becomeFirstResponder];
     groupNameField.placeholder = @"请输入小组名";
     groupNameField.layer.cornerRadius = 6;
