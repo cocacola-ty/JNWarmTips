@@ -21,7 +21,7 @@ static const int kCategoryPickerViewHeight = 240;
 
 NSString *const JNITEMSCHANGEDNOTIFICATION = @"JNITEMSCHANGEDNOTIFICATION";
 
-@interface JNAddListItemViewController () <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface JNAddListItemViewController () <UITextFieldDelegate, UIPickerViewDelegate>
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITextField *inputField;
 @property (nonatomic, strong) JNCircleSelectIndicatorView *addCategorySelectorView;
@@ -182,6 +182,7 @@ NSString *const JNITEMSCHANGEDNOTIFICATION = @"JNITEMSCHANGEDNOTIFICATION";
 #pragma mark - Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self doneAction];
     return YES;
 }
 
