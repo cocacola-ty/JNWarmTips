@@ -51,14 +51,16 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 #pragma mark - Event Response
 
 - (void) terminateAddGroup {
-    [UIView animateWithDuration:0.25 animations:^{
-        self.alertView.transform = CGAffineTransformMakeScale(0, 1);
-    } completion:^(BOOL finished) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    
+    [self.alertView endEditing:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 animations:^{
+            self.alertView.alpha = 0;
+        } completion:^(BOOL finished) {
             [self.alertView removeFromSuperview];
             self.alertView = nil;
-        });
-    }];
+        }];
+    });
 }
 
 - (void) addGroup {
@@ -80,6 +82,10 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 }
 
 - (void) showAddGroupView {
+    // 正在显示 不重复添加
+    if (self.alertView) {
+        return;
+    }
     UIView *alertView = [UIView new];
     self.alertView = alertView;
     alertView.layer.cornerRadius = 8;
