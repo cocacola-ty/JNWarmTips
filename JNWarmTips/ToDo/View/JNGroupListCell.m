@@ -74,11 +74,17 @@ static const int kCircleViewHeight = 10;
             make.centerY.equalTo(self.bottomContainerView.mas_centerY);
         }];
 
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress)];
+        [self.contentView addGestureRecognizer:longPressGesture];
     }
     return self;
 }
 
 #pragma mark - Private Method
+
+- (void) longPress {
+    
+}
 
 - (void) fontChange {
     dispatch_async(dispatch_get_main_queue(), ^{
