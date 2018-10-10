@@ -17,6 +17,7 @@
 		61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8D20BCEF430050CB51 /* group_bg1.jpg */; };
 		61550C9020BCEF430050CB51 /* group_bg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8E20BCEF430050CB51 /* group_bg2.jpg */; };
 		618EB3FD211F325800B116B0 /* JNAddListItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */; };
+		61A55BF1216DE992009C30BF /* JNMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A55BF0216DE992009C30BF /* JNMenuViewController.m */; };
 		61A7D6A42122DDD700A9AAD2 /* group_bg5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61A7D69E2122DDD400A9AAD2 /* group_bg5.jpg */; };
 		61A7D6A52122DDD700A9AAD2 /* group_bg6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61A7D69F2122DDD500A9AAD2 /* group_bg6.jpg */; };
 		61A7D6A62122DDD700A9AAD2 /* group_bg7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61A7D6A02122DDD600A9AAD2 /* group_bg7.jpg */; };
@@ -99,6 +100,8 @@
 		61550C8E20BCEF430050CB51 /* group_bg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg2.jpg; sourceTree = "<group>"; };
 		618EB3FB211F325800B116B0 /* JNAddListItemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNAddListItemViewController.h; sourceTree = "<group>"; };
 		618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddListItemViewController.m; sourceTree = "<group>"; };
+		61A55BEF216DE992009C30BF /* JNMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNMenuViewController.h; sourceTree = "<group>"; };
+		61A55BF0216DE992009C30BF /* JNMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNMenuViewController.m; sourceTree = "<group>"; };
 		61A7D69E2122DDD400A9AAD2 /* group_bg5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg5.jpg; sourceTree = "<group>"; };
 		61A7D69F2122DDD500A9AAD2 /* group_bg6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg6.jpg; sourceTree = "<group>"; };
 		61A7D6A02122DDD600A9AAD2 /* group_bg7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg7.jpg; sourceTree = "<group>"; };
@@ -439,6 +442,8 @@
 				8B8D812148AFBE267C327D8C /* JNEventsListViewController.h */,
 				8B8D85044124B5F44C647CA4 /* JNEventTimeLineViewController.m */,
 				8B8D80F805191B78A8A7362D /* JNEventTimeLineViewController.h */,
+				61A55BEF216DE992009C30BF /* JNMenuViewController.h */,
+				61A55BF0216DE992009C30BF /* JNMenuViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -694,6 +699,7 @@
 				8B8D8371855566BBCA52BD8D /* JNToDoItemCell.m in Sources */,
 				8B8D8E4F43D0B237B6781DAE /* JNGroupListCell.m in Sources */,
 				8B8D88133F6F1A66CCD3D5E3 /* JNDBManager.m in Sources */,
+				61A55BF1216DE992009C30BF /* JNMenuViewController.m in Sources */,
 				8B8D803497D44711656242FD /* JNDBManager+Group.m in Sources */,
 				8B8D89F341B7F932E80ADC31 /* JNGroupModel.m in Sources */,
 				8B8D842A580DC3564C2750C7 /* JNAddGroupAlertViewController.m in Sources */,

@@ -24,6 +24,8 @@
 #import "JNCalendarAssistant.h"
 #import "JNEventTimeLineViewController.h"
 #import "Masonry.h"
+#import "UIColor+Extension.h"
+#import "JNMenuViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
 static const int kCalendarViewMargin = 10;
@@ -47,6 +49,8 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 @property(nonatomic, assign) NSInteger currentShowMonth;
 
 @property (nonatomic, strong) UIImageView *addEventImageView;
+
+@property (nonatomic, strong) UIWindow *window;
 @end
 
 @implementation ViewController
@@ -153,6 +157,17 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSString *str = [dateFormatter1 stringFromDate:dateFromInterval];
     NSLog(@"str = %@", str);
     // END TEST
+    
+    JNMenuViewController *menuVc = [JNMenuViewController new];
+    menuVc.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    
+    UIWindow *window = [UIWindow new];
+    window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+     window.backgroundColor = [UIColor clearColor];
+    [window addSubview:menuVc.view];
+    [window makeKeyAndVisible];
+    self.window = window;
+ 
 }
 
 
