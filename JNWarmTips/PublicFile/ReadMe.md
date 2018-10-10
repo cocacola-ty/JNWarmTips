@@ -107,7 +107,7 @@ currentDateLabel :
 
 #### 事件表
 
-| event_id | content | show_date | event_type_id | event_type_color | start_time | end_time |notification
+| event_id | content | show_date | event_type_id | event_type_color | start_time | end_time | notification |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 事件id | 事件内容 | 时间日期 | 事件的类型 | 事件类型的显示颜色 | 开始时间 | 结束时间 | 是否通知 | 
 
