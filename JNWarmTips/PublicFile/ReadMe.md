@@ -82,7 +82,42 @@ currentDateLabel :
 
 ### 数据表结构
 
+#### 小组表
 
+| group_id | group_name | group_first_content | group_item_count |
+| :---: | :---: | :---: | :---: |
+| 小组id | 小组名 | 小组中的第一条内容 | 小组中的事项数量
+
+默认自动初始化第一条数据，group_id = 0 , group_name = ALL
+
+#### 分类表
+
+| category_id | category_name | group_id | 
+| :---: | :---: | :---: |
+| 分类id | 分类名 | 分类所属小组 |
+
+
+#### 清单表
+
+| item_id | content | start_time | end_time | group_id | category_id | category_name | notification | finished | 
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 事项id | 事项内容 | 该事项开始时间(默认0) | 该事项结束时间(默认0) | 该事项所属小组 | 该事项的分类(默认-100) | 事项的分类名字(默认NULL) | 是否需要通知(默认0) | 是否完成(默认0) |
+
+事项的开始时间，结束时间为非必须
+
+#### 事件表
+
+| event_id | content | show_date | event_type_id | event_type_color | start_time | end_time |notification
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 事件id | 事件内容 | 时间日期 | 事件的类型 | 事件类型的显示颜色 | 开始时间 | 结束时间 | 是否通知 | 
+
+事件有开始时间和结束时间时表示为日程
+
+#### 事件类型表
+
+| event_type_id | event_type_name | color |
+| :-: | :-: | :-: |
+| 事件类型id | 事件类型名 | 事件类型颜色 |
 
 ### ToDo:
 
