@@ -29,7 +29,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 
     // 出场动画
     self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
-    [UIView animateWithDuration:kAnimationDuration delay:1.25 usingSpringWithDamping:0.8 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.menuView.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         
