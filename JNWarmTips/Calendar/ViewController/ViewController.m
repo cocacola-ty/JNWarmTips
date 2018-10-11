@@ -141,6 +141,10 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     [self addObserver:self forKeyPath:@"currentSelectDay" options:NSKeyValueObservingOptionNew context:nil];
 
+    UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
+    [self.collectionView addGestureRecognizer:swipeGesture];
+    [self.tableView addGestureRecognizer:swipeGesture];
+    
     // TEST
     NSString *tiemStr = [NSString stringWithFormat:@"%@ 09:10", self.currentSelectDay];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -157,18 +161,24 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     NSString *str = [dateFormatter1 stringFromDate:dateFromInterval];
     NSLog(@"str = %@", str);
     // END TEST
-    
-    JNMenuViewController *menuVc = [JNMenuViewController new];
-    menuVc.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    
-    UIWindow *window = [UIWindow new];
-    window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-     window.backgroundColor = [UIColor clearColor];
-    window.rootViewController = menuVc;
-    [window addSubview:menuVc.view];
-    [window makeKeyAndVisible];
-    self.window = window;
- 
+}
+
+- (void) showMenu:(UISwipeGestureRecognizer *)swipeGes {
+    if (swipeGes.direction == UISwipeGestureRecognizerDirectionRight) {
+        JNMenuViewController *menuVc = [JNMenuViewController new];
+        menuVc.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        menuVc.dissmisBlock = ^{
+            [self.window resignKeyWindow];
+            self.window = nil;
+        };
+        UIWindow *window = [UIWindow new];
+        window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        window.backgroundColor = [UIColor clearColor];
+        window.rootViewController = menuVc;
+        [window addSubview:menuVc.view];
+        [window makeKeyAndVisible];
+        self.window = window;
+    }
 }
 
 

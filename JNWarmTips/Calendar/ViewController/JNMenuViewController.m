@@ -37,6 +37,10 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     
 }
 
+- (void)dealloc {
+    NSLog(@"menu vc dealloc");
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 //    [super touchesBegan:touches withEvent:event];
     
@@ -78,7 +82,9 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     [UIView animateWithDuration:0.1 delay:kAnimationDuration*2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
     } completion:^(BOOL finished) {
-        
+        if (self.dissmisBlock) {
+            self.dissmisBlock();
+        }
     }];
 
 }
