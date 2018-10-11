@@ -16,7 +16,7 @@
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, strong) NSArray *dataSource;
 @end
 
 static CFTimeInterval const kAnimationDuration = 0.1;
@@ -42,6 +42,17 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         make.top.equalTo(self.menuView.mas_top).offset(100);
         make.width.mas_equalTo(120);
         make.height.mas_equalTo(200);
+    }];
+    
+    UIImageView *avatarImageView = [UIImageView new];
+    avatarImageView.image = [UIImage imageNamed:@"group_bg7.jpg"];
+    avatarImageView.layer.cornerRadius = 30;
+    avatarImageView.layer.masksToBounds = YES;
+    [self.menuView addSubview:avatarImageView];
+    [avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(60);
+        make.centerX.equalTo(self.tableView.mas_centerX);
+        make.bottom.equalTo(self.menuView.mas_bottom).offset(-150);
     }];
     
     // 出场动画
