@@ -14,49 +14,28 @@
 @interface JNMenuViewController ()
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
-@property (nonatomic, strong) UIBezierPath *fromPath;
 @end
+
+static CFTimeInterval const kAnimationDuration = 0.1;
 
 @implementation JNMenuViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.view.backgroundColor = [UIColor clearColor];
     
-    UIView *menuView = [UIView new];
-    self.menuView = menuView;
-    menuView.backgroundColor = [UIColor colorWithHexString:@"F08080"];
-    menuView.alpha = 0.9;
-    menuView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    [self.view addSubview:menuView];
-    
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    self.fromPath = path;
-    [path moveToPoint:CGPointMake(0, 0)];
-    [path addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
-    [path addLineToPoint:CGPointMake(SCREEN_WIDTH, SCREEN_HEIGHT)];
-    [path addLineToPoint:CGPointMake(SCREEN_WIDTH, SCREEN_HEIGHT - 30)];
-    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH/2 - 30, 0) controlPoint:CGPointMake(SCREEN_WIDTH/2-40, (SCREEN_HEIGHT)-200)];
-    [path closePath];
-    
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    self.maskLayer = maskLayer;
-    maskLayer.path = path.CGPath;
-    maskLayer.fillColor = [UIColor redColor].CGColor;
-    
-    menuView.layer.mask = maskLayer;
-    
-    menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
+    self.menuView.layer.mask = self.maskLayer;
+    [self.view addSubview:self.menuView];
+
+    // 出场动画
+    self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
     [UIView animateWithDuration:kAnimationDuration delay:1.25 usingSpringWithDamping:0.8 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        menuView.transform = CGAffineTransformIdentity;
+        self.menuView.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         
     }];
     
 }
-
-static CFTimeInterval const kAnimationDuration = 0.1;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 //    [super touchesBegan:touches withEvent:event];
@@ -101,38 +80,36 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     } completion:^(BOOL finished) {
         
     }];
-    
-    /*
-    // 第三阶段动画
-    UIBezierPath *thirdPath = [UIBezierPath bezierPath];
-    [thirdPath moveToPoint:CGPointMake(0, 0)];
-    [thirdPath addLineToPoint:CGPointMake(0, 100)];
-    [thirdPath addLineToPoint:CGPointMake(0, 100)];
-    [thirdPath addLineToPoint:CGPointMake(0, 100)];
-    [thirdPath addQuadCurveToPoint:CGPointMake(40, 0) controlPoint:CGPointMake(30, 70)];
-    
-    CABasicAnimation *thirdAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    thirdAnimation.toValue = (__bridge id _Nullable)thirdPath.CGPath;
-    thirdAnimation.beginTime = CACurrentMediaTime() + kAnimationDuration * 2;
-    thirdAnimation.duration = kAnimationDuration;
-    thirdAnimation.fillMode = kCAFillModeForwards;
-    thirdAnimation.removedOnCompletion = NO;
-//    [self.maskLayer addAnimation:thirdAnimation forKey:nil];
-   
-    UIBezierPath *finalPath = [UIBezierPath bezierPath];
-    [finalPath moveToPoint:CGPointMake(0, 0)];
-    [finalPath addLineToPoint:CGPointMake(0, 5)];
-    [finalPath addLineToPoint:CGPointMake(0, 5)];
-    [finalPath addLineToPoint:CGPointMake(0, 5)];
-    [finalPath addQuadCurveToPoint:CGPointMake(3, 0) controlPoint:CGPointMake(1, 2)];
-    
-    CABasicAnimation *finalAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    finalAnimation.toValue = (__bridge id _Nullable)finalPath.CGPath;
-    finalAnimation.beginTime = CACurrentMediaTime() + kAnimationDuration * 3;
-    finalAnimation.duration = 0.15;
-    finalAnimation.fillMode = kCAFillModeForwards;
-    finalAnimation.removedOnCompletion = NO;
-//    [self.maskLayer addAnimation:finalAnimation forKey:nil];
-     */
+
 }
+
+#pragma mark - Getter & Setter
+
+- (UIView *)menuView {
+    if (!_menuView) {
+        _menuView = [UIView new];
+        _menuView.backgroundColor = [UIColor colorWithHexString:@"F08080"];
+        _menuView.alpha = 0.9;
+        _menuView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+    return _menuView;
+}
+
+- (CAShapeLayer *)maskLayer {
+    if (!_maskLayer) {
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(0, 0)];
+        [path addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
+        [path addLineToPoint:CGPointMake(SCREEN_WIDTH, SCREEN_HEIGHT)];
+        [path addLineToPoint:CGPointMake(SCREEN_WIDTH, SCREEN_HEIGHT - 30)];
+        [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH/2 - 30, 0) controlPoint:CGPointMake(SCREEN_WIDTH/2-40, (SCREEN_HEIGHT)-200)];
+        [path closePath];
+        
+        _maskLayer = [CAShapeLayer layer];
+        _maskLayer.path = path.CGPath;
+        _maskLayer.fillColor = [UIColor redColor].CGColor;
+    }
+    return _maskLayer;
+}
+
 @end
