@@ -164,6 +164,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     UIWindow *window = [UIWindow new];
     window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
      window.backgroundColor = [UIColor clearColor];
+    window.rootViewController = menuVc;
     [window addSubview:menuVc.view];
     [window makeKeyAndVisible];
     self.window = window;
