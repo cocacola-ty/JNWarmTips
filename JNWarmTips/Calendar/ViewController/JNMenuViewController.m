@@ -11,9 +11,12 @@
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
 
-@interface JNMenuViewController ()
+@interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
+
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataSource;
 @end
 
 static CFTimeInterval const kAnimationDuration = 0.1;
@@ -22,11 +25,25 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataSource = @[@"同步",  @"更新表结构"];
     self.view.backgroundColor = [UIColor clearColor];
+//    self.view.alpha = 0.8;
+    
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
+    [self.view addSubview:blurEffectView];
     
     self.menuView.layer.mask = self.maskLayer;
     [self.view addSubview:self.menuView];
 
+    [self.menuView addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.menuView.mas_left).offset(20);
+        make.top.equalTo(self.menuView.mas_top).offset(100);
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(200);
+    }];
+    
     // 出场动画
     self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
     [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
@@ -89,13 +106,41 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 
 }
 
+#pragma mark - Delegate Datasource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    NSString *title = self.dataSource[indexPath.row];
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuseId"];
+    cell.textLabel.text = title;
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor whiteColor];
+    cell.separatorInset = UIEdgeInsetsZero;
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return  70;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
 #pragma mark - Getter & Setter
 
 - (UIView *)menuView {
     if (!_menuView) {
         _menuView = [UIView new];
         _menuView.backgroundColor = [UIColor colorWithHexString:@"F08080"];
-        _menuView.alpha = 0.9;
+//        _menuView.alpha = 0.9;
         _menuView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     return _menuView;
@@ -116,6 +161,18 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         _maskLayer.fillColor = [UIColor redColor].CGColor;
     }
     return _maskLayer;
+}
+
+- (UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.tableFooterView = [UIView new];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    return _tableView;
 }
 
 @end
