@@ -19,13 +19,12 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-//    [self addNavigationBar];
     [self addTopView];
     
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(180);
+        make.top.equalTo(self.view.mas_top).offset(64);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
@@ -44,15 +43,6 @@
         make.width.height.mas_equalTo(20);
         make.left.equalTo(self.view.mas_left).offset(25);
         make.top.equalTo(self.view.mas_top).offset(30);
-    }];
-    
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.text = @"TIMELINE";
-    titleLabel.font = [UIFont boldSystemFontOfSize:28];
-    [self.view addSubview:titleLabel];
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left).offset(25);
-        make.top.equalTo(self.view.mas_top).offset(100);
     }];
 }
 
@@ -115,6 +105,18 @@
         _tableView.estimatedRowHeight = 50;
         _tableView.estimatedRowHeight = UITableViewAutomaticDimension;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        UIView *headerView = [UIView new];
+        headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 140);
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.text = @"TIMELINE";
+        titleLabel.font = [UIFont boldSystemFontOfSize:28];
+        [headerView addSubview:titleLabel];
+        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(headerView.mas_left).offset(25);
+            make.centerY.equalTo(headerView.mas_centerY);
+        }];
+        _tableView.tableHeaderView = headerView;
     }
     return _tableView;
 }

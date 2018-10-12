@@ -25,7 +25,14 @@
     self.circleView.layer.borderColor = MAIN_COLOR.CGColor;
     self.circleView.layer.borderWidth = 2;
     
-    self.timeLabel.text = @"2018/10/12 \n 10:32";
+    NSString *timeStr = @"2018-10-12 \n 10:32";
+    NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
+    style.lineSpacing = 5;
+    style.lineBreakMode = NSLineBreakByTruncatingTail;
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:timeStr];
+    [attrString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, timeStr.length)];
+    self.timeLabel.attributedText = attrString;
+    self.timeLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 @end
