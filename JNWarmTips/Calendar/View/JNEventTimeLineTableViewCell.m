@@ -12,6 +12,8 @@
 
 @interface JNEventTimeLineTableViewCell()
 @property (weak, nonatomic) IBOutlet UIView *circleView;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 
 @end
 
@@ -19,15 +21,11 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.circleView.layer.cornerRadius = 10;
+    self.circleView.layer.cornerRadius = 8;
     self.circleView.layer.borderColor = MAIN_COLOR.CGColor;
-    self.circleView.layer.borderWidth = 3;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+    self.circleView.layer.borderWidth = 2;
+    
+    self.timeLabel.text = @"2018/10/12 \n 10:32";
 }
 
 @end

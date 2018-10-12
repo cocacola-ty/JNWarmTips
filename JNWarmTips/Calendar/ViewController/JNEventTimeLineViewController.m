@@ -7,6 +7,7 @@
 #import "UIColor+Extension.h"
 #import "Masonry.h"
 #import "JNEventTimeLineTableViewCell.h"
+#import "JNWarmTipsPublicFile.h"
 
 @interface JNEventTimeLineViewController() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -18,7 +19,9 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    [self addNavigationBar];
+//    [self addNavigationBar];
+    [self addTopView];
+    
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -30,6 +33,27 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:@"JNEventTimeLineTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"JNEventTimeLineTableViewCellReuseId"];
 
+}
+
+- (void) addTopView {
+    UIImageView *backImageView = [UIImageView new];
+    backImageView.image = [[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [backImageView setTintColor:MAIN_COLOR];
+    [self.view addSubview:backImageView];
+    [backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(20);
+        make.left.equalTo(self.view.mas_left).offset(25);
+        make.top.equalTo(self.view.mas_top).offset(30);
+    }];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = @"TIMELINE";
+    titleLabel.font = [UIFont boldSystemFontOfSize:28];
+    [self.view addSubview:titleLabel];
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(25);
+        make.top.equalTo(self.view.mas_top).offset(100);
+    }];
 }
 
 - (void) addNavigationBar {
@@ -74,6 +98,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // 点击显示距离今天的天数
 }
 
 #pragma mark - Getter & Setter
