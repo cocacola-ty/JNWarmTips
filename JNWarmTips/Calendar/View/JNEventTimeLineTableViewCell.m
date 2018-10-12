@@ -8,6 +8,7 @@
 
 #import "JNEventTimeLineTableViewCell.h"
 #import "UIColor+Extension.h"
+#import "JNWarmTipsPublicFile.h"
 
 @interface JNEventTimeLineTableViewCell()
 @property (weak, nonatomic) IBOutlet UIView *circleView;
@@ -18,9 +19,9 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.circleView.layer.cornerRadius = 12;
-    self.circleView.layer.borderColor = [UIColor colorWithHexString:@"f08080"].CGColor;
-    self.circleView.layer.borderWidth = 2;
+    self.circleView.layer.cornerRadius = 10;
+    self.circleView.layer.borderColor = MAIN_COLOR.CGColor;
+    self.circleView.layer.borderWidth = 3;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
