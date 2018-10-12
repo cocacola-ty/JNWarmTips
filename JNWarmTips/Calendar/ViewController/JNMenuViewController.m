@@ -27,7 +27,6 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     [super viewDidLoad];
     self.dataSource = @[@"同步",  @"更新表结构"];
     self.view.backgroundColor = [UIColor clearColor];
-//    self.view.alpha = 0.8;
     
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
@@ -63,10 +62,6 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         
     }];
     
-}
-
-- (void)dealloc {
-    NSLog(@"menu vc dealloc");
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -133,6 +128,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.separatorInset = UIEdgeInsetsZero;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
@@ -142,7 +138,13 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.row == 0) {
+        // 同步数据
+        // 同步小组表
+        // 同步分类表
+        // 同步事项表
+        // 同步事件日程表
+    }
 }
 
 #pragma mark - Getter & Setter

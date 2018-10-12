@@ -178,7 +178,7 @@ static const int kTimeBtnTopMargin = 8;
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view {
     UILabel *titleLabel = [UILabel new];
     titleLabel.font = [UIFont systemFontOfSize:16.0];
-    titleLabel.text = [NSString stringWithFormat:@"%02d", row];
+    titleLabel.text = [NSString stringWithFormat:@"%02d", (int)row];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     return titleLabel;
 }
@@ -191,15 +191,15 @@ static const int kTimeBtnTopMargin = 8;
 
     if (component == 0) {
         if (self.isSelectStart) {
-            self.startHour = [NSString stringWithFormat:@"%02d", row];
+            self.startHour = [NSString stringWithFormat:@"%02d", (int)row];
         } else {
-            self.endHour =  [NSString stringWithFormat:@"%02d", row];
+            self.endHour =  [NSString stringWithFormat:@"%02d", (int)row];
         }
     } else {
         if (self.isSelectStart) {
-            self.startMinute = [NSString stringWithFormat:@"%02d", row];
+            self.startMinute = [NSString stringWithFormat:@"%02d", (int)row];
         } else {
-            self.endMinute = [NSString stringWithFormat:@"%02d", row];
+            self.endMinute = [NSString stringWithFormat:@"%02d", (int)row];
         }
     }
 
