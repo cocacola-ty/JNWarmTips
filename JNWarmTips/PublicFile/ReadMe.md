@@ -3,13 +3,13 @@
 1. 第一部分：显示今天的日期
 
 containerView :
-    top:0 , left:0 right:0 height:84
-    backColor : white
+​    top:0 , left:0 right:0 height:84
+​    backColor : white
 
 currentDateLabel :
-    font : 26 bold courier
-    left : 15 , top : 0 , bottom : 0
-    textColor : 255,54,79 / FF364F
+​    font : 26 bold courier
+​    left : 15 , top : 0 , bottom : 0
+​    textColor : 255,54,79 / FF364F
 
 2. 第二部分：星期排列
 
@@ -25,7 +25,7 @@ currentDateLabel :
 3. 第三部分 ：日期显示部分 CollectionView
 
     dateLabel :
-        font : Menlo 14 bold
+    ​    font : Menlo 14 bold
 
 
 4. 第四部分 ： 事件列表 tableView
@@ -86,20 +86,20 @@ currentDateLabel :
 
 | group_id | group_name | group_first_content | group_item_count |
 | :---: | :---: | :---: | :---: |
-| 小组id | 小组名 | 小组中的第一条内容 | 小组中的事项数量
+|  小组id  | 小组名 | 小组中的第一条内容 | 小组中的事项数量 |
 
 默认自动初始化第一条数据，group_id = 0 , group_name = ALL
 
 #### 分类表
 
-| category_id | category_name | group_id | 
+| category_id | category_name | group_id |
 | :---: | :---: | :---: |
 | 分类id | 分类名 | 分类所属小组 |
 
 
 #### 清单表
 
-| item_id | content | start_time | end_time | group_id | category_id | category_name | notification | finished | 
+| item_id | content | start_time | end_time | group_id | category_id | category_name | notification | finished |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 事项id | 事项内容 | 该事项开始时间(默认0) | 该事项结束时间(默认0) | 该事项所属小组 | 该事项的分类(默认-100) | 事项的分类名字(默认NULL) | 是否需要通知(默认0) | 是否完成(默认0) |
 
@@ -109,7 +109,7 @@ currentDateLabel :
 
 | event_id | content | show_date | event_type_id | event_type_color | start_time | end_time | notification |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 事件id | 事件内容 | 时间日期 | 事件的类型 | 事件类型的显示颜色 | 开始时间 | 结束时间 | 是否通知 | 
+| 事件id | 事件内容 | 时间日期 | 事件的类型 | 事件类型的显示颜色 | 开始时间 | 结束时间 | 是否通知 |
 
 事件有开始时间和结束时间时表示为日程
 
@@ -124,46 +124,47 @@ currentDateLabel :
 
 ### ToDo:
 
-1. ~~事件Cell右上角添加一个小✘，点击之后删除该事件~~
+* ~~事件Cell右上角添加一个小✘，点击之后删除该事件~~
 
-2. ~~点击日历左上角今天的日期 回到今天~~
+* ~~点击日历左上角今天的日期 回到今天~~
 
-3. 点击某一天之后 在下面显示距离今天有多少天
+* 点击某一天之后 在下面显示距离今天有多少天
 
-4. ~~滑动之后 隐藏添加事件按钮~~ 
+* ~~滑动之后 隐藏添加事件按钮~~ 
 
-5. ~~输入框没有内容的时候退出就不弹框了~~
+* ~~输入框没有内容的时候退出就不弹框了~~
 
-6. cellWillDisplay 添加cell出现动画
+* cellWillDisplay 添加cell出现动画
 
-7. ~~在有事件的日期添加提醒标志~~
+* ~~在有事件的日期添加提醒标志~~
 
-8. **添加时间轴界面**
+* **添加时间轴界面**
 
-9. ~~**添加小组到list列表的转场**~~
+* ~~**添加小组到list列表的转场**~~
 
-10. **编辑器界面添加选择时间**
+*  **编辑器界面添加选择时间**
 
-11. ~~转场时候的空视图添加一个loading动画~~
+*  ~~转场时候的空视图添加一个loading动画~~
 
-12. ~~设置group到list的颜色一样~~
+*  ~~设置group到list的颜色一样~~
 
-13. 添加item的左滑删除
+* 添加item的左滑删除
 
-14. dismiss转场的时候添加title
+* dismiss转场的时候添加title
 
-15. list中添加优先级显示, 默认没有，最高三星✨
+* list中添加优先级显示, 默认没有，最高三星✨
 
-16. _事件分类型添加 个人 工作 ..._
+* _事件分类型添加 个人 工作 ..._
 
-17. _加载完毕之后显示当前日期，显示有事件的cell_
+* _加载完毕之后显示当前日期，显示有事件的cell_
 
-18. 增加纪念日、节日倒计时功能
+* 增加纪念日、节日倒计时功能
 
-19. 增加删除小组功能
+* 增加删除小组功能
 
-20. 增加同步功能，将数据备份到其他位置
+* 增加同步功能，将数据备份到其他位置
 
+* 添加事件的时候添加一个继续添加的功能
 
 ### list
 

@@ -8,6 +8,6 @@
 
 @interface JNAddGroupCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) void (^clickActionBlock)();
+@property (nonatomic, strong) void (^clickActionBlock)(void);
 
 @end

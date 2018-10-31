@@ -10,4 +10,7 @@
 
 @interface JNItemGroupCell : UICollectionViewCell
 @property (nonatomic, strong) JNGroupModel *groupModel;
+
+- (void)startShake;
+- (void)stopShake;
 @end

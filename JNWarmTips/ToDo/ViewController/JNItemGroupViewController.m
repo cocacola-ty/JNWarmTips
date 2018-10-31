@@ -81,6 +81,24 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     }
 }
 
+- (void) longPressAction {
+    NSArray *cellArray = [self.collectionView visibleCells];
+    for (UICollectionViewCell *cell in cellArray) {
+        if ([cell isKindOfClass:[JNItemGroupCell class]]) {
+            [((JNItemGroupCell *)cell) startShake];
+        }
+    }
+}
+
+- (void) tapAction {
+    NSArray *cellArray = [self.collectionView visibleCells];
+    for (UICollectionViewCell *cell in cellArray) {
+        if ([cell isKindOfClass:[JNItemGroupCell class]]) {
+            [((JNItemGroupCell *)cell) stopShake];
+        }
+    }
+}
+
 - (void) showAddGroupView {
     // 正在显示 不重复添加
     if (self.alertView) {
@@ -154,7 +172,7 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 
     UILabel *titleLabel = [UILabel new];
     [alertView addSubview:titleLabel];
-    titleLabel.font = [UIFont systemFontOfSize:14.0];
+    titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
     titleLabel.textColor = MAIN_COLOR;
     titleLabel.text = @"添加小组";
     [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -206,7 +224,6 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (indexPath.row == self.groups.count) {
-//        [self showAddGroupView];
         return;
     }
 
@@ -235,6 +252,14 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.showsHorizontalScrollIndicator = NO;
+        
+        UILongPressGestureRecognizer *longPressGes = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction)];
+        longPressGes.minimumPressDuration = 1.5;
+//        longPressGes.numberOfTapsRequired = 1;
+        [_collectionView addGestureRecognizer:longPressGes];
+        
+        UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+        [_collectionView addGestureRecognizer:tapGes];
     }
     return _collectionView;
 }

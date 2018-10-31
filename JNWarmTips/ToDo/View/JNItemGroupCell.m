@@ -11,6 +11,8 @@
 
 static const int kDefaultMargin = 20;
 
+static NSString * const kAnimationKey = @"shakeAnimation";
+
 @interface JNItemGroupCell()
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIView *shadowView;
@@ -62,6 +64,30 @@ static const int kDefaultMargin = 20;
     return self;
 }
 
+- (void)startShake {
+    
+    if ([self.containerView.layer animationForKey:kAnimationKey]) {
+        return;
+    }
+    
+    CAKeyframeAnimation *shakeAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation"];
+    shakeAnimation.keyPath = @"transform.rotation";
+    shakeAnimation.values = @[@(-3 / 180.0 * M_PI), @(3 / 180.0 * M_PI), @(-3 / 180.0 * M_PI)];
+    shakeAnimation.duration = 0.3;
+    shakeAnimation.repeatCount = MAXFLOAT;
+    shakeAnimation.fillMode = kCAFillModeForwards;
+    shakeAnimation.removedOnCompletion = NO;
+    [self.containerView.layer addAnimation:shakeAnimation forKey:kAnimationKey];
+    [self.shadowView.layer addAnimation:shakeAnimation forKey:kAnimationKey];
+    
+    
+}
+
+- (void)stopShake {
+    [self.containerView.layer removeAnimationForKey:kAnimationKey];
+    [self.shadowView.layer removeAnimationForKey:kAnimationKey];
+}
+
 #pragma mark - Getter & Setter
 
 - (UIView *)containerView {
@@ -92,6 +118,7 @@ static const int kDefaultMargin = 20;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             int num = arc4random() % 8 + 1;
             NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
+            NSLog(@"%@", imageName);
             UIImage *image = [UIImage imageNamed:imageName];
             dispatch_async(dispatch_get_main_queue(), ^{
                 _imageView.image = image;
