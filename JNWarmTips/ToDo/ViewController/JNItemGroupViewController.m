@@ -20,13 +20,15 @@ static const int kHMargin = 12;
 
 static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionViewCell";
 
-@interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface JNItemGroupViewController() <UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @property (nonatomic, strong) UIView *alertView;
 @property (nonatomic, strong) UITextField *groupNameField;
 
 @property (nonatomic, strong) NSMutableArray<JNGroupModel *> *groups;
+
+@property (nonatomic, assign) BOOL waitDeleting;
 @end
 
 @implementation JNItemGroupViewController
@@ -82,6 +84,8 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 }
 
 - (void) longPressAction {
+    self.waitDeleting = YES;
+    
     NSArray *cellArray = [self.collectionView visibleCells];
     for (UICollectionViewCell *cell in cellArray) {
         if ([cell isKindOfClass:[JNItemGroupCell class]]) {
@@ -91,6 +95,8 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 }
 
 - (void) tapAction {
+    
+    self.waitDeleting = NO;
     NSArray *cellArray = [self.collectionView visibleCells];
     for (UICollectionViewCell *cell in cellArray) {
         if ([cell isKindOfClass:[JNItemGroupCell class]]) {
@@ -212,6 +218,15 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if ([cell isKindOfClass:[JNItemGroupCell class]]) {
+        if (self.waitDeleting) {
+            [((JNItemGroupCell *)cell) startShake];
+        }else {
+            [((JNItemGroupCell *)cell) stopShake];
+        }
+    }
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.groups.count + 1;
@@ -236,6 +251,10 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     self.hidesBottomBarWhenPushed = NO;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return self.waitDeleting;
+}
+
 #pragma mark - Geeter & Setter
 
 - (UICollectionView *)collectionView {
@@ -255,10 +274,10 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         
         UILongPressGestureRecognizer *longPressGes = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction)];
         longPressGes.minimumPressDuration = 1.5;
-//        longPressGes.numberOfTapsRequired = 1;
         [_collectionView addGestureRecognizer:longPressGes];
         
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+        tapGes.delegate = self;
         [_collectionView addGestureRecognizer:tapGes];
     }
     return _collectionView;
