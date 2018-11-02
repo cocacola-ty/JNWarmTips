@@ -35,13 +35,13 @@ static NSString * const kAnimationKey = @"shakeAnimation";
 
         self.backgroundColor = [UIColor whiteColor];
         
-        [self.contentView addSubview:self.shadowView];
-        [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.contentView.mas_top).offset(kDefaultMargin);
-            make.left.equalTo(self.contentView.mas_left).offset(kDefaultMargin);
-            make.right.equalTo(self.contentView.mas_right).offset(-kDefaultMargin);
-            make.bottom.equalTo(self.contentView.mas_bottom).offset(-kDefaultMargin);
-        }];
+//        [self.contentView addSubview:self.shadowView];
+//        [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.contentView.mas_top).offset(kDefaultMargin);
+//            make.left.equalTo(self.contentView.mas_left).offset(kDefaultMargin);
+//            make.right.equalTo(self.contentView.mas_right).offset(-kDefaultMargin);
+//            make.bottom.equalTo(self.contentView.mas_bottom).offset(-kDefaultMargin);
+//        }];
 
         [self.contentView addSubview:self.containerView];
         [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -79,11 +79,11 @@ static NSString * const kAnimationKey = @"shakeAnimation";
 
 - (UIImage *)handleImage {
     
+    NSLog(@"%@", [NSThread currentThread]);
     int num = arc4random() % 8 + 1;
     NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
     NSString *path = [[NSBundle mainBundle] pathForResource:imageName ofType:nil];
     UIImage *sourceImg = [UIImage imageWithContentsOfFile:path];
-    NSLog(@"source width - %f, source height - %f", sourceImg.size.width, sourceImg.size.height);
     
     CGImageRef sourceImage = sourceImg.CGImage;
     
@@ -93,13 +93,26 @@ static NSString * const kAnimationKey = @"shakeAnimation";
     uint32_t bitmapInfo = CGImageGetBitmapInfo(sourceImage);
     
     CGContextRef ctx = CGBitmapContextCreate(NULL, 270, 280, bits, bytesPerRow, spaceRef, bitmapInfo);
-    CGContextSetInterpolationQuality(ctx, kCGInterpolationDefault);
+    CGContextFillRect(ctx, CGRectMake(0, 0, 270, 280));
     CGContextDrawImage(ctx, CGRectMake(0, 0, 270, 280), sourceImage);
     
     CGImageRef desImage = CGBitmapContextCreateImage(ctx);
     
-    UIImage *resImage = [UIImage imageWithCGImage:desImage];
-    return resImage;
+    CGImageRelease(desImage);
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(spaceRef);
+
+    // 裁剪图片
+    UIBezierPath *cornerPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 270, 280) byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
+    UIGraphicsBeginImageContext(CGSizeMake(270, 280));
+    CGContextRef imgCtx = UIGraphicsGetCurrentContext();
+    CGContextAddPath(imgCtx, cornerPath.CGPath);
+    CGContextClip(imgCtx);
+    CGContextDrawPath(imgCtx, kCGPathFillStroke);
+    CGContextDrawImage(imgCtx, CGRectMake(0, 0, 270, 280), desImage);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    return img;
 }
 
 #pragma mark - Public Method
@@ -135,7 +148,11 @@ static NSString * const kAnimationKey = @"shakeAnimation";
         _containerView = [UIView new];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.cornerRadius = 5;
-        _containerView.layer.masksToBounds = YES;
+//        _containerView.layer.masksToBounds = YES;
+        
+        _containerView.layer.shadowOffset = CGSizeMake(0.5, 2);
+        _containerView.layer.shadowColor = GRAY_TEXT_COLOR.CGColor;
+        _containerView.layer.shadowOpacity = 0.5;
     }
     return _containerView;
 }
@@ -154,16 +171,8 @@ static NSString * const kAnimationKey = @"shakeAnimation";
 - (UIImageView *)imageView {
     if (!_imageView) {
         _imageView = [UIImageView new];
-        _imageView.contentMode = UIViewContentModeScaleToFill;
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            int num = arc4random() % 8 + 1;
-//            NSString *imageName = [NSString stringWithFormat:@"group_bg%d.jpg", num];
-//            NSLog(@"%@", imageName);
-//            UIImage *image = [UIImage imageNamed:imageName];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                _imageView.image = image;
-//            });
-//        });
+        _imageView.backgroundColor = [UIColor clearColor];
+//        _imageView.contentMode = UIViewContentModeScaleToFill;
     }
     return _imageView;
 }
