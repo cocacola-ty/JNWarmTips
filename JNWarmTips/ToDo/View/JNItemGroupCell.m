@@ -16,7 +16,7 @@ static NSString * const kAnimationKey = @"shakeAnimation";
 @interface JNItemGroupCell()
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIView *shadowView;
-@property (nonatomic, strong) UIImageView *imageView;
+
 @property (nonatomic, strong) UILabel *groupNameLabel;
 @property (nonatomic, strong) UIButton *deleteBtn;
 @property (nonatomic, strong) UIImage *img;
@@ -34,14 +34,6 @@ static NSString * const kAnimationKey = @"shakeAnimation";
     if (self) {
 
         self.backgroundColor = [UIColor whiteColor];
-        
-//        [self.contentView addSubview:self.shadowView];
-//        [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(self.contentView.mas_top).offset(kDefaultMargin);
-//            make.left.equalTo(self.contentView.mas_left).offset(kDefaultMargin);
-//            make.right.equalTo(self.contentView.mas_right).offset(-kDefaultMargin);
-//            make.bottom.equalTo(self.contentView.mas_bottom).offset(-kDefaultMargin);
-//        }];
 
         [self.contentView addSubview:self.containerView];
         [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -65,12 +57,14 @@ static NSString * const kAnimationKey = @"shakeAnimation";
             make.top.equalTo(self.imageView.mas_bottom).offset(10);
         }];
         
+        /*
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             UIImage *img = [self handleImage];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.imageView.image = img;
             });
         });
+         */
     }
     return self;
 }
@@ -98,10 +92,6 @@ static NSString * const kAnimationKey = @"shakeAnimation";
     
     CGImageRef desImage = CGBitmapContextCreateImage(ctx);
     
-    CGImageRelease(desImage);
-    CGContextRelease(ctx);
-    CGColorSpaceRelease(spaceRef);
-
     // 裁剪图片
     UIBezierPath *cornerPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 270, 280) byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
     UIGraphicsBeginImageContext(CGSizeMake(270, 280));
@@ -112,6 +102,9 @@ static NSString * const kAnimationKey = @"shakeAnimation";
     CGContextDrawImage(imgCtx, CGRectMake(0, 0, 270, 280), desImage);
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     
+    CGImageRelease(desImage);
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(spaceRef);
     return img;
 }
 
@@ -148,7 +141,6 @@ static NSString * const kAnimationKey = @"shakeAnimation";
         _containerView = [UIView new];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.cornerRadius = 5;
-//        _containerView.layer.masksToBounds = YES;
         
         _containerView.layer.shadowOffset = CGSizeMake(0.5, 2);
         _containerView.layer.shadowColor = GRAY_TEXT_COLOR.CGColor;
@@ -172,7 +164,6 @@ static NSString * const kAnimationKey = @"shakeAnimation";
     if (!_imageView) {
         _imageView = [UIImageView new];
         _imageView.backgroundColor = [UIColor clearColor];
-//        _imageView.contentMode = UIViewContentModeScaleToFill;
     }
     return _imageView;
 }

@@ -29,6 +29,7 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 @property (nonatomic, strong) NSMutableArray<JNGroupModel *> *groups;
 
 @property (nonatomic, assign) BOOL waitDeleting;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 @end
 
 @implementation JNItemGroupViewController
@@ -212,9 +213,59 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     }
 
     JNItemGroupCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kGroupCollectionCellID forIndexPath:indexPath];
+    
+    if (cell) {
+        [cell.imageTask cancel];
+    }
+    
     JNGroupModel *groupModel = self.groups[indexPath.row];
     cell.groupModel = groupModel;
 
+    int index = indexPath.row % 8 + 1;
+    NSString *imgName = [NSString stringWithFormat:@"group_bg%d.jpg", index];
+    
+    __weak JNItemGroupCell * weakCell = cell;
+    cell.imageTask = [NSBlockOperation blockOperationWithBlock:^{
+        
+        NSLog(@"%@", [NSThread currentThread]);
+
+        NSString *path = [[NSBundle mainBundle] pathForResource:imgName ofType:nil];
+        UIImage *sourceImg = [UIImage imageWithContentsOfFile:path];
+        
+        CGImageRef sourceImage = sourceImg.CGImage;
+        
+        size_t bits = CGImageGetBitsPerComponent(sourceImage);
+        size_t bytesPerRow = CGImageGetBytesPerRow(sourceImage);
+        CGColorSpaceRef spaceRef = CGImageGetColorSpace(sourceImage);
+        uint32_t bitmapInfo = CGImageGetBitmapInfo(sourceImage);
+        
+        CGContextRef ctx = CGBitmapContextCreate(NULL, 270, 280, bits, bytesPerRow, spaceRef, bitmapInfo);
+        CGContextFillRect(ctx, CGRectMake(0, 0, 270, 280));
+        CGContextDrawImage(ctx, CGRectMake(0, 0, 270, 280), sourceImage);
+        
+        CGImageRef desImage = CGBitmapContextCreateImage(ctx);
+        
+        // 裁剪图片
+        UIBezierPath *cornerPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 270, 280) byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(8, 8)];
+        UIGraphicsBeginImageContext(CGSizeMake(270, 280));
+        CGContextRef imgCtx = UIGraphicsGetCurrentContext();
+        CGContextAddPath(imgCtx, cornerPath.CGPath);
+        CGContextClip(imgCtx);
+        CGContextDrawPath(imgCtx, kCGPathFillStroke);
+        CGContextDrawImage(imgCtx, CGRectMake(0, 0, 270, 280), desImage);
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakCell.imageView.image = img;
+        });
+        
+        
+        CGImageRelease(desImage);
+        CGContextRelease(ctx);
+        CGColorSpaceRelease(spaceRef);
+    }];
+    
+    [self.operationQueue addOperation:cell.imageTask];
     return cell;
 }
 
@@ -288,5 +339,13 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         _groups = [NSMutableArray arrayWithArray:[[JNDBManager shareInstance] getAllGroups]] ;
     }
     return _groups;
+}
+
+- (NSOperationQueue *)operationQueue {
+    if (!_operationQueue) {
+        _operationQueue = [[NSOperationQueue alloc] init];
+        _operationQueue.maxConcurrentOperationCount = 5;
+    }
+    return _operationQueue;
 }
 @end
