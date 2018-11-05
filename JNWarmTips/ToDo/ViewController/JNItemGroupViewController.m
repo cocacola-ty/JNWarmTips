@@ -229,8 +229,6 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     @weakify(self)
     cell.imageTask = [NSBlockOperation blockOperationWithBlock:^{
         
-        NSLog(@"%@", [NSThread currentThread]);
-
         NSString *path = [[NSBundle mainBundle] pathForResource:imgName ofType:nil];
         UIImage *sourceImg = [UIImage imageWithContentsOfFile:path];
         
@@ -254,9 +252,10 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         CGContextAddPath(imgCtx, cornerPath.CGPath);
         CGContextClip(imgCtx);
         CGContextDrawPath(imgCtx, kCGPathFillStroke);
+        CGContextTranslateCTM(imgCtx, 0, 280);
+        CGContextScaleCTM(imgCtx, 1, -1);
         CGContextDrawImage(imgCtx, CGRectMake(0, 0, 270, 280), desImage);
         UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-        
         weakCell.image = img;
         
         CGImageRelease(desImage);
