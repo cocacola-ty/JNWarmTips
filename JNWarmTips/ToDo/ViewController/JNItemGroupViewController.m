@@ -225,6 +225,8 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     NSString *imgName = [NSString stringWithFormat:@"group_bg%d.jpg", index];
     
     __weak JNItemGroupCell * weakCell = cell;
+    __weak UICollectionView *weakCollectionView = collectionView;
+    @weakify(self)
     cell.imageTask = [NSBlockOperation blockOperationWithBlock:^{
         
         NSLog(@"%@", [NSThread currentThread]);
@@ -255,15 +257,21 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         CGContextDrawImage(imgCtx, CGRectMake(0, 0, 270, 280), desImage);
         UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakCell.imageView.image = img;
-        });
-        
+        weakCell.image = img;
         
         CGImageRelease(desImage);
         CGContextRelease(ctx);
         CGColorSpaceRelease(spaceRef);
     }];
+    
+    cell.deleteBlock = ^{
+        @strongify(self)
+        // 数据库中进行删除
+        
+        // 移除cell
+        [self.groups removeObjectAtIndex:indexPath.row];
+        [weakCollectionView deleteItemsAtIndexPaths:@[indexPath]];
+    };
     
     [self.operationQueue addOperation:cell.imageTask];
     return cell;
@@ -303,6 +311,9 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UIButton class]]) {
+        return NO;
+    }
     return self.waitDeleting;
 }
 

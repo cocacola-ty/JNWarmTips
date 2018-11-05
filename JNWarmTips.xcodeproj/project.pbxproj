@@ -15,6 +15,7 @@
 		6108F14A207B119700590F4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6108F149207B119700590F4D /* Assets.xcassets */; };
 		6108F14D207B119700590F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6108F14B207B119700590F4D /* LaunchScreen.storyboard */; };
 		6108F150207B119700590F4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6108F14F207B119700590F4D /* main.m */; };
+		6130D0B3218D95ED005A7B2D /* JNItemGroupContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6130D0B2218D95ED005A7B2D /* JNItemGroupContainerView.m */; };
 		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
 		61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8D20BCEF430050CB51 /* group_bg1.jpg */; };
 		61550C9020BCEF430050CB51 /* group_bg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8E20BCEF430050CB51 /* group_bg2.jpg */; };
@@ -98,6 +99,8 @@
 		6108F14C207B119700590F4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6108F14E207B119700590F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6108F14F207B119700590F4D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6130D0B1218D95ED005A7B2D /* JNItemGroupContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNItemGroupContainerView.h; sourceTree = "<group>"; };
+		6130D0B2218D95ED005A7B2D /* JNItemGroupContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNItemGroupContainerView.m; sourceTree = "<group>"; };
 		6143384A208DBFD400DFB91F /* JNWarmTipsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JNWarmTipsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNWarmTipsTests.m; sourceTree = "<group>"; };
 		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -507,6 +510,8 @@
 				8B8D8DFC2DE172C114F2FBCD /* JNCircleSelectIndicatorView.h */,
 				8B8D88299AF505AE1A4D9007 /* JNAddGroupCollectionViewCell.m */,
 				8B8D84907385949A059F2C06 /* JNAddGroupCollectionViewCell.h */,
+				6130D0B1218D95ED005A7B2D /* JNItemGroupContainerView.h */,
+				6130D0B2218D95ED005A7B2D /* JNItemGroupContainerView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -746,6 +751,7 @@
 				8B8D8E437C66458838755038 /* JNAlertAssistant.m in Sources */,
 				8B8D8EAB1F57B64B68DEF945 /* JNCategoryPickerViewController.m in Sources */,
 				8B8D8C211387AC3AB01714F7 /* JNAddGroupCollectionViewCell.m in Sources */,
+				6130D0B3218D95ED005A7B2D /* JNItemGroupContainerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,9 +9,10 @@
 
 
 @interface JNItemGroupCell : UICollectionViewCell
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) JNGroupModel *groupModel;
 @property (nonatomic, strong) NSOperation *imageTask;
+@property (nonatomic, strong) void (^deleteBlock)(void);
 
 - (void)startShake;
 - (void)stopShake;
