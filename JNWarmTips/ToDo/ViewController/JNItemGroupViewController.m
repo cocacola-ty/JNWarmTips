@@ -267,6 +267,7 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
     cell.deleteBlock = ^{
         @strongify(self)
         // 数据库中进行删除
+        [[JNDBManager shareInstance] deleteGroup:groupModel];
         
         // 移除cell
         [self.groups removeObjectAtIndex:indexPath.row];
