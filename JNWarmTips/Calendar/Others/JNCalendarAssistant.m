@@ -11,7 +11,7 @@
 /*缓存每个月的天数*/
 @property (nonatomic, strong) NSMutableDictionary *cacheCountOfDays;
 /*缓存距离当前日期n个月的日期*/
-@property (nonatomic, strong) NSMutableDictionary<NSArray *, NSString *> *cacheAwayMonth;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *cacheAwayMonth;
 @end
 
 @implementation JNCalendarAssistant {
@@ -51,6 +51,7 @@
     return dateComponents;
 }
 
+/*获取每月1号在一周的第几天 周日是第一天*/
 - (int) getMonthFirstDayInWeek:(int)month InYear:(int)year {
 
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
@@ -72,6 +73,7 @@
     }
 }
 
+/*获取每月的天数*/
 - (int) getCountOfDayInMonth:(int)month InYear:(int)year {
     NSString *firstDayStr = [JNWarmTipsPublicFile dateStringFormat:year month:month day:1];
     id cacheResult = [self.cacheCountOfDays valueForKey:firstDayStr];
@@ -86,10 +88,11 @@
     }
 }
 
+/*获取距离当前日期n个月的日期*/
 - (NSArray *) getDateAwayCurrentDate:(int)awayLength {
 
     NSString *key = [NSString stringWithFormat:@"%d", awayLength];
-    NSArray *cacheResult = [self.cacheAwayMonth valueForKey:key];
+    NSArray *cacheResult = (NSArray *)[self.cacheAwayMonth valueForKey:key];
     if (cacheResult) {
         return cacheResult;
     } else {
@@ -100,8 +103,8 @@
 
         NSDate *dateResult = [self.calendar dateByAddingComponents:adComponents toDate:[NSDate date] options:0];
         NSDateComponents *dateComponents = [self.calendar components:NSCalendarUnitMonth | NSCalendarUnitYear fromDate:dateResult];
-        int month = dateComponents.month;
-        int year = dateComponents.year;
+        int month = (int)dateComponents.month;
+        int year = (int)dateComponents.year;
 
         NSArray *result = @[@(year), @(month)];
 
@@ -143,7 +146,7 @@
     return _cacheCountOfDays;
 }
 
-- (NSMutableDictionary *)cacheAwayMonth {
+- (NSMutableDictionary<NSString *, NSArray *> *)cacheAwayMonth {
     if (!_cacheAwayMonth) {
         _cacheAwayMonth = [NSMutableDictionary dictionary];
     }
