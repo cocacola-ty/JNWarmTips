@@ -53,10 +53,13 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
     if (![self tableExist:kJNDBGroupTable]) {
         [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
             NSString *sql = [NSString stringWithFormat:@"create table if not exists %@ ("
-                                                       "group_id integer primary key autoincrement not null, "
-                                                       "group_name text not null, "
-                                                       "group_first_content text default '该小组目前空空如也~', "
-                                                       "group_item_count integer default 0)",
+                                                        "group_id integer primary key autoincrement not null, "
+                                                        "group_name text not null, "
+                                                        "group_first_content text default '该小组目前空空如也~', "
+                                                        "group_item_count integer default 0,"
+                                                        "deleted integer default 0,"
+                                                        "update_time integer"
+                                                        ")",
                                                        kJNDBGroupTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"小组表创建失败");
@@ -76,6 +79,8 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "category_id integer primary key autoincrement not null, "
                                                        "category_name text not null , "
                                                        "group_id integer default 0, "
+                                                        "deleted integer default 0,"
+                                                        "update_time integer,"
                                                        "foreign key(group_id) references %@(group_id))",
                                                        kJNDBCategoryTable, kJNDBGroupTable];
             BOOL result = [db executeUpdate:sql];
@@ -96,6 +101,8 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "category_name text default NULL, "
                                                        "notification integer default 0, "
                                                        "finished integer default 0, "
+                                                        "deleted integer default 0,"
+                                                        "update_time integer,"
                                                        "foreign key(group_id) references %@(group_id), "
                                                        "foreign key(category_id) references %@(category_id))",
                                                        kJNDBListTable, kJNDBGroupTable, kJNDBCategoryTable];
@@ -138,13 +145,33 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "event_type_color varchar(10), "
                                                        "start_time integer default 0, "
                                                        "end_time integer default 0, "
-                                                       "notification integer default 0)",
+                                                       "notification integer default 0,"
+                                                        "deleted integer default 0,"
+                                                        "update_time integer"
+                                                        ")",
                                                        kJNDBEventsTable];
             BOOL result = [db executeUpdate:sql];
             NSAssert(result, @"事件表创建失败");
         }];
     }
 
+}
+
+
+/**
+ 修改表结构，增加字段
+ */
+- (void) alterTable {
+    
+    NSArray *tables = @[kJNDBGroupTable, kJNDBCategoryTable, kJNDBListTable, kJNDBEventsTable];
+    for (NSString *tableName in tables) {
+        [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+            NSString *addDeletedSql = [NSString stringWithFormat:@"alter table %@ add column deleted integer default 0", tableName];
+            NSString *addUpdateTimeSql = [NSString stringWithFormat:@"alter table %@ add column update_time integer", tableName];
+            [db executeUpdate:addDeletedSql];
+            [db executeUpdate:addUpdateTimeSql];
+        }];
+    }
 }
 
 - (BOOL) tableExist:(NSString *)tableName {

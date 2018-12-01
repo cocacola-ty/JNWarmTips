@@ -82,7 +82,7 @@
         NSDate *date = [self.dateFormatter dateFromString:firstDayStr];
         NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
         [self.cacheCountOfDays setValue:@(range.length) forKey:firstDayStr];
-        return range.length;
+        return (int)range.length;
     }
 }
 

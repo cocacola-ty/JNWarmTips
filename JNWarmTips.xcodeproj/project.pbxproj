@@ -144,7 +144,7 @@
 		8B8D8397A21F58E07253DD83 /* JNItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNItemModel.h; sourceTree = "<group>"; };
 		8B8D839B83BB3166F7628654 /* JNAddEventCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddEventCellView.h; sourceTree = "<group>"; };
 		8B8D845045EF929195B9E64A /* JNDayEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNDayEventTableViewCell.m; sourceTree = "<group>"; };
-		8B8D846A78DB3E839387D207 /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
+		8B8D846A78DB3E839387D207 /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		8B8D84907385949A059F2C06 /* JNAddGroupCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNAddGroupCollectionViewCell.h; sourceTree = "<group>"; };
 		8B8D84A3FFA3DC8CF3E6E3A3 /* JNGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNGroupModel.m; sourceTree = "<group>"; };
 		8B8D84AB715D682708D129EB /* JNAddEventCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNAddEventCellView.m; sourceTree = "<group>"; };

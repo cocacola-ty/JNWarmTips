@@ -17,8 +17,6 @@
 #import "JNAlertAssistant.h"
 #import "JNCategoryPickerViewController.h"
 
-static const int kCategoryPickerViewHeight = 240;
-
 NSString *const JNITEMSCHANGEDNOTIFICATION = @"JNITEMSCHANGEDNOTIFICATION";
 
 @interface JNAddListItemViewController () <UITextFieldDelegate, UIPickerViewDelegate>
@@ -182,7 +180,9 @@ NSString *const JNITEMSCHANGEDNOTIFICATION = @"JNITEMSCHANGEDNOTIFICATION";
 #pragma mark - Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self doneAction];
+    if (textField.text.length > 0) {
+        [self doneAction];
+    }
     return YES;
 }
 

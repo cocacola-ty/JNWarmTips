@@ -28,27 +28,42 @@
 #import "JNMenuViewController.h"
 
 static NSString *const DayEventTableViewCellReuseId = @"DayEventTableViewCellReuseId";
-static const int kCalendarViewMargin = 10;
-static const int kAllSections = 100;
-static const int kCurrentMonthSection = 50;
-static CGFloat kTopContainerViewHeight = 64;
-static CGFloat kWeekViewHeight = 30;
 
-static NSInteger kItemCount = 7;
-static NSInteger kItemLines = 6;
 static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
+
+static const int kCalendarViewMargin = 10; // 日历视图的边距
+
+static const int kAllSections = 100; // 默认加载100个月
+
+static const int kCurrentMonthSection = 50; // 当前月份放在第50个section的位置
+
+static CGFloat kTopContainerViewHeight = 64; // 顶部视图的高度
+
+static CGFloat kWeekViewHeight = 30; // 显示星期的视图高度
+
+static NSInteger kItemCount = 7; // collectionView一行显示7个cell
+
+static NSInteger kItemLines = 6; // 6行显示
 
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource> {
     BOOL onceToken;
 }
-
+/**
+ 顶部视图
+ */
 @property (nonatomic, strong) JNTopContainerView *topContainerView;
+
+/**
+ 周视图
+ */
 @property (nonatomic, strong) UIView *weekView;
 
-@property (nonatomic, strong) NSMutableArray *dataArrayInit;
-@property(nonatomic, assign) NSInteger currentShowMonth;
-
+/**
+ 添加事件按钮
+ */
 @property (nonatomic, strong) UIImageView *addEventImageView;
+
+@property(nonatomic, assign) NSInteger currentShowMonth;
 
 @property (nonatomic, strong) UIWindow *window;
 @end
@@ -68,10 +83,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 初始化设置
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
-
-    self.cacheList = [[NSCache alloc] init];
     [self initDataSource];
-
     self.currentShowMonth = self.currentMonth;
     self.currentSelectDay = [JNWarmTipsPublicFile dateStringFormat:self.currentYear month:self.currentMonth day:self.currentDay];
 
@@ -80,64 +92,23 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 
     // 布局
     self.navigationController.navigationBar.hidden = YES;
-
     [self.topContainerView setContent:self.currentYear AndDay:self.currentDay AndMonth:self.currentMonth];
     [self.view addSubview:self.topContainerView];
-    [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(20);
-        make.left.equalTo(self.view.mas_left);
-        make.right.equalTo(self.view.mas_right);
-        make.height.mas_equalTo(kTopContainerViewHeight);
-    }];
-
     [self.view addSubview:self.weekView];
-    [self.weekView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.topContainerView.mas_bottom);
-        make.left.equalTo(self.view.mas_left).offset(kCalendarViewMargin);
-        make.right.equalTo(self.view.mas_right).offset(-kCalendarViewMargin);
-        make.height.mas_equalTo(kWeekViewHeight);
-    }];
 
-    // 添加日历
+    // 添加日历视图
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[JNDayCollectionViewCell class] forCellWithReuseIdentifier:CalCollectionViewCellReuseId];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.weekView.mas_bottom);
-        make.left.equalTo(self.view.mas_left).offset(kCalendarViewMargin);
-        make.right.equalTo(self.view.mas_right).offset(-kCalendarViewMargin);
-        make.height.mas_equalTo(kCollectionViewHeight);
-    }];
 
-    UIView *blankView = [UIView new];
-    blankView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:blankView];
-    [blankView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left);
-        make.right.equalTo(self.view.mas_right);
-        make.top.equalTo(self.collectionView.mas_bottom);
-        make.height.mas_equalTo(20);
-    }];
-
-    // 添加事件列表
+    // 添加事件列表视图
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[JNDayEventTableViewCell class] forCellReuseIdentifier:DayEventTableViewCellReuseId];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(blankView.mas_bottom);
-        make.left.equalTo(self.view.mas_left);
-        make.right.equalTo(self.view.mas_right);
-        make.bottom.equalTo(self.view.mas_bottom);
-    }];
     self.currentDateShowLabel.text = [NSString stringWithFormat:@"%d年 %02d月 %02d日", self.currentYear, self.currentMonth, self.currentDay];
     [self reloadEventList];
 
-
+    // 添加事件按钮
     [self.view addSubview:self.addEventImageView];
-    [self.addEventImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(60);
-        make.right.equalTo(_tableView.mas_right).offset(-20);
-        make.bottom.equalTo(_tableView.mas_bottom).offset(-60);
-    }];
 
     [self addObserver:self forKeyPath:@"currentSelectDay" options:NSKeyValueObservingOptionNew context:nil];
 
@@ -196,6 +167,63 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     }
 }
 
+- (void)updateViewConstraints {
+    
+    // 顶部视图布局
+    [self.topContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).offset(20);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.mas_equalTo(kTopContainerViewHeight);
+    }];
+    
+    // 星期列表视图布局
+    [self.weekView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.topContainerView.mas_bottom);
+        make.left.equalTo(self.view.mas_left).offset(kCalendarViewMargin);
+        make.right.equalTo(self.view.mas_right).offset(-kCalendarViewMargin);
+        make.height.mas_equalTo(kWeekViewHeight);
+    }];
+    
+    // 日历视图布局
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.weekView.mas_bottom);
+        make.left.equalTo(self.view.mas_left).offset(kCalendarViewMargin);
+        make.right.equalTo(self.view.mas_right).offset(-kCalendarViewMargin);
+        make.height.mas_equalTo(kCollectionViewHeight);
+    }];
+    
+    // 事件列表布局
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.collectionView.mas_bottom).offset(20);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
+    
+    // 添加事件按钮布局
+    [self.addEventImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(60);
+        make.right.equalTo(self.tableView.mas_right).offset(-20);
+        make.bottom.equalTo(self.tableView.mas_bottom).offset(-60);
+    }];
+    
+    // 事件列表中的占位符
+    [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.tableView.mas_centerY);
+        make.centerX.equalTo(self.tableView.mas_centerX);
+        make.left.equalTo(self.tableView.mas_left).offset(25);
+        make.right.equalTo(self.tableView.mas_right).offset(-25);
+    }];
+    
+    // 事件列表中的当前日期显示视图
+    [self.currentDateShowLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tableView.mas_centerX);
+        make.bottom.equalTo(self.placeHolderLabel.mas_top).offset(-50);
+    }];
+    [super updateViewConstraints];
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -218,23 +246,6 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     _currentYear = (int)components.year;
     _currentDay = (int)components.day;
 
-    NSArray *lastMonthArray = [self getAllDaysOfMonth:self.currentMonth - 1 InYear:self.currentYear];
-    NSString *lastMonthKey = [self getLastMonth:self.currentMonth currentYear:self.currentYear];
-
-    [self.cacheList setObject:lastMonthArray forKey:lastMonthKey];
-    [self.dataArray addObject:lastMonthKey];
-
-    NSArray *currentMonthArray = [self getAllDaysOfMonth:self.currentMonth InYear:self.currentYear];
-    NSString *currentMonthKey = [JNWarmTipsPublicFile dateStringFormat:self.currentYear month:self.currentMonth day:0];
-    [self.cacheList setObject:currentMonthArray forKey:currentMonthKey];
-    [self.dataArray addObject:currentMonthKey];
-
-    NSArray *nextMonthArray = [self getAllDaysOfMonth:self.currentMonth + 1 InYear:self.currentYear];
-    NSString *nextMonthKey = [self getNextMonth:self.currentMonth currentYear:self.currentYear];
-    [self.cacheList setObject:nextMonthArray forKey:nextMonthKey];
-    [self.dataArray addObject:nextMonthKey];
-
-
 }
 
 - (CGSize) caculatorItemSize {
@@ -246,13 +257,13 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
 /*获取当前位置的日期*/
 - (NSArray *)getDateWithIndexPath:(NSIndexPath *)indexPath {
 
-    int awayLength = indexPath.section - kCurrentMonthSection;
+    int awayLength = (int)indexPath.section - kCurrentMonthSection;
     NSArray *resultArray = [[JNCalendarAssistant shareInstance] getDateAwayCurrentDate:awayLength];
     int month = [resultArray.lastObject intValue];
     int year = [resultArray.firstObject intValue];
 
     int firstDayIndex = [[JNCalendarAssistant shareInstance] getMonthFirstDayInWeek:month InYear:year];
-    int rowIndex = indexPath.row + 1; // 更改row的起始索引为1
+    int rowIndex = (int)indexPath.row + 1; // 更改row的起始索引为1
 
     // 获取该月份的天数
     int totalDaysOfMonth = [[JNCalendarAssistant shareInstance] getCountOfDayInMonth:month InYear:year]; // 这个月的天数
@@ -312,12 +323,12 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
     BOOL isToday = (indexPath.section == kCurrentMonthSection && day == [JNCalendarAssistant shareInstance].currentDay);
 
     NSString *dateString = [JNWarmTipsPublicFile dateStringFormat:year month:month day:day];
-    BOOL showFlat = [self.allEventsDate.allKeys containsObject:dateString];
+    BOOL showFlag = [self.allEventsDate.allKeys containsObject:dateString];
     NSString *color = [self.allEventsDate valueForKey:dateString];
 
     NSString *content = day == 0 ? @"" : [NSString stringWithFormat:@"%d", day];
 
-    [cell setupContent:content andIsToday:isToday andShowFlag:showFlat AndColor:color];
+    [cell setupContent:content andIsToday:isToday andShowFlag:showFlag AndColor:color];
     return cell;
 }
 
@@ -414,19 +425,7 @@ static NSString *CalCollectionViewCellReuseId = @"CalCollectionViewCellReuseId";
         _tableView.rowHeight = UITableViewAutomaticDimension;
 
         [_tableView addSubview:self.placeHolderLabel];
-        [self.placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(_tableView.mas_centerY);
-            make.centerX.equalTo(_tableView.mas_centerX);
-            make.left.equalTo(_tableView.mas_left).offset(25);
-            make.right.equalTo(_tableView.mas_right).offset(-25);
-        }];
-
         [_tableView addSubview:self.currentDateShowLabel];
-        [self.currentDateShowLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(_tableView.mas_centerX);
-            make.bottom.equalTo(self.placeHolderLabel.mas_top).offset(-50);
-        }];
-
     }
     return _tableView;
 }

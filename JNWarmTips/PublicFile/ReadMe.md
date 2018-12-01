@@ -84,22 +84,22 @@ currentDateLabel :
 
 #### 小组表
 
-| group_id | group_name | group_first_content | group_item_count |
-| :---: | :---: | :---: | :---: |
-|  小组id  | 小组名 | 小组中的第一条内容 | 小组中的事项数量 |
+| group_id | group_name | group_type | group_first_content | group_item_count | update_time | deleted |
+| :---: | :---: | :---: | :---: | :--: | :--: | :--: |
+|  小组id  | 小组名 | 小组类型:任务型0/清单型1(default:0) |小组中的第一条内容 | 小组中的事项数量 | 更新时间 | 是否被删除 |
 
 默认自动初始化第一条数据，group_id = 0 , group_name = ALL
 
 #### 分类表
 
-| category_id | category_name | group_id |
+| category_id | category_name | group_id | deleted | update_time |
 | :---: | :---: | :---: |
 | 分类id | 分类名 | 分类所属小组 |
 
 
 #### 清单表
 
-| item_id | content | start_time | end_time | group_id | category_id | category_name | notification | finished |
+| item_id | content | start_time | end_time | group_id | category_id | category_name | notification | finished | deleted | update_time |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 事项id | 事项内容 | 该事项开始时间(默认0) | 该事项结束时间(默认0) | 该事项所属小组 | 该事项的分类(默认-100) | 事项的分类名字(默认NULL) | 是否需要通知(默认0) | 是否完成(默认0) |
 
@@ -107,7 +107,7 @@ currentDateLabel :
 
 #### 事件表
 
-| event_id | content | show_date | event_type_id | event_type_color | start_time | end_time | notification |
+| event_id | content | show_date | event_type_id | event_type_color | start_time | end_time | notification | deleted | update_time|
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 事件id | 事件内容 | 时间日期 | 事件的类型 | 事件类型的显示颜色 | 开始时间 | 结束时间 | 是否通知 |
 
@@ -115,12 +115,29 @@ currentDateLabel :
 
 #### 事件类型表
 
-| event_type_id | event_type_name | color |
+| event_type_id | event_type_name | color | deleted | update_time |
 | :-: | :-: | :-: |
 | 事件类型id | 事件类型名 | 事件类型颜色 |
 
 ### 数据同步逻辑
 
+手动输入服务端的IP地址
+
+请求接口进行数据发送
+
+服务端保存到数据库之后，对数据文件进行备份，保存到其他云端或者其他文件夹目录
+
+如何进行数据比对：通过数据的更新时间判断是否已经进行了同步
+
+1. 将本地新数据(数据更新时间晚于上次接口请求时间的)上传到服务器。
+
+2. 服务器对数据进行保存及处理。如果遇到数据冲突的，以更新时间晚的为准
+
+3. 下载服务器的数据到本地。
+
+通过updateTime来判断
+
+本地同步数据之后记录同步时间，下次同步数据只选择这次数据之后的
 
 ### ToDo:
 
@@ -160,11 +177,15 @@ currentDateLabel :
 
 * 增加纪念日、节日倒计时功能
 
-* 增加删除小组功能
+* ~~增加删除小组功能~~
 
 * 增加同步功能，将数据备份到其他位置
 
 * 添加事件的时候添加一个继续添加的功能
+
+* 增加一个记事本，按周进行分类，记录一些备忘录的点
+
+* 列表增加类型，分类任务型列表和清单型列表。任务型列表中的item可以有完成状态和未完成状态。清单型的没有这个状态
 
 ### list
 

@@ -269,7 +269,7 @@ static NSString *const kAddGroupCollectionViewCellId = @"JNAddGroupCollectionVie
         [[JNDBManager shareInstance] deleteGroup:groupModel];
         
         // 移除cell
-        [self.groups removeObjectAtIndex:indexPath.row];
+        [self.groups removeObject:groupModel];
         [weakCollectionView deleteItemsAtIndexPaths:@[indexPath]];
     };
     
