@@ -15,7 +15,7 @@
 
     NSMutableArray *resultArray = [NSMutableArray array];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql = [NSString stringWithFormat:@"select * from %@", kJNDBGroupTable];
+        NSString *sql = [NSString stringWithFormat:@"select * from %@ where deleted = 0", kJNDBGroupTable];
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {
             JNGroupModel *model = [JNGroupModel new];
@@ -32,7 +32,8 @@
 - (BOOL) addGroup:(JNGroupModel *)groupModel {
     __block BOOL result;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@(GROUP_ID, GROUP_NAME) VALUES(%@, '%@')", kJNDBGroupTable, groupModel.groupId, groupModel.groupName];
+        long long timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@(GROUP_ID, GROUP_NAME, update_time) VALUES(%@, '%@', %lli)", kJNDBGroupTable, groupModel.groupId, groupModel.groupName, timestamp];
         result = [db executeUpdate:sql];
 
         if (!result) {
@@ -44,15 +45,16 @@
 
 - (void)deleteGroup:(JNGroupModel *)groupModel {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        /*将所有属于该表的item的group_id更新为0*/
-//        NSString *updateListSql = [NSString stringWithFormat:@"update %@ set group_id='0', CATEGORY_ID=null where group_id = '%@' ", kJNDBListTable, groupModel.groupId];
-        NSString *deleteItemsSql = [NSString stringWithFormat:@"delete from %@ where group_id = %@", kJNDBListTable, groupModel.groupId];
+
+        // 删除所有属于这个小组的事项
+        NSString *deleteItemsSql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id = %@", kJNDBListTable, groupModel.groupId];
         [db executeUpdate:deleteItemsSql];
 
-        NSString *deleteCategorySql = [NSString stringWithFormat:@"delete from %@ where group_id='%@'", kJNDBCategoryTable, groupModel.groupId];
+        // 删除所有属于这个小组的分类
+        NSString *deleteCategorySql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id='%@'", kJNDBCategoryTable, groupModel.groupId];
         [db executeUpdate:deleteCategorySql];
 
-        NSString *deleteGroupSql = [NSString stringWithFormat:@"delete from %@ where group_id = '%@'", kJNDBGroupTable, groupModel.groupId];
+        NSString *deleteGroupSql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id = '%@'", kJNDBGroupTable, groupModel.groupId];
         [db executeUpdate:deleteGroupSql];
     }];
 }

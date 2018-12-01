@@ -90,7 +90,7 @@ static const int kFinishBtnWidthAndHeight = 35;
     }
     JNGroupModel *groupModel = [JNGroupModel new];
     groupModel.groupName = self.inputField.text;
-    groupModel.groupId = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+    groupModel.groupId = [NSString stringWithFormat:@"%lli", (long long)([[NSDate date] timeIntervalSince1970] * 1000)];
 
     // 插入到数据库
     [[JNDBManager shareInstance] addGroup:groupModel];

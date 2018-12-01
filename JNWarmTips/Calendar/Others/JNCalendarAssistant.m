@@ -27,9 +27,9 @@
     self = [super init];
     if (self) {
         NSDateComponents *dateComponents = [self getCurrentDay];
-        _currentMonth = dateComponents.month;
-        _currentDay = dateComponents.day;
-        _currentYear = dateComponents.year;
+        _currentMonth = (int)(dateComponents.month);
+        _currentDay = (int)(dateComponents.day);
+        _currentYear = (int)(dateComponents.year);
         _currentDateStr = [JNWarmTipsPublicFile dateStringFormat:_currentYear month:_currentMonth day:_currentDay];
         [self getDateAwayCurrentDate:-10];
     }
