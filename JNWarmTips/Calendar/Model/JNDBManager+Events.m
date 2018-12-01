@@ -17,7 +17,7 @@
 - (NSArray<NSString *> *)getAllEventsDate {
 
     NSMutableArray *result = [NSMutableArray array];
-    NSString *sql = [NSString stringWithFormat:@"select show_date from %@", kJNDBEventsTable];
+    NSString *sql = [NSString stringWithFormat:@"select show_date from %@ where deleted = 0", kJNDBEventsTable];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {
@@ -30,7 +30,7 @@
 
 - (NSDictionary *) getAllDateAndEventColor {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    NSString *sql = [NSString stringWithFormat:@"select show_date, event_type_color from %@", kJNDBEventsTable];
+    NSString *sql = [NSString stringWithFormat:@"select show_date, event_type_color from %@ where deleted = 0", kJNDBEventsTable];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {
@@ -45,7 +45,7 @@
 
 - (NSArray<JNEventModel *> *)getAllSortEvents {
 
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ order by show_date", kJNDBEventsTable];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where deleted = 0 order by show_date", kJNDBEventsTable];
     NSMutableArray *result = [NSMutableArray array];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -67,7 +67,7 @@
 - (NSArray<JNEventModel *> *)getAllEventsOfDay:(NSString *)day {
 
     NSMutableArray *result = [NSMutableArray array];
-    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATE = '%@'", kJNDBEventsTable, day];
+    NSString *sql = [NSString stringWithFormat:@"SELECT EVENT_ID, CONTENT, START_TIME, END_TIME FROM %@ WHERE SHOW_DATE = '%@' and deleted = 0", kJNDBEventsTable, day];
     [self.dbQueue inTransaction:^(FMDatabase *_Nonnull db, BOOL *_Nonnull rollback) {
         FMResultSet *queryResult = [db executeQuery:sql];
         while ([queryResult next]) {
