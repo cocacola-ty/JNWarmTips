@@ -45,7 +45,7 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
     _dbQueue = nil;
 }
 
-- (void) createTables {
+- (void)createTables {
     BOOL dbOpenResult = [self createDataBase];
     NSAssert(dbOpenResult, @"数据库创建失败");
 
@@ -161,7 +161,7 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
 /**
  修改表结构，增加字段
  */
-- (void) alterTable {
+- (void)alterTable {
     
     NSArray *tables = @[kJNDBGroupTable, kJNDBCategoryTable, kJNDBListTable, kJNDBEventsTable];
     for (NSString *tableName in tables) {
@@ -174,7 +174,7 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
     }
 }
 
-- (BOOL) tableExist:(NSString *)tableName {
+- (BOOL)tableExist:(NSString *)tableName {
     __block BOOL exist = NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
         [db tableExists:tableName];

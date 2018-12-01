@@ -10,6 +10,7 @@
 #import <Masonry/Masonry.h>
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
+#import "JNDBManager.h"
 
 @interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *menuView;
@@ -144,6 +145,22 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         // 同步分类表
         // 同步事项表
         // 同步事件日程表
+    }
+    
+    switch (indexPath.row) {
+        case 0:
+        {
+            
+        }
+            break;
+        case 1:
+        {
+            // 更改表结构
+            [[JNDBManager shareInstance] alterTable];
+        }
+            break;
+        default:
+            break;
     }
 }
 

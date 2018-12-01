@@ -86,7 +86,7 @@
 
 - (void) deleteEvent:(long long)eventId {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql = [NSString stringWithFormat:@"delete from %@ where event_id = '%lld'", kJNDBEventsTable, eventId];
+        NSString *sql = [NSString stringWithFormat:@"update %@ set deleted = 1 where event_id = '%lld'", kJNDBEventsTable, eventId];
         [db executeUpdate:sql];
     }];
 }
@@ -117,24 +117,25 @@
     [self addEvent:sql];
 }
 
-- (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndStartTime:(long long)startTime AndEndTime:(long long)endTime AndNotification:(BOOL)notification AndFinished:(BOOL)finished {
-    NSString *sql = [NSString stringWithFormat:@""];
-    [self addEvent:sql];
-}
-
 - (void)addEventWithModel:(JNEventModel *)eventModel {
+     long long timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
     NSString *sql = [NSString stringWithFormat:@"insert into %@"
-                                               "('content',"
+                                               "("
+                                                "'event_id',"
+                                                "'content',"
                                                "'show_date',"
                                                "'event_type_id',"
                                                "'event_type_color',"
                                                "'start_time',"
                                                "'end_time',"
-                                               "'notification'"
+                                               "'notification',"
+                                                "'deleted',"
+                                                "'update_time'"
                                                ") values ("
-                                               "'%@', '%@', '%@', '%@', %lld, %lld, %d)"
-                                               , kJNDBEventsTable, eventModel.content, eventModel.showDate,
-    eventModel.eventTypeId, eventModel.color, eventModel.startTime, eventModel.endTime, eventModel.needNotification];
+                                               " %lld, '%@', '%@', '%@', '%@', %lld, %lld, %d, 0, %lld"
+                                                ")"
+                                               , kJNDBEventsTable, timestamp, eventModel.content, eventModel.showDate,
+    eventModel.eventTypeId, eventModel.color, eventModel.startTime, eventModel.endTime, eventModel.needNotification, timestamp];
     [self addEvent:sql];
 }
 

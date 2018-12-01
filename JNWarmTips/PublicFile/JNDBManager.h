@@ -23,6 +23,7 @@ UIKIT_EXTERN NSString *const kJNDBEventTypeTable;
 
 + (instancetype) shareInstance;
 
-- (void) createTables;
+- (void)createTables;
+- (void)alterTable;
 
 @end

@@ -345,7 +345,7 @@ static const int kTimePickerViewHeight = 220;
     UILabel *titleLabel = [UILabel new];
     titleLabel.font = [UIFont systemFontOfSize:16.0];
     titleLabel.textColor = MAIN_COLOR;
-    titleLabel.text = [NSString stringWithFormat:@"%d", row + 1];
+    titleLabel.text = [NSString stringWithFormat:@"%d", (int)row + 1];
     return titleLabel;
 }
 
@@ -431,7 +431,6 @@ static const int kTimePickerViewHeight = 220;
         self.allTagBtns = [NSMutableArray array];
         for (JNEventTypeModel *model in self.allTagModels) {
             UIButton *tagBtn = [UIButton  new];
-            tagBtn.font = [UIFont systemFontOfSize:14.0];
             tagBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
             [tagBtn setTitle:[model.typeName substringToIndex:1] forState:UIControlStateNormal];
             [tagBtn addTarget:self action:@selector(selectTag:) forControlEvents:UIControlEventTouchUpInside];
@@ -450,11 +449,11 @@ static const int kTimePickerViewHeight = 220;
             nameLabel.text = model.typeName;
             [_tagCellView addSubview:nameLabel];
             [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(_tagCellView.mas_bottom).offset(-6);
+                make.bottom.equalTo(self->_tagCellView.mas_bottom).offset(-6);
                 make.left.equalTo(self->_tagCellView.mas_left).offset(35 + offset);
             }];
 
-            CGRect rect = [model.typeName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:nil attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]} context:nil];
+            CGRect rect = [model.typeName boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]} context:nil];
             [tagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.bottom.equalTo(nameLabel.mas_top).offset(-4);
                 make.centerX.equalTo(nameLabel.mas_centerX);

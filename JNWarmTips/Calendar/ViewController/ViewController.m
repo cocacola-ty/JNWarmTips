@@ -130,6 +130,9 @@ static NSInteger kItemLines = 6; // 6行显示
     NSDate *dateFromInterval = [NSDate dateWithTimeIntervalSince1970:timeInterval];
     NSString *str = [dateFormatter1 stringFromDate:dateFromInterval];
     NSLog(@"str = %@", str);
+    
+    long long t = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
+    NSLog(@"tLong = %lli", t);
     // END TEST
 }
 
