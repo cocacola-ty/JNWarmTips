@@ -12,7 +12,6 @@
  */
 
 #import "ViewController.h"
-#import "ViewController+CalculateCalendar.h"
 #import "ViewController+EventList.h"
 #import "JNTopContainerView.h"
 #import "JNDayModel.h"

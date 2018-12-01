@@ -75,8 +75,6 @@
 #pragma mark - Event Response
 
 - (void) changeTagKeyBoard {
-    self.inputView;
-
 }
 
 #pragma mark - Getter & Setter
