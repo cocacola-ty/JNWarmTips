@@ -7,7 +7,7 @@
 
 
 @interface JNItemModel : NSObject
-@property(nonatomic, assign) NSInteger itemId;
+@property(nonatomic, assign) long long itemId;
 /*事件内容*/
 @property (nonatomic, strong) NSString *content;
 /*开始时间 默认值 0*/

@@ -11,6 +11,7 @@
 #import "FMDB.h"
 #import "JNEventModel.h"
 #import "JNEventTypeModel.h"
+#import "JNWarmTipsPublicFile.h"
 
 @implementation JNDBManager (Events)
 
@@ -86,7 +87,8 @@
 
 - (void) deleteEvent:(long long)eventId {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql = [NSString stringWithFormat:@"update %@ set deleted = 1 where event_id = '%lld'", kJNDBEventsTable, eventId];
+        long long ts = [JNWarmTipsPublicFile getCurrentTimeStamp];
+        NSString *sql = [NSString stringWithFormat:@"update %@ set deleted = 1 update_time = %lld where event_id = '%lld'", kJNDBEventsTable, ts, eventId];
         [db executeUpdate:sql];
     }];
 }

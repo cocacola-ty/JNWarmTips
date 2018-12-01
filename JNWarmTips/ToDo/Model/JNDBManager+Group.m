@@ -7,7 +7,7 @@
 #import "FMDatabaseQueue.h"
 #import "FMDatabase.h"
 #import "JNGroupModel.h"
-
+#import "JNWarmTipsPublicFile.h"
 
 @implementation JNDBManager (Group)
 
@@ -46,15 +46,17 @@
 - (void)deleteGroup:(JNGroupModel *)groupModel {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 
+        long long ts = [JNWarmTipsPublicFile getCurrentTimeStamp];
+        
         // 删除所有属于这个小组的事项
-        NSString *deleteItemsSql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id = %@", kJNDBListTable, groupModel.groupId];
+        NSString *deleteItemsSql = [NSString stringWithFormat:@"update %@ set deleted = 1 update_time = %lld where group_id = %@", kJNDBListTable, ts, groupModel.groupId];
         [db executeUpdate:deleteItemsSql];
 
         // 删除所有属于这个小组的分类
-        NSString *deleteCategorySql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id='%@'", kJNDBCategoryTable, groupModel.groupId];
+        NSString *deleteCategorySql = [NSString stringWithFormat:@"update %@ set deleted = 1 update_time = %lld where group_id='%@'", kJNDBCategoryTable, ts, groupModel.groupId];
         [db executeUpdate:deleteCategorySql];
 
-        NSString *deleteGroupSql = [NSString stringWithFormat:@"update %@ set deleted = 1 where group_id = '%@'", kJNDBGroupTable, groupModel.groupId];
+        NSString *deleteGroupSql = [NSString stringWithFormat:@"update %@ set deleted = 1 update_time = %lld where group_id = '%@'", kJNDBGroupTable, ts, groupModel.groupId];
         [db executeUpdate:deleteGroupSql];
     }];
 }

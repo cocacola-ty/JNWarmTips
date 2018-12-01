@@ -7,13 +7,15 @@
 #import <FMDB/FMDatabase.h>
 #import "JNDBManager+Items.h"
 #import "JNItemModel.h"
+#import "JNWarmTipsPublicFile.h"
 
 
 @implementation JNDBManager (Items)
 
 - (void)addCategory:(NSString *)categoryName InGroup:(NSString *)groupId {
 
-    NSString *sql = [NSString stringWithFormat:@"insert into %@ (category_name, group_id) values ('%@', %@)", kJNDBCategoryTable, categoryName, groupId];
+    long long timestamp = [JNWarmTipsPublicFile getCurrentTimeStamp];
+    NSString *sql = [NSString stringWithFormat:@"insert into %@ (category_id, category_name, group_id, update_time) values (%lld, '%@', %@, %lld)", kJNDBCategoryTable, timestamp, categoryName, groupId, timestamp];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];
@@ -66,12 +68,12 @@
 
 - (NSMutableDictionary<NSString *, NSMutableArray<JNItemModel *> *> *)getAllItemsInGroup:(NSString *)groupId {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    NSString *sql = [NSString stringWithFormat:@"select * from %@ where group_id = %@", kJNDBListTable, groupId];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where group_id = %@ and deleted = 0", kJNDBListTable, groupId];
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *resultSet = [db executeQuery:sql];
         while ([resultSet next]) {
             JNItemModel *itemModel = [JNItemModel new];
-            itemModel.itemId = [resultSet intForColumn:@"item_id"];
+            itemModel.itemId = [resultSet longLongIntForColumn:@"item_id"];
             itemModel.content = [resultSet stringForColumn:@"content"];
             itemModel.groupId = [resultSet longLongIntForColumn:@"group_id"];
             itemModel.categoryId = [resultSet intForColumn:@"category_id"];
@@ -99,16 +101,14 @@
     NSString *endTime = [NSString stringWithFormat:@"%lld", itemModel.endTime];
     NSString *groupId = [NSString stringWithFormat:@"%lld", itemModel.groupId];
     NSString *notification = [NSString stringWithFormat:@"%d", itemModel.notification];
-    NSString *finish = [NSString stringWithFormat:@"%d", itemModel.finished];
-    NSString *categoryId = [NSString stringWithFormat:@"%d", itemModel.categoryId];
+    NSString *finish = [NSString stringWithFormat:@"%d", (int)(itemModel.finished)];
+    NSString *categoryId = [NSString stringWithFormat:@"%zd", itemModel.categoryId];
+    long long timeStamp = [JNWarmTipsPublicFile getCurrentTimeStamp];
+    
+    NSString *sql = [NSString stringWithFormat:@"insert into %@(item_id, content, start_time, end_time, group_id, category_id, category_name, notification, finished, deleted, update_time) values ( %lld, '%@',%@, %@, %@, %@, '%@', %@, %@, 0, %lld)", kJNDBListTable, timeStamp,itemModel.content, startTime, endTime, groupId, categoryId, itemModel.categoryName, notification, finish, timeStamp];
 
-    NSString *sql = [NSString stringWithFormat:@"insert into %@(content, start_time, end_time, group_id, category_id, category_name, notification, finished) values ('%@', %@, %@, %@, %@, '%@', %@, %@)", kJNDBListTable, itemModel.content, startTime, endTime, groupId, categoryId, itemModel.categoryName, notification, finish];
-    NSString *updateGroupSql = [NSString stringWithFormat:@"update %@ set group_first_content = '%@' where group_id='%@'", kJNDBGroupTable, itemModel.content, groupId];
-
-    NSLog(@"sql = %@", sql);
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];
-        [db executeUpdate:updateGroupSql];
     }];
 }
 
@@ -120,7 +120,8 @@
 }
 
 - (void) deleteItem:(long long)itemId {
-    NSString *sql = [NSString stringWithFormat:@"delete from %@ where item_id = %lld", kJNDBListTable, itemId];
+    long long timeStamp = [JNWarmTipsPublicFile getCurrentTimeStamp];
+    NSString *sql = [NSString stringWithFormat:@"update %@ set deleted = 1 update_time = %lld where item_id = %lld", kJNDBListTable, timeStamp, itemId];
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [db executeUpdate:sql];

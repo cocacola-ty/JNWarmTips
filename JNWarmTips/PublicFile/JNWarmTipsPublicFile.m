@@ -92,6 +92,15 @@
         }
     }];
 }
+
+/**
+ 获取当前时间戳 13位
+ */
++ (long long)getCurrentTimeStamp {
+    long long timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
+    return timestamp;
+}
+
 @end
 
 const CGFloat CalendarDefaultMargin = 20;

@@ -15,6 +15,12 @@
 /*隐藏tabbar*/
 + (void) hiddenTabbar:(UITabBarController *)vc ;
 + (void) showTabbar:(UITabBarController *)vc ;
+
+/**
+ 获取当前时间戳 13位
+ */
++ (long long)getCurrentTimeStamp;
+
 @end
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
