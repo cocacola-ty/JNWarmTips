@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSString *eventTypeId;
 @property (nonatomic, strong) NSString *color;
 @property(nonatomic, assign) BOOL needNotification;
-
+@property(nonatomic, assign) BOOL deleted;
+@property (nonatomic, assign) long long updateTime;
 
 @end

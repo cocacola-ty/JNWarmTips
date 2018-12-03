@@ -60,6 +60,8 @@
             eventModel.showDate = [queryResult stringForColumn:@"SHOW_DATE"];
             eventModel.color = [queryResult stringForColumn:@"event_type_color"];
             eventModel.eventTypeId = [queryResult stringForColumn:@"event_type_id"];
+            eventModel.updateTime = [queryResult longLongIntForColumn:@"update_time"];
+            eventModel.deleted = [queryResult boolForColumn:@"deleted"];
         }
     }];
     return result;

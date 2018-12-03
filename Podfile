@@ -9,5 +9,6 @@ target 'JNWarmTips' do
   # Pods for JNWarmTips
   pod 'Masonry'
   pod 'FMDB'
-
+  pod 'AFNetworking'
+  pod 'MJExtension'
 end

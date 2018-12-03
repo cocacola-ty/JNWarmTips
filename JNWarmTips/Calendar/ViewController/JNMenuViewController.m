@@ -11,6 +11,9 @@
 #import "UIColor+Extension.h"
 #import "JNWarmTipsPublicFile.h"
 #import "JNDBManager.h"
+#import "AFNetworking.h"
+#import "JNDBManager+Events.h"
+#import "MJExtension.h"
 
 @interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *menuView;
@@ -145,6 +148,31 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         // 同步分类表
         // 同步事项表
         // 同步事件日程表
+        // 测试接口
+        AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
+        
+        AFHTTPRequestSerializer *requestSerializer = [AFHTTPRequestSerializer serializer];
+        AFJSONResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
+        sessionManager.requestSerializer = requestSerializer;
+        sessionManager.responseSerializer = responseSerializer;
+        
+        NSString *url = @"http://127.0.0.1:5000/updateData";
+    
+        JNEventModel *eventModel = [[JNDBManager shareInstance] getAllSortEvents].firstObject;
+        
+        NSDictionary *dict = @{@"eventId": @"1233", @"updateTime":@"123312312"};
+        NSDictionary *dict2 = @{@"eventId": @"2222", @"updateTime":@"44223312312"};
+        NSArray *dataArray = @[dict, dict2];
+        NSString *json = [dataArray mj_JSONString];
+        NSDictionary *params = @{
+                                 @"datas" : json
+                                 };
+        
+        [sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"%@",responseObject);
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"%@",error);
+        }];
     }
     
     switch (indexPath.row) {
