@@ -142,7 +142,7 @@ NSString *const kJNDBEventTypeTable = @"event_type_table";
                                                        "content text not null, "
                                                        "show_date date not null, "
                                                        "event_type_id integer not null, "
-                                                       "event_type_color varchar(10), "
+                                                       "event_type_color vdarchar(10), "
                                                        "start_time integer default 0, "
                                                        "end_time integer default 0, "
                                                        "notification integer default 0,"
