@@ -19,6 +19,7 @@
 @interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
+@property (nonatomic, strong) UIVisualEffectView *visualEffectView;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataSource;
@@ -59,62 +60,16 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         make.bottom.equalTo(self.menuView.mas_bottom).offset(-150);
     }];
     
-    // 出场动画
-    self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
-    [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.menuView.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
-        
-    }];
+    [self showAnimation];
     
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    [super touchesBegan:touches withEvent:event];
-    
-    self.view.userInteractionEnabled = NO;
-    
-    // 第一阶段动画
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:CGPointMake(0, 0)];
-    [path addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
-    [path addLineToPoint:CGPointMake(100, SCREEN_HEIGHT)];
-    [path addLineToPoint:CGPointMake(100, SCREEN_HEIGHT)];
-    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH/2 - 30, 0) controlPoint:CGPointMake(SCREEN_WIDTH/2-40, (SCREEN_HEIGHT)-200)];
-    [path closePath];
-    
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-    animation.toValue = (__bridge id _Nullable)(path.CGPath);
-    animation.duration = kAnimationDuration;
-    animation.repeatCount = 1;
-    animation.removedOnCompletion = NO;
-    animation.fillMode = kCAFillModeForwards;
-    [self.maskLayer addAnimation:animation forKey:nil];
-    
-    // 第二阶段动画
-    UIBezierPath *secondPath = [UIBezierPath bezierPath];
-    [secondPath moveToPoint:CGPointMake(0, 0)];
-    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
-    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
-    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
-    [secondPath addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH / 4, 0) controlPoint:CGPointMake(100, 150)];
-    
-    CABasicAnimation *secAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    secAnimation.toValue = (__bridge id _Nullable)secondPath.CGPath;
-    secAnimation.beginTime = CACurrentMediaTime() + kAnimationDuration;
-    secAnimation.duration = kAnimationDuration;
-    secAnimation.fillMode = kCAFillModeForwards;
-    secAnimation.removedOnCompletion = NO;
-    [self.maskLayer addAnimation:secAnimation forKey:nil];
-    
-    [UIView animateWithDuration:0.1 delay:kAnimationDuration*2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
-    } completion:^(BOOL finished) {
-        if (self.dissmisBlock) {
-            self.dissmisBlock();
-        }
-    }];
-
+    if ( ![[touches allObjects].firstObject.view isKindOfClass:[self.visualEffectView class]]) {
+        [self dismissAnimationWithExit:YES];
+    }else {
+        [super touchesBegan:touches withEvent:event];
+    }
 }
 
 #pragma mark - Delegate Datasource
@@ -151,6 +106,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         // 同步事件日程表
         
         // 获取本地数据
+        /*
         NSArray *eventsArray = [[JNDBManager shareInstance] getAllUnSynchronizeEvents];
         NSArray *dictArray = [NSObject mj_keyValuesArrayWithObjectArray:eventsArray];
         NSString *dataStr = [dictArray mj_JSONString];
@@ -173,12 +129,22 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"%@",error);
         }];
+         */
     }
     
     switch (indexPath.row) {
         case 0:
         {
+            [self dismissAnimationWithExit:NO];
             
+            // 显示高斯模糊背景
+            [self.view addSubview:self.visualEffectView];
+            
+            // 显示输入框
+            
+            // 重置视图可点击
+            
+            // 重新显示菜单栏
         }
             break;
         case 1:
@@ -246,6 +212,69 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     
 }
 
+- (void)showAnimation{
+    // 出场动画
+    self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
+    [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.menuView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+    }];
+
+}
+
+- (void)dismissAnimationWithExit:(BOOL)exit {
+//    self.view.userInteractionEnabled = NO;
+    
+    // 第一阶段动画
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(0, 0)];
+    [path addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
+    [path addLineToPoint:CGPointMake(100, SCREEN_HEIGHT)];
+    [path addLineToPoint:CGPointMake(100, SCREEN_HEIGHT)];
+    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH/2 - 30, 0) controlPoint:CGPointMake(SCREEN_WIDTH/2-40, (SCREEN_HEIGHT)-200)];
+    [path closePath];
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+    animation.toValue = (__bridge id _Nullable)(path.CGPath);
+    animation.duration = kAnimationDuration;
+    animation.repeatCount = 1;
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    [self.maskLayer addAnimation:animation forKey:nil];
+    
+    // 第二阶段动画
+    UIBezierPath *secondPath = [UIBezierPath bezierPath];
+    [secondPath moveToPoint:CGPointMake(0, 0)];
+    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
+    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
+    [secondPath addLineToPoint:CGPointMake(0, SCREEN_HEIGHT)];
+    [secondPath addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH / 4, 0) controlPoint:CGPointMake(100, 150)];
+    
+    CABasicAnimation *secAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+    secAnimation.toValue = (__bridge id _Nullable)secondPath.CGPath;
+    secAnimation.beginTime = CACurrentMediaTime() + kAnimationDuration;
+    secAnimation.duration = kAnimationDuration;
+    secAnimation.fillMode = kCAFillModeForwards;
+    secAnimation.removedOnCompletion = NO;
+    [self.maskLayer addAnimation:secAnimation forKey:nil];
+    
+    [UIView animateWithDuration:0.1 delay:kAnimationDuration*2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.menuView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
+    } completion:^(BOOL finished) {
+        if (self.dissmisBlock && exit) {
+            self.dissmisBlock();
+        }
+    }];
+}
+
+- (void)tapEffectView {
+    self.view.userInteractionEnabled = YES;
+    [self.visualEffectView removeFromSuperview];
+    
+    [self showAnimation];
+    
+}
+
 #pragma mark - Getter & Setter
 
 - (UIView *)menuView {
@@ -287,4 +316,16 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     return _tableView;
 }
 
+- (UIVisualEffectView *)visualEffectView {
+    if (!_visualEffectView) {
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        _visualEffectView.alpha = 0.8;
+        _visualEffectView.frame = self.view.bounds;
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEffectView)];
+        [_visualEffectView addGestureRecognizer:tapGesture];
+    }
+    return _visualEffectView;
+}
 @end
