@@ -32,7 +32,7 @@ def synchronize_data():
 
     # 返回需要本地进行更新的数据
     content = json.dumps({"code":"200"})
-    res = Response(content, mimetype="APPlication/json")
+    res = Response(content, mimetype="application/json")
     return res
 
 

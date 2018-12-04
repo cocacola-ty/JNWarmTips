@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NetWorkManager : NSObject
++ (instancetype)shareInstance;
 
+- (void)getWithUrl:(NSString *)url WithParams:(NSDictionary *)params success:(void(^)(id))success failure:(void(^)(NSError *))failure;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -14,6 +14,7 @@
 #import "AFNetworking.h"
 #import "JNDBManager+Events.h"
 #import "MJExtension.h"
+#import "NetWorkManager.h"
 
 @interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *menuView;
@@ -196,24 +197,47 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     // 子线程去执行请求，避免阻塞主线程
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+        
+        // 需要同步执行，清单表中group_id需要依赖小组表中的值
+        
+        // 同步小组表数据
         [self synchroizeGroup:semaphore];
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        // 同步分类表数据
+        [self synchronizeCategory:semaphore];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        // 同步清单表数据
+        [self synhronizeList:semaphore];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        // 同步事件表数据
+        [self synchronizeEvents:semaphore];
     });
 }
 
 - (void)synchroizeGroup:(dispatch_semaphore_t)semaphore {
+    NSString *url = @"";
+    NSString *path = @"/updateGroup";
+    NSDictionary *params;
+    [[NetWorkManager shareInstance] getWithUrl:url WithParams:params success:^(id _Nonnull responseData) {
+        
+        dispatch_semaphore_signal(semaphore);
+    } failure:^(NSError *error) {
+        dispatch_semaphore_signal(semaphore);
+    }];;
+}
+
+- (void)synchronizeCategory:(dispatch_semaphore_t)semaphore {
     
 }
 
-- (void)synchronizeCategory {
+- (void)synchronizeEvents:(dispatch_semaphore_t)semaphore {
     
 }
 
-- (void)synchronizeEvents {
-    
-}
-
-- (void)synhronizeList {
+- (void)synhronizeList:(dispatch_semaphore_t)semaphore  {
     
 }
 
