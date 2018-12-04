@@ -148,6 +148,12 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         // 同步分类表
         // 同步事项表
         // 同步事件日程表
+        
+        // 获取本地数据
+        NSArray *eventsArray = [[JNDBManager shareInstance] getAllUnSynchronizeEvents];
+        NSArray *dictArray = [NSObject mj_keyValuesArrayWithObjectArray:eventsArray];
+        NSString *dataStr = [dictArray mj_JSONString];
+        
         // 测试接口
         AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
         
@@ -157,15 +163,8 @@ static CFTimeInterval const kAnimationDuration = 0.1;
         sessionManager.responseSerializer = responseSerializer;
         
         NSString *url = @"http://127.0.0.1:5000/updateData";
-    
-        JNEventModel *eventModel = [[JNDBManager shareInstance] getAllSortEvents].firstObject;
-        
-        NSDictionary *dict = @{@"eventId": @"1233", @"updateTime":@"123312312"};
-        NSDictionary *dict2 = @{@"eventId": @"2222", @"updateTime":@"44223312312"};
-        NSArray *dataArray = @[dict, dict2];
-        NSString *json = [dataArray mj_JSONString];
         NSDictionary *params = @{
-                                 @"datas" : json
+                                 @"datas" : dataStr
                                  };
         
         [sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -178,18 +177,44 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     switch (indexPath.row) {
         case 0:
         {
-            
+            [self synchroizeData];
         }
             break;
         case 1:
         {
             // 更改表结构
-            [[JNDBManager shareInstance] alterTable];
+//            [[JNDBManager shareInstance] deleteRubbishData];
         }
             break;
         default:
             break;
     }
+}
+
+#pragma mark - Private Method
+- (void)synchroizeData {
+    // 子线程去执行请求，避免阻塞主线程
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+        [self synchroizeGroup:semaphore];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    });
+}
+
+- (void)synchroizeGroup:(dispatch_semaphore_t)semaphore {
+    
+}
+
+- (void)synchronizeCategory {
+    
+}
+
+- (void)synchronizeEvents {
+    
+}
+
+- (void)synhronizeList {
+    
 }
 
 #pragma mark - Getter & Setter

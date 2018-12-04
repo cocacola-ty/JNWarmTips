@@ -31,6 +31,7 @@
 		61B9287C20AEC2AB0040732F /* JNEventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287820AEC2AB0040732F /* JNEventModel.m */; };
 		61B9287D20AEC2AB0040732F /* JNDBManager+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B9287920AEC2AB0040732F /* JNDBManager+Events.m */; };
 		61C9AF9120FDE41E002F4A69 /* JNAddEventStyleOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */; };
+		61DDF4B721B6873E006CFE92 /* NetWorkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DDF4B621B6873E006CFE92 /* NetWorkManager.m */; };
 		61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E4640220A002730045C737 /* HannotateSC-W5.ttf */; };
 		8B8D803497D44711656242FD /* JNDBManager+Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88EC2C8D6080D16B04B5 /* JNDBManager+Group.m */; };
 		8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */; };
@@ -123,6 +124,8 @@
 		61B9287B20AEC2AB0040732F /* JNDBManager+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JNDBManager+Events.h"; sourceTree = "<group>"; };
 		61C9AF8F20FDE41E002F4A69 /* JNAddEventStyleOneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNAddEventStyleOneViewController.h; sourceTree = "<group>"; };
 		61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddEventStyleOneViewController.m; sourceTree = "<group>"; };
+		61DDF4B521B6873E006CFE92 /* NetWorkManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetWorkManager.h; sourceTree = "<group>"; };
+		61DDF4B621B6873E006CFE92 /* NetWorkManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetWorkManager.m; sourceTree = "<group>"; };
 		61E4640220A002730045C737 /* HannotateSC-W5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HannotateSC-W5.ttf"; sourceTree = "<group>"; };
 		8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSwitchView.h; sourceTree = "<group>"; };
 		8B8D8040A5651811BE1BD8F2 /* CAShapeLayer+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAShapeLayer+Extension.m"; sourceTree = "<group>"; };
@@ -351,6 +354,15 @@
 			path = docs;
 			sourceTree = "<group>";
 		};
+		61DDF4B421B6871B006CFE92 /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
+				61DDF4B521B6873E006CFE92 /* NetWorkManager.h */,
+				61DDF4B621B6873E006CFE92 /* NetWorkManager.m */,
+			);
+			path = NetWork;
+			sourceTree = "<group>";
+		};
 		8B8D813DE1C35F121D6A15C2 /* Others */ = {
 			isa = PBXGroup;
 			children = (
@@ -413,6 +425,7 @@
 		8B8D87604E1A96A0CC8FFF17 /* PublicFile */ = {
 			isa = PBXGroup;
 			children = (
+				61DDF4B421B6871B006CFE92 /* NetWork */,
 				61E4640220A002730045C737 /* HannotateSC-W5.ttf */,
 				8B8D846A78DB3E839387D207 /* ReadMe.md */,
 				8B8D8E2393819A8A628D2505 /* JNWarmTipsPublicFile.m */,
@@ -671,6 +684,7 @@
 				8B8D89DE5F6DD1EFFF79B182 /* ViewController.m in Sources */,
 				8B8D84C766FD4610E65ABD82 /* JNDayCollectionViewCell.m in Sources */,
 				618EB3FD211F325800B116B0 /* JNAddListItemViewController.m in Sources */,
+				61DDF4B721B6873E006CFE92 /* NetWorkManager.m in Sources */,
 				8B8D84089AE8B2E6182F1AAB /* JNDayModel.m in Sources */,
 				8B8D8DECA4453B6757CCDC21 /* ReadMe.md in Sources */,
 				8B8D8F9E8CBB8DE1D626BA5B /* JNDayEventTableViewCell.m in Sources */,

@@ -114,3 +114,5 @@ NSString * const FONT_NAME_SHOUZHA = @"HannotateSC-W5";
 NSString * const FONT_NAME_YAPI = @"YuppySC-Regular";
 
 NSString * const FONT_DOWNLOAD_NOTIFICATION = @"FONTDOWNLOADFINISHNOTIFICATION";
+
+NSString * const LAST_UPDATE_KEY = @"LAST_UPDATE_TIME";

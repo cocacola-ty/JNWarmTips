@@ -11,28 +11,52 @@
 
 @interface JNDBManager (Events)
 
+
+/**
+ 获取某天的所有事件
+ */
 - (NSArray<JNEventModel *> *) getAllEventsOfDay:(NSString *)day;
 
-/*获取所有含有事件的日期*/
+/**
+ 获取所有含有事件的日期
+ */
 - (NSArray<NSString *> *)getAllEventsDate ;
 
-/*获取所有含有事件的日期及该事件的颜色*/
+/**
+ 获取所有含有事件的日期及该事件的颜色
+ */
 - (NSDictionary *)getAllDateAndEventColor;
 
-/*获取按照时间排序后的所有事件*/
+/**
+ 获取按照时间排序后的所有事件
+ */
 - (NSArray<JNEventModel *> *)getAllSortEvents;
 
-/*删除事件*/
+
+/**
+ 获取所有未和服务端同步的数据
+ */
+- (NSMutableArray *) getAllUnSynchronizeEvents;
+
+/**
+ 删除事件
+ */
 - (void)deleteEvent:(long long)eventId;
 
-/*添加事件*/
+/**
+ 添加事件
+ */
 - (void)addEventContent:(nonnull NSString *)content AndShowDate:(nonnull NSString *)showDate AndEventTypeId:(NSString *)eventTypeId AndEventColor:(NSString *)color;
 
 - (void)addEventWithModel:(JNEventModel *)eventModel;
 
-/*获取所有事件类型*/
+/**
+ 获取所有事件类型
+ */
 - (NSArray *)getAllEventTypes ;
 
-/*删除垃圾数据*/
+/**
+ 删除垃圾数据
+ */
 - (void)deleteRubbishData;
 @end

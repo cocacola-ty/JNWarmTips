@@ -53,6 +53,9 @@ UIKIT_EXTERN NSString * const FONT_NAME_SHOUZHA;
 /*雅痞字体*/
 UIKIT_EXTERN NSString * const FONT_NAME_YAPI ;
 
+/*上次更新时间*/
+UIKIT_EXTERN NSString * const LAST_UPDATE_KEY ;
+
 #ifndef weakify
     #if DEBUG
         #if __has_feature(objc_arc)

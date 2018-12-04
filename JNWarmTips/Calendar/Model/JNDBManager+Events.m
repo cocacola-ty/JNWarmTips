@@ -15,6 +15,8 @@
 
 @implementation JNDBManager (Events)
 
+#pragma mark - 查询接口
+
 - (NSArray<NSString *> *)getAllEventsDate {
 
     NSMutableArray *result = [NSMutableArray array];
@@ -52,16 +54,8 @@
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         FMResultSet *queryResult = [db executeQuery:sql];
         while ([queryResult next]) {
-            JNEventModel *eventModel = [JNEventModel new];
-            eventModel.eventId = [queryResult longLongIntForColumn:@"event_id"];
-            eventModel.content = [queryResult stringForColumn:@"CONTENT"];
-            eventModel.startTime = [queryResult longLongIntForColumn:@"START_TIME"];
-            eventModel.endTime = [queryResult longLongIntForColumn:@"END_TIME"];
-            eventModel.showDate = [queryResult stringForColumn:@"SHOW_DATE"];
-            eventModel.color = [queryResult stringForColumn:@"event_type_color"];
-            eventModel.eventTypeId = [queryResult stringForColumn:@"event_type_id"];
-            eventModel.updateTime = [queryResult longLongIntForColumn:@"update_time"];
-            eventModel.deleted = [queryResult boolForColumn:@"deleted"];
+            JNEventModel *eventModel = [self eventModelWithResultSet:queryResult];
+            [result addObject:eventModel];
         }
     }];
     return result;
@@ -86,6 +80,25 @@
     }];
     return result;
 }
+
+/*获取所有未上传到服务端的数据*/
+- (NSMutableArray *) getAllUnSynchronizeEvents {
+    NSMutableArray *result = [NSMutableArray array];
+    // 上次更新时间
+     long long lastUpdateTimeStamp = [[[NSUserDefaults standardUserDefaults] valueForKey:LAST_UPDATE_KEY] longLongValue];
+
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where update_time >= %lld", kJNDBEventsTable, lastUpdateTimeStamp];
+    [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        FMResultSet *queryResult = [db executeQuery:sql];
+        while ([queryResult next]) {
+            JNEventModel *eventModel = [self eventModelWithResultSet:queryResult];
+            [result addObject:eventModel];
+        };
+    }];
+    return result;
+}
+
+#pragma mark - 删除接口
 
 - (void) deleteEvent:(long long)eventId {
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -150,7 +163,24 @@
 }
 
 - (void)deleteRubbishData {
+    NSString *sql = [NSString stringWithFormat:@"update events_table set update_time = 0 where update_time is null"];
+    [self.dbQueue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        [db executeUpdate:sql];
+    }];
 }
 
+- (JNEventModel *)eventModelWithResultSet:(FMResultSet *)queryResult {
+    JNEventModel *eventModel = [JNEventModel new];
+    eventModel.eventId = [queryResult longLongIntForColumn:@"event_id"];
+    eventModel.content = [queryResult stringForColumn:@"CONTENT"];
+    eventModel.startTime = [queryResult longLongIntForColumn:@"START_TIME"];
+    eventModel.endTime = [queryResult longLongIntForColumn:@"END_TIME"];
+    eventModel.showDate = [queryResult stringForColumn:@"SHOW_DATE"];
+    eventModel.color = [queryResult stringForColumn:@"event_type_color"];
+    eventModel.eventTypeId = [queryResult stringForColumn:@"event_type_id"];
+    eventModel.updateTime = [queryResult longLongIntForColumn:@"update_time"];
+    eventModel.deleted = [queryResult boolForColumn:@"deleted"];
+    return eventModel;
+}
 @end
 
