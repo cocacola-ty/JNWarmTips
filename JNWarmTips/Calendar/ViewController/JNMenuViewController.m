@@ -30,7 +30,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dataSource = @[@"同步",  @"更新表结构"];
+    self.dataSource = @[@"设置服务器", @"同步",  @"更新表结构"];
     self.view.backgroundColor = [UIColor clearColor];
     
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
@@ -178,13 +178,18 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     switch (indexPath.row) {
         case 0:
         {
-            [self synchroizeData];
+            
         }
             break;
         case 1:
         {
+            [self synchroizeData];
+        }
+            break;
+        case 2:
+        {
             // 更改表结构
-//            [[JNDBManager shareInstance] deleteRubbishData];
+            //[[JNDBManager shareInstance] deleteRubbishData];
         }
             break;
         default:

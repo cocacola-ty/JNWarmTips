@@ -129,4 +129,4 @@ def prepare_context():
     return conn
 
 
-APP.run()
+APP.run(host="0.0.0.0")
