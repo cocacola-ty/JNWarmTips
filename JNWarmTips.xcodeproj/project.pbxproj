@@ -19,6 +19,7 @@
 		6143384D208DBFD400DFB91F /* JNWarmTipsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6143384C208DBFD400DFB91F /* JNWarmTipsTests.m */; };
 		61550C8F20BCEF430050CB51 /* group_bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8D20BCEF430050CB51 /* group_bg1.jpg */; };
 		61550C9020BCEF430050CB51 /* group_bg2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 61550C8E20BCEF430050CB51 /* group_bg2.jpg */; };
+		6177B84021B7C6BE00A93174 /* JNIPAddressInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6177B83F21B7C6BE00A93174 /* JNIPAddressInputView.m */; };
 		618EB3FD211F325800B116B0 /* JNAddListItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */; };
 		619CDC2A218AA152000A4091 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 619CDC29218AA152000A4091 /* readme.md */; };
 		61A55BF1216DE992009C30BF /* JNMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A55BF0216DE992009C30BF /* JNMenuViewController.m */; };
@@ -106,6 +107,8 @@
 		6143384E208DBFD400DFB91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61550C8D20BCEF430050CB51 /* group_bg1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg1.jpg; sourceTree = "<group>"; };
 		61550C8E20BCEF430050CB51 /* group_bg2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group_bg2.jpg; sourceTree = "<group>"; };
+		6177B83E21B7C6BE00A93174 /* JNIPAddressInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNIPAddressInputView.h; sourceTree = "<group>"; };
+		6177B83F21B7C6BE00A93174 /* JNIPAddressInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNIPAddressInputView.m; sourceTree = "<group>"; };
 		618EB3FB211F325800B116B0 /* JNAddListItemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNAddListItemViewController.h; sourceTree = "<group>"; };
 		618EB3FC211F325800B116B0 /* JNAddListItemViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNAddListItemViewController.m; sourceTree = "<group>"; };
 		619CDC29218AA152000A4091 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
@@ -454,6 +457,8 @@
 				6100F281217047C3002CD7EA /* JNEventTimeLineTableViewCell.h */,
 				6100F282217047C3002CD7EA /* JNEventTimeLineTableViewCell.m */,
 				6100F283217047C3002CD7EA /* JNEventTimeLineTableViewCell.xib */,
+				6177B83E21B7C6BE00A93174 /* JNIPAddressInputView.h */,
+				6177B83F21B7C6BE00A93174 /* JNIPAddressInputView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -693,6 +698,7 @@
 				8B8D8B9E1A09208320853911 /* ViewController+EventList.m in Sources */,
 				8B8D8311A594230342333C5F /* JNEventEditorViewController.m in Sources */,
 				8B8D8727352533082FF59CB9 /* JNTextView.m in Sources */,
+				6177B84021B7C6BE00A93174 /* JNIPAddressInputView.m in Sources */,
 				8B8D86D32D7E51E3AA147856 /* JNToDoListViewController.m in Sources */,
 				8B8D8A37811E949BBE125B55 /* JNToDoGroupListViewController.m in Sources */,
 				8B8D8371855566BBCA52BD8D /* JNToDoItemCell.m in Sources */,

@@ -15,12 +15,14 @@
 #import "JNDBManager+Events.h"
 #import "MJExtension.h"
 #import "NetWorkManager.h"
+#import "JNIPAddressInputView.h"
 
-@interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
 @property (nonatomic, strong) UIVisualEffectView *visualEffectView;
-@property (nonatomic, strong) UIView *addressInputView;
+@property (nonatomic, strong) JNIPAddressInputView *addressInputView;
+@property (nonatomic, strong) UITextField *textView;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataSource;
@@ -155,6 +157,9 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     }
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return YES;
+}
 #pragma mark - Private Method
 - (void)synchroizeData {
     // 子线程去执行请求，避免阻塞主线程
@@ -278,17 +283,18 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     // 显示输入框
     [self.view addSubview:self.addressInputView];
     [self.addressInputView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(50);
+//        make.height.mas_equalTo(50);
         make.centerX.equalTo(self.view.mas_centerX);
         make.top.equalTo(self.view.mas_top).offset(150);
-        make.left.equalTo(self.view.mas_left).offset(50);
-        make.right.equalTo(self.view.mas_right).offset(-50);
+//        make.width.mas_equalTo(240);
     }];
     self.addressInputView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
     
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.addressInputView.transform = CGAffineTransformIdentity;
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        [self.textView becomeFirstResponder];
+    }];
     
     // 重置视图可点击
     
@@ -349,11 +355,21 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     return _visualEffectView;
 }
 
-- (UIView *)addressInputView {
+- (JNIPAddressInputView *)addressInputView {
     if (!_addressInputView) {
-        _addressInputView = [UIView new];
+        _addressInputView = [JNIPAddressInputView new];
         _addressInputView.backgroundColor = [UIColor whiteColor];
     }
     return _addressInputView;
+}
+
+- (UITextField *)textView {
+    if (!_textView) {
+        _textView = [[UITextField alloc] init];
+        _textView.keyboardType = UIKeyboardTypeNumberPad;
+        _textView.returnKeyType = UIReturnKeyNext;
+        _textView.delegate = self;
+    }
+    return _textView;
 }
 @end
