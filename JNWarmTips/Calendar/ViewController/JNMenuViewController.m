@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
 @property (nonatomic, strong) UIVisualEffectView *visualEffectView;
+@property (nonatomic, strong) UIView *addressInputView;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataSource;
@@ -135,16 +136,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     switch (indexPath.row) {
         case 0:
         {
-            [self dismissAnimationWithExit:NO];
-            
-            // 显示高斯模糊背景
-            [self.view addSubview:self.visualEffectView];
-            
-            // 显示输入框
-            
-            // 重置视图可点击
-            
-            // 重新显示菜单栏
+            [self showSetupServerAddressView];
         }
             break;
         case 1:
@@ -267,12 +259,40 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     }];
 }
 
-- (void)tapEffectView {
+
+- (void)cancelInputIpAddress {
     self.view.userInteractionEnabled = YES;
+    [self.maskLayer removeAllAnimations];
+    [self.addressInputView removeFromSuperview];
     [self.visualEffectView removeFromSuperview];
     
     [self showAnimation];
+}
+
+- (void)showSetupServerAddressView{
+    [self dismissAnimationWithExit:NO];
     
+    // 显示高斯模糊背景
+    [self.view addSubview:self.visualEffectView];
+    
+    // 显示输入框
+    [self.view addSubview:self.addressInputView];
+    [self.addressInputView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(50);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.top.equalTo(self.view.mas_top).offset(150);
+        make.left.equalTo(self.view.mas_left).offset(50);
+        make.right.equalTo(self.view.mas_right).offset(-50);
+    }];
+    self.addressInputView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
+    
+    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.addressInputView.transform = CGAffineTransformIdentity;
+    } completion:nil];
+    
+    // 重置视图可点击
+    
+    // 重新显示菜单栏
 }
 
 #pragma mark - Getter & Setter
@@ -318,14 +338,22 @@ static CFTimeInterval const kAnimationDuration = 0.1;
 
 - (UIVisualEffectView *)visualEffectView {
     if (!_visualEffectView) {
-        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
         _visualEffectView.alpha = 0.8;
         _visualEffectView.frame = self.view.bounds;
         
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEffectView)];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelInputIpAddress)];
         [_visualEffectView addGestureRecognizer:tapGesture];
     }
     return _visualEffectView;
+}
+
+- (UIView *)addressInputView {
+    if (!_addressInputView) {
+        _addressInputView = [UIView new];
+        _addressInputView.backgroundColor = [UIColor whiteColor];
+    }
+    return _addressInputView;
 }
 @end
