@@ -282,11 +282,10 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     
     // 显示输入框
     [self.view addSubview:self.addressInputView];
+    [self.addressInputView becomeFirstResponder];
     [self.addressInputView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.height.mas_equalTo(50);
         make.centerX.equalTo(self.view.mas_centerX);
         make.top.equalTo(self.view.mas_top).offset(150);
-//        make.width.mas_equalTo(240);
     }];
     self.addressInputView.transform = CGAffineTransformMakeTranslation(-SCREEN_WIDTH, 0);
     

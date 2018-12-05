@@ -33,6 +33,22 @@
         
         self.ipLabelArray = @[self.ipFirstLabel, self.ipSecondLabel, self.ipThirdLabel, self.ipFourthLabel];
         [self addDotLayer];
+        
+        CALayer *lineLayer = [CALayer layer];
+        lineLayer.frame = CGRectMake(50, 10, 3, 30);
+        lineLayer.backgroundColor = MAIN_COLOR.CGColor;
+        [self.layer addSublayer:lineLayer];
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];//必须写opacity才行。
+        animation.fromValue = [NSNumber numberWithFloat:1.0f];
+        animation.toValue = [NSNumber numberWithFloat:0.0f];//这是透明度。
+        animation.autoreverses = YES;
+        animation.duration = 0.25;
+        animation.repeatCount = MAXFLOAT;
+        animation.removedOnCompletion = NO;
+        animation.fillMode = kCAFillModeForwards;
+        animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];///没有的话是均匀的动画。
+        [lineLayer addAnimation:animation forKey:nil];
     }
     return self;
 }
@@ -71,6 +87,11 @@
     lbl.font = [UIFont boldSystemFontOfSize:18.0];
     lbl.textColor = MAIN_COLOR;
     lbl.textAlignment = NSTextAlignmentCenter;
+}
+
+#pragma mark - Public Method
+- (void)becomeFirstResponder {
+    [self.textField becomeFirstResponder];
 }
 
 #pragma mark - Delegate
