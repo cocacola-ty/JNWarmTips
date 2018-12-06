@@ -22,8 +22,24 @@
 @property (nonatomic, strong) UIButton *preBtn;
 @property (nonatomic, strong) UIButton *nextBtn;
 
+@property (nonatomic, strong) CALayer *lineLayer;
+
 @property (nonatomic, assign) NSInteger focusIndex;
 @end
+
+/*光标高度*/
+static CGFloat lineLayerHeight = 30;
+
+/*光标宽度*/
+static CGFloat lineLayerWidth = 3;
+
+/*光标边距*/
+static CGFloat lineLayerRightMargin = 10;
+
+/*光标初始y位置*/
+static CGFloat lineLayerYPosition = 10;
+
+static CGFloat labelWidth = 60;
 
 @implementation JNIPAddressInputView
 
@@ -40,7 +56,7 @@
         
         self.ipLabelArray = @[self.ipFirstLabel, self.ipSecondLabel, self.ipThirdLabel, self.ipFourthLabel];
         [self addDotLayer];
-        [self addFocusLineLayer];
+        [self addCursorLayer];
         
         [self addObserver:self forKeyPath:@"focusIndex" options:NSKeyValueObservingOptionNew context:nil];
     }
@@ -57,7 +73,7 @@
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(attribute);
             make.top.equalTo(self.mas_top);
-            make.width.mas_equalTo(60);
+            make.width.mas_equalTo(labelWidth);
             make.bottom.equalTo(self.mas_bottom);
         }];
         attribute = lbl.mas_right;
@@ -68,7 +84,7 @@
 - (void)addDotLayer {
     for (int index = 1; index < 4; index++) {
         CALayer *layer = [CALayer layer];
-        CGFloat xPosition = index * 60;
+        CGFloat xPosition = index * labelWidth;
         layer.frame = CGRectMake(xPosition, 30, 4, 4);
         layer.backgroundColor = [UIColor blackColor].CGColor;
         layer.cornerRadius = 2;
@@ -76,17 +92,20 @@
     }
 }
 
-- (void)addFocusLineLayer {
+- (void)addCursorLayer {
+
     CALayer *lineLayer = [CALayer layer];
-    lineLayer.frame = CGRectMake(50, 10, 3, 30);
+    CGFloat xPosition = labelWidth - lineLayerRightMargin;
+    lineLayer.frame = CGRectMake(xPosition, lineLayerYPosition, lineLayerWidth, lineLayerHeight);
     lineLayer.backgroundColor = MAIN_COLOR.CGColor;
+    self.lineLayer = lineLayer;
     [self.layer addSublayer:lineLayer];
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];//必须写opacity才行。
     animation.fromValue = [NSNumber numberWithFloat:1.0f];
     animation.toValue = [NSNumber numberWithFloat:0.0f];//这是透明度。
     animation.autoreverses = YES;
-    animation.duration = 0.35;
+    animation.duration = 0.6;
     animation.repeatCount = MAXFLOAT;
     animation.removedOnCompletion = NO;
     animation.fillMode = kCAFillModeForwards;
@@ -109,13 +128,35 @@
 #pragma mark - Event Response
 
 - (void)moveFocusToNext {
-    NSLog(@"next ");
     self.focusIndex = self.focusIndex + 1;
+    CGFloat xPosition = self.focusIndex * labelWidth - 10;
+    CGFloat preX = self.lineLayer.frame.origin.x;
+    CGFloat width = xPosition - preX;
+    [self animationWithFromXPosition:preX toXPosition:xPosition width:width];
+}
+
+- (void)animationWithFromXPosition:(CGFloat)fromX toXPosition:(CGFloat)toX width:(CGFloat)width {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.lineLayer.frame = CGRectMake(fromX, lineLayerYPosition, width, lineLayerHeight);
+    } completion:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.lineLayer.frame = CGRectMake(toX, lineLayerYPosition, lineLayerWidth, lineLayerHeight);
+        } completion:nil];
+    });
 }
 
 - (void)moveFocusToPre {
-    NSLog(@"pre ");
+
     self.focusIndex = self.focusIndex - 1;
+    
+    // 移动光标
+    CGFloat preX = self.lineLayer.frame.origin.x;
+    CGFloat xPosition = self.focusIndex * labelWidth - 10;
+    CGFloat width = preX - xPosition;
+    [self animationWithFromXPosition:xPosition toXPosition:xPosition width:width];
+    
 }
 #pragma mark - Delegate
 
