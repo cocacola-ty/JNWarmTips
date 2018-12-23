@@ -11,4 +11,5 @@ target 'JNWarmTips' do
   pod 'FMDB'
   pod 'AFNetworking'
   pod 'MJExtension'
+  pod 'ReactiveCocoa'
 end
