@@ -79,7 +79,7 @@ static NSInteger kItemLines = 6; // 6行显示
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+//    self.edgesForExtendedLayout = UIRectEdgeNone;
     // 初始化设置
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFont) name:FONT_DOWNLOAD_NOTIFICATION object:nil];
     [self initDataSource];
@@ -200,7 +200,11 @@ static NSInteger kItemLines = 6; // 6行显示
         make.top.equalTo(self.collectionView.mas_bottom).offset(20);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.bottom.equalTo(self.view.mas_bottom);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
     }];
     
     // 添加事件按钮布局
