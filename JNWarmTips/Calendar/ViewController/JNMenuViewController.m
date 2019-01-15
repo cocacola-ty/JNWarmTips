@@ -16,6 +16,7 @@
 #import "MJExtension.h"
 #import "NetWorkManager.h"
 #import "JNIPAddressInputView.h"
+#import "JNIPInputView.h"
 
 @interface JNMenuViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) UIView *menuView;
@@ -281,6 +282,7 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     [self.view addSubview:self.visualEffectView];
     
     // 显示输入框
+    
     [self.view addSubview:self.addressInputView];
     [self.addressInputView becomeFirstResponder];
     [self.addressInputView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -294,7 +296,15 @@ static CFTimeInterval const kAnimationDuration = 0.1;
     } completion:^(BOOL finished) {
         [self.textView becomeFirstResponder];
     }];
-    
+
+/*
+    JNIPInputView *inputView = [JNIPInputView new];
+    [self.view addSubview:inputView];
+    [inputView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.top.equalTo(self.view.mas_top).offset(200);
+    }];
+    */
     // 重置视图可点击
     
     // 重新显示菜单栏

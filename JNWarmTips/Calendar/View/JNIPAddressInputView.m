@@ -39,7 +39,7 @@ static CGFloat lineLayerRightMargin = 10;
 /*光标初始y位置*/
 static CGFloat lineLayerYPosition = 10;
 
-static CGFloat labelWidth = 60;
+static CGFloat margin = 80;
 
 @implementation JNIPAddressInputView
 
@@ -64,16 +64,20 @@ static CGFloat labelWidth = 60;
 }
 
 - (CGSize)intrinsicContentSize {
-    return CGSizeMake(240, 50);
+    CGFloat width = SCREEN_WIDTH - margin - margin;
+    return CGSizeMake(width, 50);
 }
 
 - (void)updateConstraints {
+    
+    CGFloat width = ( SCREEN_WIDTH - margin - margin ) / 4;
+    
     MASViewAttribute *attribute = self.mas_left;
     for (UILabel *lbl in self.ipLabelArray) {
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(attribute);
             make.top.equalTo(self.mas_top);
-            make.width.mas_equalTo(labelWidth);
+            make.width.mas_equalTo(width);
             make.bottom.equalTo(self.mas_bottom);
         }];
         attribute = lbl.mas_right;
@@ -82,6 +86,8 @@ static CGFloat labelWidth = 60;
 }
 
 - (void)addDotLayer {
+    CGFloat labelWidth = ( SCREEN_WIDTH - margin - margin ) / 4;
+    
     for (int index = 1; index < 4; index++) {
         CALayer *layer = [CALayer layer];
         CGFloat xPosition = index * labelWidth;
@@ -94,27 +100,27 @@ static CGFloat labelWidth = 60;
 
 - (void)addCursorLayer {
 
-    CALayer *lineLayer = [CALayer layer];
-    CGFloat xPosition = labelWidth - lineLayerRightMargin;
-    lineLayer.frame = CGRectMake(xPosition, lineLayerYPosition, lineLayerWidth, lineLayerHeight);
-    lineLayer.backgroundColor = MAIN_COLOR.CGColor;
-    self.lineLayer = lineLayer;
-    [self.layer addSublayer:lineLayer];
-    
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];//必须写opacity才行。
-    animation.fromValue = [NSNumber numberWithFloat:1.0f];
-    animation.toValue = [NSNumber numberWithFloat:0.0f];//这是透明度。
-    animation.autoreverses = YES;
-    animation.duration = 0.6;
-    animation.repeatCount = MAXFLOAT;
-    animation.removedOnCompletion = NO;
-    animation.fillMode = kCAFillModeForwards;
-    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];///没有的话是均匀的动画。
-    [lineLayer addAnimation:animation forKey:nil];
+//    CALayer *lineLayer = [CALayer layer];
+//    CGFloat xPosition = labelWidth - lineLayerRightMargin;
+//    lineLayer.frame = CGRectMake(xPosition, lineLayerYPosition, lineLayerWidth, lineLayerHeight);
+//    lineLayer.backgroundColor = MAIN_COLOR.CGColor;
+//    self.lineLayer = lineLayer;
+//    [self.layer addSublayer:lineLayer];
+//
+//    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];//必须写opacity才行。
+//    animation.fromValue = [NSNumber numberWithFloat:1.0f];
+//    animation.toValue = [NSNumber numberWithFloat:0.0f];//这是透明度。
+//    animation.autoreverses = YES;
+//    animation.duration = 0.6;
+//    animation.repeatCount = MAXFLOAT;
+//    animation.removedOnCompletion = NO;
+//    animation.fillMode = kCAFillModeForwards;
+//    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];///没有的话是均匀的动画。
+//    [lineLayer addAnimation:animation forKey:nil];
 }
 
 - (void)labelSetting:(UILabel *)lbl {
-    lbl.text = @"192";
+//    lbl.text = @"192";
     lbl.font = [UIFont boldSystemFontOfSize:18.0];
     lbl.textColor = MAIN_COLOR;
     lbl.textAlignment = NSTextAlignmentCenter;
@@ -129,10 +135,12 @@ static CGFloat labelWidth = 60;
 
 - (void)moveFocusToNext {
     self.focusIndex = self.focusIndex + 1;
-    CGFloat xPosition = self.focusIndex * labelWidth - 10;
-    CGFloat preX = self.lineLayer.frame.origin.x;
-    CGFloat width = xPosition - preX;
-    [self animationWithFromXPosition:preX toXPosition:xPosition width:width];
+    UILabel *ipLabel = self.ipLabelArray[self.focusIndex - 1];
+    self.textField.text = ipLabel.text.length > 0 ? ipLabel.text : @"";
+//    CGFloat xPosition = self.focusIndex * labelWidth - 10;
+//    CGFloat preX = self.lineLayer.frame.origin.x;
+//    CGFloat width = xPosition - preX;
+//    [self animationWithFromXPosition:preX toXPosition:xPosition width:width];
 }
 
 - (void)animationWithFromXPosition:(CGFloat)fromX toXPosition:(CGFloat)toX width:(CGFloat)width {
@@ -148,21 +156,28 @@ static CGFloat labelWidth = 60;
 }
 
 - (void)moveFocusToPre {
-
     self.focusIndex = self.focusIndex - 1;
+    UILabel *ipLabel = self.ipLabelArray[self.focusIndex - 1];
+    self.textField.text = ipLabel.text.length > 0 ? ipLabel.text : @"";
     
     // 移动光标
-    CGFloat preX = self.lineLayer.frame.origin.x;
-    CGFloat xPosition = self.focusIndex * labelWidth - 10;
-    CGFloat width = preX - xPosition;
-    [self animationWithFromXPosition:xPosition toXPosition:xPosition width:width];
+//    CGFloat preX = self.lineLayer.frame.origin.x;
+//    CGFloat xPosition = self.focusIndex * labelWidth - 10;
+//    CGFloat width = preX - xPosition;
+//    [self animationWithFromXPosition:xPosition toXPosition:xPosition width:width];
     
 }
 #pragma mark - Delegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    return YES;
+    NSString *updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (updateText.length <= 3) {
+        UILabel *ipLabel = self.ipLabelArray[self.focusIndex - 1];
+        ipLabel.text = updateText;
+        return YES;
+    }else {
+        return NO;
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {

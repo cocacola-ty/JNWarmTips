@@ -34,6 +34,8 @@
 		61C9AF9120FDE41E002F4A69 /* JNAddEventStyleOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C9AF9020FDE41E002F4A69 /* JNAddEventStyleOneViewController.m */; };
 		61DDF4B721B6873E006CFE92 /* NetWorkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DDF4B621B6873E006CFE92 /* NetWorkManager.m */; };
 		61E4640320A002740045C737 /* HannotateSC-W5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E4640220A002730045C737 /* HannotateSC-W5.ttf */; };
+		61F70E2821EB893B001BBD24 /* JNIPInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F70E2721EB893B001BBD24 /* JNIPInputView.m */; };
+		61FF59F721ECBFD400F71A92 /* JNIPField.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FF59F621ECBFD400F71A92 /* JNIPField.m */; };
 		8B8D803497D44711656242FD /* JNDBManager+Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88EC2C8D6080D16B04B5 /* JNDBManager+Group.m */; };
 		8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D8C167C153F85D3F43D45 /* JNSwitchView.m */; };
 		8B8D81F39C44C415A95C970A /* JNItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D88E67434D3790068CFA2 /* JNItemModel.m */; };
@@ -130,6 +132,10 @@
 		61DDF4B521B6873E006CFE92 /* NetWorkManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetWorkManager.h; sourceTree = "<group>"; };
 		61DDF4B621B6873E006CFE92 /* NetWorkManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetWorkManager.m; sourceTree = "<group>"; };
 		61E4640220A002730045C737 /* HannotateSC-W5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HannotateSC-W5.ttf"; sourceTree = "<group>"; };
+		61F70E2621EB893B001BBD24 /* JNIPInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNIPInputView.h; sourceTree = "<group>"; };
+		61F70E2721EB893B001BBD24 /* JNIPInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNIPInputView.m; sourceTree = "<group>"; };
+		61FF59F521ECBFD400F71A92 /* JNIPField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNIPField.h; sourceTree = "<group>"; };
+		61FF59F621ECBFD400F71A92 /* JNIPField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNIPField.m; sourceTree = "<group>"; };
 		8B8D8020A5734B34FADC91C4 /* JNSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSwitchView.h; sourceTree = "<group>"; };
 		8B8D8040A5651811BE1BD8F2 /* CAShapeLayer+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CAShapeLayer+Extension.m"; sourceTree = "<group>"; };
 		8B8D806D8F1DF3DC4714B271 /* JNToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNToDoListViewController.h; sourceTree = "<group>"; };
@@ -459,6 +465,10 @@
 				6100F283217047C3002CD7EA /* JNEventTimeLineTableViewCell.xib */,
 				6177B83E21B7C6BE00A93174 /* JNIPAddressInputView.h */,
 				6177B83F21B7C6BE00A93174 /* JNIPAddressInputView.m */,
+				61F70E2621EB893B001BBD24 /* JNIPInputView.h */,
+				61F70E2721EB893B001BBD24 /* JNIPInputView.m */,
+				61FF59F521ECBFD400F71A92 /* JNIPField.h */,
+				61FF59F621ECBFD400F71A92 /* JNIPField.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -718,9 +728,11 @@
 				8B8D8C02BBC01BB3F788FD20 /* JNEventTypeModel.m in Sources */,
 				8B8D866EA43101BD0D892938 /* UIColor+Extension.m in Sources */,
 				8B8D877E8AD5D34AF0FA9CC0 /* JNWaringAlertView.m in Sources */,
+				61FF59F721ECBFD400F71A92 /* JNIPField.m in Sources */,
 				6100F284217047C3002CD7EA /* JNEventTimeLineTableViewCell.m in Sources */,
 				8B8D8DB882312F8A45628321 /* JNAddEventTransitionAnimator.m in Sources */,
 				8B8D882F451CBDCEB541FDB1 /* JNEventTimeLineViewController.m in Sources */,
+				61F70E2821EB893B001BBD24 /* JNIPInputView.m in Sources */,
 				8B8D87F0B6F800AB773D238F /* JNAddEventsViewController.m in Sources */,
 				8B8D80EC788A309A51983A39 /* JNSwitchView.m in Sources */,
 				8B8D8F91F2A3D8F5798242E5 /* JNArrowIndicateView.m in Sources */,
@@ -895,7 +907,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P7CJ6N6XA3;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.ty.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -915,7 +927,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P7CJ6N6XA3;
 				INFOPLIST_FILE = JNWarmTips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.ty.markday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
